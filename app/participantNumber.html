@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en" ng-app="cruncher">
+<head>
+  <meta charset="utf-8">
+  <title>{{appTitle}}</title>
+  <link rel="stylesheet" href="css/cruncher.css"/>
+</head>
+<body ng-controller="registrationCtrl">
+<center>
+  <div class="app-container ui-corner-all">
+    <img src="img/sexstlbanner_sm.png"/>
+    <h2 id="appTitle">{{appTitle}}</h2>
+
+    <br/>
+
+    <p id="welcome">Thank you for participating in the "No" Workshop!</p>
+    <p id="welcome">Before we begin, let's go over some basic points that should reassure you that the SEX+STL organization deeply respects your privacy...</p>
+
+    <form name="registerationForm">
+      <div class="control-group" ng-class="{error: registerationForm.name.$invalid}">
+        <label for="name">Name</label>
+        <span ng-show="registerationForm.name.$error.required" class="help-inline">(Required)</span>
+        <br/>
+        <input type="text" name="name" ng-model="project.name" placeholder="...or nickname" required>
+      </div>
+
+      <div class="control-group" ng-class="{error: registerationForm.email.$invalid}">
+        <label for="email">Email</label>
+        <span ng-show="registerationForm.email.$error.required" class="help-inline">(Required)</span>
+        <span ng-show="registerationForm.email.$error.email" class="help-inline">Not a valid email address</span>
+        <br/>
+        <input type="email" name="email" ng-model="project.email" placeholder="...so we can send you your matches!"  required>
+      </div>
+
+      <input type="checkbox" name="emailMatchesOk" ng-model="project.emailMatchesOk" style="display:inline;"></input>
+      <label for="emailMatchesOk">May we send your email address to matches?</label>
+
+      <div class="control-group" ng-class="{error: registerationForm.participantNumber.$invalid}">
+        <label for="name">Participant Number</label>
+        <span ng-show="registerationForm.participantNumber.$error.required" class="help-inline">(Required - Your "No" Workshop leader will assign you this)</span>
+        <br/>
+        <input type="number" name="participantNumber" ng-model="project.participantNumber" style="width:50px;" min="0" max="100" required>
+      </div>
+
+      <br/><br/>
+
+      <a href="#/" class="btn">Cancel</a>
+      <button ng-click="register()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Continue</button>
+    </form>
+
+    <div id="footer">{{appTitle}} version <span app-version>{{appVersion}}</span></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-route.js"></script>
+  <!--script src="lib/angular/angular.js"></script-->  
+  <script src="js/cruncher.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+</center>
+</body>
+</html>
