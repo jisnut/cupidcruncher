@@ -1,13 +1,16 @@
 {
   "name": "cupidcruncher",
-  "description": "",
-  "repository": "",
-  "devDependencies": {
+  "version": "0.2",
+  "description": "Administration and participant software for The No Workshop.",
+  "repository": "https://github.com/jisnut/cupidcruncher.git",
+  "author": "Justin Cleveland",
+  "dependencies": {
     "phantomjs" : "~1.9",
     "karma" : "~0.10",
     "karma-junit-reporter" : "~0.1",
     "karma-jasmine" : "~0.1",
     "karma-ng-scenario" : "~0.1",
     "express": "3.4.6"
-  }
+  },
+  "main": "server.js"
 }
