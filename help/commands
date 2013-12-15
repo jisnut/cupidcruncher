@@ -1,0 +1,68 @@
+This is a scratchpad for a list of common commands I've had to use to get this crazy shit working.
+
+It's sort of all thrown in here now, I'll organize it later.
+==================================================================================================
+
+
+Initial heroku toolbelt setup: 
+
+Get the Heroku Toolbelt command line interface for Linux:
+
+	wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh 
+
+	heroku login
+
+	git config --global user.email "jisnut@gmail.com"
+	git config --global user.name "jisnut"
+
+	git clone https://github.com/jisnut/cupidcruncher.git
+	git push origin master
+
+	git remote add cupid git@heroku.com:cupidcruncher.git
+
+
+
+List git remotes:
+	git remote -v
+
+	ssh-keygen -t rsa
+	heroku keys:add
+
+After deploying it's important you scale your web dynos. They start out at 0 for some dumb reason
+	heroku ps:scale web=1
+
+
+
+
+
+
+heroku addons:add loggly --app cupidcruncher
+
+
+
+
+
+Print the Heroku log stream
+
+	heroku logs
+
+
+List Heroku web processes running and scale them:
+
+	heroku ps
+
+
+Deploy the app to Heroku: Pushes the code to the remote heroku repository and initiates building the slug...
+
+	git push cupid master -f
+
+
+Commit code changes in local repo
+	git add .
+	git commit -m "message"
+
+
+	git status
+
+	
+
