@@ -17,6 +17,10 @@ angular.module('cruncher.controllers', [])
     $scope.application = application;
   })
 
+  .controller('loginCtrl', function($scope) {
+    $scope.application = application;
+  })
+
   .controller('cruncherCtrl', function($scope) {
     $scope.application = application;
 

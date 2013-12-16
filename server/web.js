@@ -4,9 +4,14 @@ var util = require('util'),
     http = require('http'),
     fs = require('fs'),
     url = require('url'),
-    events = require('events');
+    events = require('events'),
+    express = require('express'),
+    logfmt = require('logfmt'),
+    os = require('os');
+//    app = express();
+//    app.use(logfmt.requestLogger());
 
-var DEFAULT_PORT = 80;
+var DEFAULT_PORT = process.env.PORT || 5000;
 
 function main(argv) {
   new HttpServer({
@@ -41,7 +46,10 @@ function HttpServer(handlers) {
 HttpServer.prototype.start = function(port) {
   this.port = port;
   this.server.listen(port);
-  util.puts('Http Server running at http://localhost:' + port + '/');
+  util.puts('Http Server running on port:' + port + '/');
+  console.log("Listening on " + port);
+
+  console.log("Hostname: " + os.hostname());
 };
 
 HttpServer.prototype.parseUrl_ = function(urlString) {
@@ -200,7 +208,7 @@ StaticServlet.prototype.sendDirectory_ = function(req, res, path) {
 
     var remaining = files.length;
     files.forEach(function(fileName, index) {
-      if(filename == 'index.html'){
+      if(fileName == 'index.html'){
 	    return self.sendFile_(req, res, path + fileName);
       }
       fs.stat(path + '/' + fileName, function(err, stat) {

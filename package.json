@@ -2,7 +2,7 @@
   "name": "cupidcruncher",
   "version": "0.0.0",
   "description": "Administration and participant software for The No Workshop.",
-  "main": "server.js",
+  "main": "server/web.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -12,7 +12,8 @@
   },
   "author": "Justin Cleveland",
   "dependencies": {
-    "express": "3.4.6"
+    "express": "3.4.6",
+    "logfmt": "~0.18.1"
   },
   "engines": {
     "node": "0.10.x"
