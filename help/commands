@@ -49,7 +49,7 @@ Print the Heroku log stream
 
 List Heroku web processes running and scale them:
 
-	heroku ps
+	heroku ps --app cupidcruncher
 
 
 Deploy the app to Heroku: Pushes the code to the remote heroku repository and initiates building the slug...
