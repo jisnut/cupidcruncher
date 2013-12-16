@@ -11,7 +11,7 @@
 
       <img src="img/sexstlbanner_ssm.png" style="display:inline"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <h2 id="eventTitle" style="display:inline; vertical-align:middle;">{{application.event}}</h2>
-      <br/>
+      <br/><br/>
       <h2 id="appTitle">{{application.title}}</h2>
       <h3 id="adminTitle">Administrative Login</h3>
       <br/>
@@ -22,17 +22,13 @@
           <br/>
           <input type="text" name="username" ng-model="admin.username" placeholder="username" required>
         </div>
-
         <br/>
-
         <div class="control-group" ng-class="{error: adminLoginForm.password.$invalid}">
           <label for="name" class="text">Password</label>
           <br/>
-          <input type="password" name="password" ng-model="admin.password" placeholder="***********"required>
+          <input type="password" name="password" ng-model="admin.password" placeholder="***********" required>
         </div>
-
         <br/>
-
         <a href="../" class="btn">Cancel</a>
         <button ng-click="loginAdmin()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Login</button>
       </form>

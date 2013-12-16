@@ -8,6 +8,14 @@
   background-color: #d8bed3;
 }
 
+.admin-container{
+  border: 3px solid #bf9734;
+  width: 800px;
+  padding: 10px;  
+  margin: 10px;
+  background-color: #d8bed3;
+}
+
 .question-container{
   border: 3px solid #bf9734;
   width: 500px;
@@ -22,6 +30,8 @@
 
 .registration-form input{
   font-size: 1.3em;
+  text-align: center;
+  width: 300px;
 }
 
 .privacy-points {

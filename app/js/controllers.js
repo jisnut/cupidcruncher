@@ -21,6 +21,10 @@ angular.module('cruncher.controllers', [])
     $scope.application = application;
   })
 
+  .controller('adminCtrl', function($scope) {
+    $scope.application = application;
+  })
+
   .controller('cruncherCtrl', function($scope) {
     $scope.application = application;
 
