@@ -4,14 +4,9 @@ var util = require('util'),
     http = require('http'),
     fs = require('fs'),
     url = require('url'),
-    events = require('events'),
-    express = require('express'),
-    logfmt = require('logfmt'),
-    os = require('os');
-//    app = express();
-//    app.use(logfmt.requestLogger());
+    events = require('events');
 
-var DEFAULT_PORT = process.env.PORT || 5000;
+var DEFAULT_PORT = 80;
 
 function main(argv) {
   new HttpServer({
@@ -46,10 +41,7 @@ function HttpServer(handlers) {
 HttpServer.prototype.start = function(port) {
   this.port = port;
   this.server.listen(port);
-  util.puts('Http Server running on port:' + port + '/');
-  console.log("Listening on " + port);
-
-  console.log("Hostname: " + os.hostname());
+  util.puts('Http Server running at http://localhost:' + port + '/');
 };
 
 HttpServer.prototype.parseUrl_ = function(urlString) {
@@ -172,21 +164,6 @@ StaticServlet.prototype.sendRedirect_ = function(req, res, redirectUrl) {
   util.puts('301 Moved Permanently: ' + redirectUrl);
 };
 
-StaticServlet.prototype.sendData_ = function(req, res, path) {
-  var self = this;
-  var file = fs.createReadStream(path);
-  res.writeHead(200, {
-    'Content-Type': 'application/json'
-  });
-  if (req.method === 'HEAD') {
-    res.end();
-  } else {
-    res.write('{"json":"object"}');
-    res.end();
-//      self.sendError_(req, res, error);
-  }
-};
-
 StaticServlet.prototype.sendFile_ = function(req, res, path) {
   var self = this;
   var file = fs.createReadStream(path);
@@ -223,8 +200,9 @@ StaticServlet.prototype.sendDirectory_ = function(req, res, path) {
 
     var remaining = files.length;
     files.forEach(function(fileName, index) {
-      if(fileName == 'index.html'){
-	    return self.sendFile_(req, res, path + fileName);
+      if(fileName=='index.html'){
+        util.puts('Serving: '+path + fileName);
+        return self.sendFile_(req, res, path + fileName);
       }
       fs.stat(path + '/' + fileName, function(err, stat) {
         if (err)
