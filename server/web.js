@@ -184,6 +184,7 @@ StaticServlet.prototype.sendData_ = function(req, res, path) {
     res.write('{"json":"object"}');
     res.end();
 //      self.sendError_(req, res, error);
+	//Figure out where to call this function.
   }
 };
 
