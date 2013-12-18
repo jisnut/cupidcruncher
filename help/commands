@@ -73,3 +73,6 @@ BE CAREFUL: This resets your workspace overwriting local files with what's in th
 
 
 rdesktop -f -u <username> <hostname>
+
+https://github.com/node-inspector/node-inspector
+

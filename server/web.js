@@ -12,8 +12,15 @@ var util = require('util'),
 //    app.use(logfmt.requestLogger());
 
 var DEFAULT_PORT = process.env.PORT || 5000;
+var MONGODB_URL = process.env.['MONGOLAB_URI'];
 
 function main(argv) {
+  if(!MONGODB_URL){
+    console.log("Error: MONGODB_URL is " + MONGODB_URL);
+  } else {
+    //setup connection http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/
+    // http://mongodb.github.io/node-mongodb-native/   MONGODB_URL
+  }
   new HttpServer({
     'GET': createServlet(StaticServlet),
     'HEAD': createServlet(StaticServlet)
@@ -99,8 +106,12 @@ StaticServlet.prototype.handleRequest = function(req, res) {
     return String.fromCharCode(parseInt(hex, 16));
   });
   var parts = path.split('/');
-  if (parts[parts.length-1].charAt(0) === '.')
+  if (parts[parts.length-1].charAt(0) === '.') {
     return self.sendForbidden_(req, res, path);
+  }
+  if (req.url.pathname = '/data') {
+    return self.sendData_(req, res, path);
+  }
   fs.stat(path, function(err, stat) {
     if (err)
       return self.sendMissing_(req, res, path);
@@ -172,20 +183,40 @@ StaticServlet.prototype.sendRedirect_ = function(req, res, redirectUrl) {
   util.puts('301 Moved Permanently: ' + redirectUrl);
 };
 
-StaticServlet.prototype.sendData_ = function(req, res, path) {
+StaticServlet.prototype.sendData_ = function(req, res) {
   var self = this;
-  var file = fs.createReadStream(path);
+  var respObj = {};
+  if(!isAuthorized(req)){
+    res.writeHead(403, {
+      'Content-Type': 'text/html'
+    });
+    res.write('{"error":"Unauthorized access."}');
+    res.end();
+    return;
+  }
   res.writeHead(200, {
     'Content-Type': 'application/json'
   });
   if (req.method === 'HEAD') {
     res.end();
-  } else {
-    res.write('{"json":"object"}');
-    res.end();
-//      self.sendError_(req, res, error);
-	//Figure out where to call this function.
+    return;
   }
+  if (req.url.query.json) {
+    var reqObj = JSON.parse(req.url.query.json);
+    if(reqObj && reqObj.o){
+      var dataPar = reqObj.p ? reqObj.p : {};
+      var dataReq = req.method.toLowerCase()+reqObj.o+'(dataPar);';
+      try{
+        respObj = eval(dataReq);
+      } catch (e) {
+        var errMsg = 'Invalid data request: '+dataReq;
+        util.puts(errMsg);
+        respObj = {"error":errMsg};
+      }
+    }
+  }
+  res.write(JSON.stringify(respObj));
+  res.end();
 };
 
 StaticServlet.prototype.sendFile_ = function(req, res, path) {
@@ -266,6 +297,22 @@ StaticServlet.prototype.writeDirectoryIndex_ = function(req, res, path, files) {
   res.write('</ol>');
   res.end();
 };
+
+function isAuthorized(req){
+  //implement this
+  //check req.<user?>
+  return true;
+};
+
+/***** Data Request Methods *****/
+function getPartnerList(req){
+    //implement this
+    // ...DB query...
+  return {"name":"Justin"};
+};
+
+
+
 
 // Must be last,
 main(process.argv);
