@@ -16,7 +16,14 @@
 
     <p id="welcome">Other participants will <b>NOT</b> see your name or email address.<br/>Be sure your number sticker is visible to your partners.</p>
 
-    <form name="registrationForm" class="registration-form">
+    <form action="register" name="registrationForm" class="registration-form">
+      
+    <!-- 
+    Need a mechanism to manage the events down the road, but for now we'll just hard code this eventName to be "SEXSTL No Workshop 2014-01-09"
+    -->
+
+      <input type="hidden" name="eventName" value="SEXSTL No Workshop 2014-01-09"></input>
+
       <div class="control-group" ng-class="{error: registrationForm.name.$invalid}">
         <label for="name" class="text">Name</label>
         <span ng-show="registrationForm.name.$error.required" class="help-inline">(Required)</span>
@@ -42,12 +49,12 @@
 
       <br/><br/>
 
-      <div class="control-group" ng-class="{error: registrationForm.participantNumber.$invalid}">
+      <div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
         <label for="name" class="text">Participant Number</label>
         <br/>
-        <span ng-show="registrationForm.participantNumber.$error.required" class="help-inline">(Required - Your "No" Workshop leader will assign you this)</span>
+        <span ng-show="registrationForm.number.$error.required" class="help-inline">(Required - Your "No" Workshop leader will assign you this)</span>
         <br/>
-        <input type="number" name="participantNumber" ng-model="project.participantNumber" style="width:50px;" min="0" max="100" required>
+        <input type="number" name="number" ng-model="project.number" style="width:50px;" min="0" max="100" required>
       </div>
 
       <br/>

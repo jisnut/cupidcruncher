@@ -16,7 +16,7 @@
       <h3 id="adminTitle">Administrative Login</h3>
       <br/>
 
-      <form name="adminLoginForm" class="registration-form">
+      <form action="admin/login" name="adminLoginForm" ng-submit="adminLogin();" class="registration-form">
         <div class="control-group" ng-class="{error: adminLoginForm.username.$invalid}">
           <label for="username" class="text">Username</label>
           <br/>

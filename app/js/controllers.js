@@ -19,6 +19,10 @@ angular.module('cruncher.controllers', [])
 
   .controller('loginCtrl', function($scope) {
     $scope.application = application;
+    $scope.adminLogin = function() {
+      console.log("Logging in admin: "); // ...admin user name
+      // maybe some validation?
+    }
   })
 
   .controller('adminCtrl', function($scope) {

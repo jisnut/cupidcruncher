@@ -1,25 +1,44 @@
 #!/usr/bin/env node
 
-var util = require('util'),
+var db = null,
+    util = require('util'),
     http = require('http'),
     fs = require('fs'),
     url = require('url'),
     events = require('events'),
     express = require('express'),
     logfmt = require('logfmt'),
-    os = require('os');
+    os = require('os'),
+    mongo = require('mongodb'),
+    monk = require('monk');
 //    app = express();
 //    app.use(logfmt.requestLogger());
 
 var DEFAULT_PORT = process.env.PORT || 5000;
-var MONGODB_URL = process.env.['MONGOLAB_URI'];
+var MONGODB_URL = process.env['MONGOLAB_URI'];
+// For local setup set this environment variable in your .bashrc
+// export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
+
+var configuration;
 
 function main(argv) {
   if(!MONGODB_URL){
     console.log("Error: MONGODB_URL is " + MONGODB_URL);
+    return -1;
   } else {
-    //setup connection http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/
-    // http://mongodb.github.io/node-mongodb-native/   MONGODB_URL
+    console.log("Connecting to: " + MONGODB_URL);
+    try{
+      db = monk(MONGODB_URL);
+      initializeGlobalCollections();
+    } catch (e) {
+      console.log("Error: Database connection could not be established.");
+      console.log(e);
+      return -1;
+    }
+    if(!db){
+      console.log("Error: Database connection could not be established.");
+      return -1;
+    }
   }
   new HttpServer({
     'GET': createServlet(StaticServlet),
@@ -109,8 +128,14 @@ StaticServlet.prototype.handleRequest = function(req, res) {
   if (parts[parts.length-1].charAt(0) === '.') {
     return self.sendForbidden_(req, res, path);
   }
-  if (req.url.pathname = '/data') {
-    return self.sendData_(req, res, path);
+  if (req.url.pathname === '/data') {
+    return self.sendData_(req, res);
+  }
+  if (req.url.pathname === '/app/participant/register') {
+    return self.registerParticipant_(req, res);
+  }
+  if (req.url.pathname === '/app/admin/login') {
+    return self.authenticateAdmin_(req, res);
   }
   fs.stat(path, function(err, stat) {
     if (err)
@@ -185,7 +210,7 @@ StaticServlet.prototype.sendRedirect_ = function(req, res, redirectUrl) {
 
 StaticServlet.prototype.sendData_ = function(req, res) {
   var self = this;
-  var respObj = {};
+//  var respObj = {};
   if(!isAuthorized(req)){
     res.writeHead(403, {
       'Content-Type': 'text/html'
@@ -202,21 +227,22 @@ StaticServlet.prototype.sendData_ = function(req, res) {
     return;
   }
   if (req.url.query.json) {
-    var reqObj = JSON.parse(req.url.query.json);
+    var reqObj = null;
+    try{
+      reqObj = JSON.parse(req.url.query.json);
+    } catch (e) {
+      invalidDataRequestError(res, req.url.query.json);
+    }
     if(reqObj && reqObj.o){
       var dataPar = reqObj.p ? reqObj.p : {};
-      var dataReq = req.method.toLowerCase()+reqObj.o+'(dataPar);';
+      var dataReq = req.method.toLowerCase()+reqObj.o+'(dataPar, res);';
       try{
-        respObj = eval(dataReq);
+        var promise = eval(dataReq); // might want to inspect this a little more to see if we should do anything with it might be good for catching errors/bugs
       } catch (e) {
-        var errMsg = 'Invalid data request: '+dataReq;
-        util.puts(errMsg);
-        respObj = {"error":errMsg};
+        invalidDataRequestError(res, dataReq);
       }
     }
   }
-  res.write(JSON.stringify(respObj));
-  res.end();
 };
 
 StaticServlet.prototype.sendFile_ = function(req, res, path) {
@@ -298,18 +324,83 @@ StaticServlet.prototype.writeDirectoryIndex_ = function(req, res, path, files) {
   res.end();
 };
 
+StaticServlet.prototype.registerParticipant_ = function(req, res) {
+  var self = this;
+  var participant = {
+    eventName: req.url.query.eventName,
+    name: req.url.query.name,
+    nameMatchesOk: req.url.query.nameMatchesOk === 'on' ? true : false,
+    email: req.url.query.email,
+    emailMatchesOk: req.url.query.emailMatchesOk === 'on' ? true : false,
+    number: req.url.query.number
+  };
+  // ...definitely some validation (certainly to make sure the number isn't already in use)
+
+// TODO: save it to the participant collection
+
+  return self.sendFile_(req, res, "./app/participant/play.html");
+};
+
+StaticServlet.prototype.authenticateAdmin_ = function(req, res) {
+  var self = this;
+  if((req.url.query.username === "justin" && req.url.query.password === "nibor") ||
+     (req.url.query.username === "robin" && req.url.query.password === "jisnut")) {
+// TODO: create some sort of "session"
+    return self.sendFile_(req, res, "./app/admin/index.html");
+  }
+  res.writeHead(403, {
+    'Content-Type': 'text/html'
+  });
+  res.write('{"error":"Unauthorized access."}');  // Need a better failed login page than this
+  res.end();
+  return;
+};
+
 function isAuthorized(req){
   //implement this
   //check req.<user?>
   return true;
 };
 
-/***** Data Request Methods *****/
-function getPartnerList(req){
-    //implement this
-    // ...DB query...
-  return {"name":"Justin"};
+function invalidDataRequestError(res, dReq) {
+  var errMsg = 'Invalid data request: '+dReq;
+  util.puts(errMsg);
+  res.write('{"error":"'+errMsg+'"}');
+  res.end();
 };
+
+function writeDataResponse(res, docs) {
+//  console.log(docs);
+  res.write(JSON.stringify(docs));
+  res.end();
+};
+
+function initializeGlobalCollections() {
+  configuration = db.get('configuration');
+};
+
+/***** Data Request Methods *****/
+function getConfiguration(query, res) {
+  return configuration.findOne(query,{},
+    function(e,docs){
+      writeDataResponse(res, docs);
+    });
+};
+
+function getQuestionList(query, res) {
+  return db.get('questions').find({},{},
+    function(e,docs){
+      writeDataResponse(res, docs);
+    });
+};
+
+function getPartnerList(query, res) {
+  return db.get('partners').find({},{},
+    function(e,docs){
+      writeDataResponse(res, docs);
+    });
+};
+
 
 
 

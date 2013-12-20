@@ -66,6 +66,13 @@ Commit code changes in local repo
 
 	
 
+sudo npm install mongodb
+sudo npm install logfmt
+sudo npm install monk
+
+
+
+
 
 BE CAREFUL: This resets your workspace overwriting local files with what's in the master branch of the github repo:
 	git fetch --all
@@ -76,3 +83,31 @@ rdesktop -f -u <username> <hostname>
 
 https://github.com/node-inspector/node-inspector
 
+rdesktop -u jcleve01 -d NRG -g 1920x1160 NRG226
+
+
+connect to MongoDB with:
+
+mongo ds053218.mongolab.com:53218/heroku_app20014113 -u heroku_app20014113
+
+export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
+
+db.auth('<username>', '<password>')
+
+    //setup connection http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/
+    // http://mongodb.github.io/node-mongodb-native/   MONGODB_URL
+
+
+
+
+
+node --debug server/web.js
+
+node-inspector &
+
+
+http://192.168.2.3:5000/data?json={"o":"PartnerList","p":""}
+
+http://192.168.2.3:5000/data?json={"o":"QuestionList","p":""}
+
+http://192.168.2.3:8080/debug?port=5858
