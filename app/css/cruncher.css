@@ -38,6 +38,23 @@
   font-size: 1.2em;
 }
 
+.animate-show {
+  -webkit-transition:all linear 5.0s;
+  transition:all linear 5.0s;
+  line-height:20px;
+  opacity:1;
+}
+ 
+.animate-show.ng-hide-add,
+.animate-show.ng-hide-remove {
+  display:inline!important;
+}
+ 
+.animate-show.ng-hide {
+  line-height:0;
+  opacity:0;
+}
+
 #appTitle {
   font-family: "Arial Rounded MT Bold", "Helvetica Rounded", Arial, sans-serif;
 }

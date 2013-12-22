@@ -14,7 +14,10 @@
 
     <br/>
 
-    <p id="welcome">Other participants will <b>NOT</b> see your name or email address.<br/>Be sure your number sticker is visible to your partners.</p>
+    <p id="welcome">
+      <span class="animate-show" ng-hide="project.nameMatchesOk && project.emailMatchesOk">Other participants will <b>NOT</b> see your <span ng-hide="project.nameMatchesOk">name<span ng-hide="project.emailMatchesOk"> or </span></span><span ng-hide="project.emailMatchesOk">email address</span>.<br/></span>
+      <span class="animate-show" ng-show="project.nameMatchesOk || project.emailMatchesOk">Other participants who match your questions <b>will</b> see your <span ng-show="project.nameMatchesOk">name<span ng-show="project.emailMatchesOk"> and </span></span><span ng-show="project.emailMatchesOk">email address</span>.<br/></span>
+    </p>
 
     <form action="register" name="registrationForm" class="registration-form">
       
@@ -52,7 +55,8 @@
       <div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
         <label for="name" class="text">Participant Number</label>
         <br/>
-        <span ng-show="registrationForm.number.$error.required" class="help-inline">(Required - Your "No" Workshop leader will assign you this)</span>
+        <span ng-show="project.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</span>
+        <span ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</span>
         <br/>
         <input type="number" name="number" ng-model="project.number" style="width:50px;" min="0" max="100" required>
       </div>
@@ -66,8 +70,9 @@
     <div id="footer">{{application.title}} version <span app-version>{{application.version}}</span></div>
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.3/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.min.js"></script>
   <!--script src="../lib/angular/angular.js"></script-->  
   <script src="../js/cruncher.js"></script>
   <script src="../js/services.js"></script>
