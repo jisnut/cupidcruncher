@@ -111,3 +111,18 @@ http://192.168.2.3:5000/data?json={"o":"PartnerList","p":""}
 http://192.168.2.3:5000/data?json={"o":"QuestionList","p":""}
 
 http://192.168.2.3:8080/debug?port=5858
+
+http://bit.ly/1hAZpNb
+
+
+
+
+
+
+
+
+
+
+Technologies to check out down the road:
+OmniBinder
+Restangular (and using promises)

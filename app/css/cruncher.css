@@ -24,6 +24,49 @@
   background-color: #bf9734;
 }
 
+.qr-container{
+  border: none;
+  padding: 20px 100px;
+  background: #ffffff;
+  text-align: center;
+}
+.qr-gr-top{
+  height: 80px;
+  background: -webkit-linear-gradient(top, rgba(216,190,211,1) 0%,rgba(216,190,211,1) 13%,rgba(255,255,255,1) 98%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: linear-gradient(to bottom, rgba(216,190,211,1) 0%,rgba(216,190,211,1) 13%,rgba(255,255,255,1) 98%,rgba(255,255,255,1) 100%); /* W3C */
+}
+.qr-gr-bot{
+  height: 80px;
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 2%,rgba(216,190,211,1) 87%,rgba(216,190,211,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,1) 2%,rgba(216,190,211,1) 87%,rgba(216,190,211,1) 100%); /* W3C */
+}
+.qr-gr-left{
+  width: 80px;
+  background: -webkit-linear-gradient(left, rgba(216,190,211,1) 0%,rgba(216,190,211,1) 13%,rgba(255,255,255,1) 98%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: linear-gradient(to right, rgba(216,190,211,1) 0%,rgba(216,190,211,1) 13%,rgba(255,255,255,1) 98%,rgba(255,255,255,1) 100%); /* W3C */
+}
+.qr-gr-right{
+  width: 80px;
+  background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 2%,rgba(216,190,211,1) 87%,rgba(216,190,211,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: linear-gradient(to right, rgba(255,255,255,1) 0%,rgba(255,255,255,1) 2%,rgba(216,190,211,1) 87%,rgba(216,190,211,1) 100%); /* W3C */
+}
+.qr-gr-top-left{
+  background: -webkit-radial-gradient(bottom right, #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* Chrome10+,Safari5.1+ */
+  background: radial-gradient(bottom right,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* W3C */
+}
+.qr-gr-top-right{
+  background: -webkit-radial-gradient(bottom left,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* Chrome10+,Safari5.1+ */
+  background: radial-gradient(bottom left,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* W3C */
+}
+.qr-gr-bot-left{
+  background: -webkit-radial-gradient(top right,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* Chrome10+,Safari5.1+ */
+  background: radial-gradient(top right,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* W3C */
+}
+.qr-gr-bot-right{
+  background: -webkit-radial-gradient(top left,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* Chrome10+,Safari5.1+ */
+  background: radial-gradient(top left,  #ffffff 0%,#ffffff 2%,#d8bed3 60%,#d8bed3 100%); /* W3C */
+}
+
 .registration-form label.text{
   font-size: 1.2em;
 }
