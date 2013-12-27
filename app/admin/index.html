@@ -7,11 +7,11 @@
   <link rel="stylesheet" href="../css/cruncher.css"/>
   <link rel="stylesheet" href="../css/animate.css"/>
 </head>
-<body ng-controller="adminCtrl" class="fill-window">
+<body ng-controller="adminCtrl as admin" class="fill-window">
 <center>
   <div class="admin-container app-container ui-corner-all">
     <img src="../img/sexstlbanner_ssm.png" style="display:inline"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <h3 id="pageTitle" style="display:inline; vertical-align:middle;">{{application.event}} ~ Administrative Console</h3>
+    <h3 id="pageTitle" style="display:inline; vertical-align:middle;">{{application.event}} ~ Administration</h3>
     <br/>
     
     <form name="adminForm" class="registration-form">
@@ -30,13 +30,15 @@
 
       <br/><br/>
 
+<!-- http://docs.angularjs.org/api/ngRoute.directive:ngView -->
+
       <div style="display:block;">
         <pre>
-          $location.path() = {{main.$location.path()}}
-          $route.current.templateUrl = {{main.$route.current.templateUrl}}
-          $route.current.params = {{main.$route.current.params}}
-          $route.current.scope.name = {{main.$route.current.scope.name}}
-          $routeParams = {{main.$routeParams}}
+          $location.path() = {{admin.$location.path()}}
+          $route.current.templateUrl = {{admin.$route.current.templateUrl}}
+          $route.current.params = {{admin.$route.current.params}}
+          $route.current.scope.name = {{admin.$route.current.scope.name}}
+          $routeParams = {{admin.$routeParams}}
         </pre>
       </div>
 
