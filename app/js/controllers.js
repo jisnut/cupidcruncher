@@ -34,6 +34,7 @@ angular.module('cruncher.controllers', [])
 
   })
 
+// Participant controller functions
   .controller('partnersCtrl', function($scope, $http) {
     $http.get('data/partners.json').success(function(data) {
       $scope.partners = data;
@@ -50,6 +51,35 @@ angular.module('cruncher.controllers', [])
     $http.get('data/configuration.json').success(function(data) {
       $scope.configuration = data;
     });
+  })
+
+// Admin controller functions
+  .controller('setupCtrl', function($scope, $routeParams) {
+      this.name = "BookCntl";
+      this.params = $routeParams;
+  })
+
+  .controller('eventDetailsCtrl', function($scope, $http) {
+    console.log('firing eventDetailsCtrl');
+//    console.log('$scope: '+$scope);
+  })
+
+  .controller('participantsCtrl', function($scope, $http) {
+
+  })
+
+  .controller('questionsCtrl', function($scope, $http) {
+
+  })
+
+  .controller('reportsCtrl', function($scope, $http) {
+
+  })
+
+  .controller('reportsCtrl', function($scope, $http) {
+
+  })
+
+  .controller('reportsCtrl', function($scope, $http) {
+
   });
-
-

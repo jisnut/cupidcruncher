@@ -23,7 +23,7 @@ var configuration;
 
 function main(argv) {
   if(!MONGODB_URL){
-    console.log("Error: MONGODB_URL is " + MONGODB_URL);
+    console.log("Error: MONGOLAB_URI is " + MONGODB_URL);
     return -1;
   } else {
     console.log("Connecting to: " + MONGODB_URL);

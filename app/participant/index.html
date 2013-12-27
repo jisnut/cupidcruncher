@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>{{application.event}}</title>
   <link rel="stylesheet" href="../css/cruncher.css"/>
+  <link rel="stylesheet" href="../css/animate.css"/>
 </head>
 <body ng-controller="registrationCtrl">
 <center>
@@ -55,8 +56,8 @@
       <div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
         <label for="name" class="text">Participant Number</label>
         <br/>
-        <span ng-show="project.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</span>
-        <span ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</span>
+        <div ng-show="project.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</br></div>
+        <div ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</br></div>
         <br/>
         <input type="number" name="number" ng-model="project.number" style="width:50px;" min="0" max="100" required>
       </div>
