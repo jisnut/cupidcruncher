@@ -9,7 +9,7 @@
 </head>
 <body ng-controller="adminCtrl as admin" class="fill-window">
 <center>
-  <div class="admin-container app-container ui-corner-all">
+  <div id="adminContainer" class="admin-container resizable-container ui-corner-all">
     <img src="../img/sexstlbanner_ssm.png" style="display:inline"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <h3 id="pageTitle" style="display:inline; vertical-align:middle;">{{application.event}} ~ Administration</h3>
     <br/>
@@ -24,7 +24,7 @@
         <span><a href="#/stats">Cruncher Stats</a></span>
         <span><a href="#/links">Links</a></span>
       </div>
-      <div class="view-animate-container">
+      <div id="adminTabContainer" class="view-animate-container resizable-container">
         <div ng-view class="view-animate"></div>
       </div>
 

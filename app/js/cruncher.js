@@ -21,16 +21,27 @@ config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/partners'});
 }]);
 
+var resizable_containers;
 function initializeApp() {
+  resizable_containers = $('.resizable-container');
+  resizable_containers.each(function(index, value) {
+    if(value.id=='adminContainer') {
+      value.wOffset = 50; value.hOffset = 50;
+    }
+    if(value.id=='adminTabContainer') {
+      value.wOffset = 50; value.hOffset = 300;
+    }
+  });
   window.onresize=resizeAppContainer;
   resizeAppContainer();
 };
 
-var wOffset = 50, hOffset = 50;
+
 function resizeAppContainer() {
   var w = parseInt(window.innerWidth),
-      h = parseInt(window.innerHeight),
-      c = $('.app-container')[0];
-      c.style.width=(w-wOffset)+'px';
-      c.style.height=(h-hOffset)+'px';
+      h = parseInt(window.innerHeight);
+  resizable_containers.each(function(index, value) {
+    value.style.width=(w-value.wOffset)+'px';
+    value.style.height=(h-value.hOffset)+'px';
+  });
 };
