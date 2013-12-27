@@ -13,8 +13,25 @@ var application = {
 
 angular.module('cruncher.controllers', [])
 
-  .controller('registrationCtrl', function($scope) {
+  .controller('registrationCtrl', function($scope, $http, $location, $routeParams) {
     $scope.application = application;
+    $scope.register = function() {
+      var loop = $('#registryLoop').val();
+      if(loop == 'true'){
+        loop = true;
+      } else {
+        loop = false;
+      }
+      console.log('Registering: '+this.participant.name);
+      $http.post('register', this.participant).success(function(data) {
+        $scope.registration = data;
+      }).
+      error(function(data, status) {
+        $scope.data = data || "Request failed";
+        $scope.status = status;
+      });
+      return false; // prevent the submit action???
+    };
   })
 
   .controller('loginCtrl', function($scope) {
@@ -76,10 +93,10 @@ angular.module('cruncher.controllers', [])
 
   })
 
-  .controller('reportsCtrl', function($scope, $http) {
+  .controller('statsCtrl', function($scope, $http) {
 
   })
 
-  .controller('reportsCtrl', function($scope, $http) {
+  .controller('linksCtrl', function($scope, $http) {
 
   });

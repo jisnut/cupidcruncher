@@ -38,6 +38,14 @@ button.bigger{
   font-size: 3.0em;
   padding: 20px;
 }
+.big-icon{
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  margin: 5px 10px 10px 10px;
+}
 
 .app-container{
   border: 4px solid #bf9734;

@@ -1,52 +1,26 @@
 #!/usr/bin/env node
-var DEFAULT_PORT = process.env.PORT || 5000;
+
 var db = null,
     util = require('util'),
     http = require('http'),
-    path = require('path'),
     fs = require('fs'),
     url = require('url'),
     events = require('events'),
     express = require('express'),
-    routes = require('./routes'),
-    user = require('./routes/user'),
     logfmt = require('logfmt'),
     os = require('os'),
     mongo = require('mongodb'),
     monk = require('monk');
+//    app = express();
+//    app.use(logfmt.requestLogger());
 
-    app = express();
-    app.use(logfmt.requestLogger());
-    app.set('port', DEFAULT_PORT);
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.urlencoded());
-    app.use(express.methodOverride());
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname, 'public')));
-
+var DEFAULT_PORT = process.env.PORT || 5000;
 var MONGODB_URL = process.env['MONGOLAB_URI'];
 // For local setup set this environment variable in your .bashrc
 // export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
 
 var configuration;
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
-
-app.get('/', routes.index);
-app.get('/users', user.list);
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
-});
-
-app.get('/helloworld', routes.helloworld);
-
-
-/*
 function main(argv) {
   if(!MONGODB_URL){
     console.log("Error: MONGOLAB_URI is " + MONGODB_URL);
@@ -86,12 +60,12 @@ function createServlet(Class) {
   return servlet.handleRequest.bind(servlet);
 }
 
-
-// * An Http server implementation that uses a map of methods to decide
-// * action routing.
-// *
-// * @param {Object} Map of method => Handler function
-
+/**
+ * An Http server implementation that uses a map of methods to decide
+ * action routing.
+ *
+ * @param {Object} Map of method => Handler function
+ */
 function HttpServer(handlers) {
   this.handlers = handlers;
   this.server = http.createServer(this.handleRequest_.bind(this));
@@ -128,7 +102,9 @@ HttpServer.prototype.handleRequest_ = function(req, res) {
   }
 };
 
-// Handles static content.
+/**
+ * Handles static content.
+ */
 function StaticServlet() {}
 
 StaticServlet.MimeMap = {
@@ -407,7 +383,7 @@ function initializeGlobalCollections() {
   configuration = db.get('configuration');
 };
 
-//***** Data Request Methods *****
+/***** Data Request Methods *****/
 function getConfiguration(query, res) {
   return configuration.findOne(query,{},
     function(e,docs){
@@ -435,5 +411,3 @@ function getPartnerList(query, res) {
 
 // Must be last,
 main(process.argv);
-*/
-
