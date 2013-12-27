@@ -15,7 +15,7 @@
 
     <br/>
 
-    <p id="welcome">
+    <p id="privacyNotification">
       <span class="animate-show" ng-hide="project.nameMatchesOk && project.emailMatchesOk">Other participants will <b>NOT</b> see your <span ng-hide="project.nameMatchesOk">name<span ng-hide="project.emailMatchesOk"> or </span></span><span ng-hide="project.emailMatchesOk">email address</span>.<br/></span>
       <span class="animate-show" ng-show="project.nameMatchesOk || project.emailMatchesOk">Other participants who match your questions <b>will</b> see your <span ng-show="project.nameMatchesOk">name<span ng-show="project.emailMatchesOk"> and </span></span><span ng-show="project.emailMatchesOk">email address</span>.<br/></span>
     </p>
@@ -29,43 +29,43 @@
       <input type="hidden" name="eventName" value="SEXSTL No Workshop 2014-01-09"></input>
 
       <div class="control-group" ng-class="{error: registrationForm.name.$invalid}">
-        <label for="name" class="text">Name</label>
+        <label for="name">Name</label>
         <span ng-show="registrationForm.name.$error.required" class="help-inline">(Required)</span>
         <br/>
         <input type="text" name="name" ng-model="project.name" placeholder="...or nickname" required>
       </div>
 
-      <input type="checkbox" name="nameMatchesOk" ng-model="project.nameMatchesOk"></input>
+      <input type="checkbox" name="nameMatchesOk" class="big" ng-model="project.nameMatchesOk"></input>
       <label for="nameMatchesOk">May we send your name to your matches?</label>
 
       <br/><br/>
 
       <div class="control-group" ng-class="{error: registrationForm.email.$invalid}">
-        <label for="email" class="text">Email</label>
+        <label for="email">Email</label>
         <span ng-show="registrationForm.email.$error.required" class="help-inline">(Required)</span>
         <span ng-show="registrationForm.email.$error.email" class="help-inline">Not a valid email address</span>
         <br/>
         <input type="email" name="email" ng-model="project.email" placeholder="...so we can send you your matches!"  required>
       </div>
 
-      <input type="checkbox" name="emailMatchesOk" ng-model="project.emailMatchesOk"></input>
+      <input type="checkbox" name="emailMatchesOk" class="big" ng-model="project.emailMatchesOk"></input>
       <label for="emailMatchesOk">May we send your email address to your matches?</label>
 
       <br/><br/>
 
       <div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
-        <label for="name" class="text">Participant Number</label>
+        <label for="name">Participant Number</label>
         <br/>
         <div ng-show="project.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</br></div>
         <div ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</br></div>
         <br/>
-        <input type="number" name="number" ng-model="project.number" style="width:50px;" min="0" max="100" required>
+        <input type="number" name="number" ng-model="project.number" style="width:80px; height:50px; font-size:3.0em;" min="0" max="100" required>
       </div>
 
       <br/>
 
-      <a href="#/" class="btn">Cancel</a>
-      <button ng-click="register()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Continue</button>
+      <a href="#/" class="btn big">Cancel</a>
+      <button ng-click="register()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary big">Continue</button>
     </form>
 
     <div id="footer">{{application.title}} version <span app-version>{{application.version}}</span></div>
