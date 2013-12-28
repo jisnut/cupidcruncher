@@ -1,0 +1,10 @@
+extends layout
+
+block content
+    h1= title
+    form#newParticipant(name="registration",method="post",action="/register")
+        input#participantName(type="text", placeholder="name", name="name")
+        input#participantEmail(type="email", placeholder="email", name="email")
+        button#btnSubmit(type="button",onclick="register();") Register
+    div#result(style="border: 1px solid yellow; color: white;")
+    
