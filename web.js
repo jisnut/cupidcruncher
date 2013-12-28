@@ -13,23 +13,56 @@ var db = null,
     logfmt = require('logfmt'),
     os = require('os'),
     mongo = require('mongodb'),
-    monk = require('monk');
-
+    monk = require('monk'),
     app = express();
-    app.use(logfmt.requestLogger());
-    app.set('port', DEFAULT_PORT);
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.urlencoded());
-    app.use(express.methodOverride());
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname, 'public')));
+
+/*
+var configuration;  // Configuration data that is loaded once upon app startup from the database
+var initializeGlobalCollections = function() {
+  configuration = db.get('configuration');
+  configuration.find({},{},function(e,docs){
+    configuration = docs;
+// Put something more useful in here...
+console.log("question set size: "+configuration.questionSetSize);
+  })
+};
+*/
 
 var MONGODB_URL = process.env['MONGOLAB_URI'];
 // For local setup set this environment variable in your .bashrc
 // export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
+if(!MONGODB_URL){
+  console.log("Error: MONGOLAB_URI is " + MONGODB_URL);
+  return -1;
+} else {
+  console.log("Connecting to: " + MONGODB_URL);
+  try{
+    db = monk(MONGODB_URL);
+//    initializeGlobalCollections();
+  } catch (e) {
+    console.log("Error: Database connection could not be established.");
+    console.log(e);
+    return -1;
+  }
+  if(!db){
+    console.log("Error: Database connection could not be established.");
+    return -1;
+  }
+}
 
-var configuration;
+app.use(logfmt.requestLogger());
+app.set('port', DEFAULT_PORT);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.favicon(path.join(__dirname, 'public/app/img/favicon.ico')));
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(express.cookieParser('your secret here'));
+app.use(express.session());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
@@ -38,12 +71,18 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/helloworld', routes.helloworld);
+app.get('/userlist', routes.userlist(db));
+app.get('/newuser', routes.newuser);
+app.get('/newParticipant', routes.newParticipant);
+
+app.post('/adduser', routes.adduser(db));
+app.post('/register', routes.register(db));
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
-
-app.get('/helloworld', routes.helloworld);
 
 
 /*
@@ -436,4 +475,3 @@ function getPartnerList(query, res) {
 // Must be last,
 main(process.argv);
 */
-

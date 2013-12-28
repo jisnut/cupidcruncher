@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" ng-app="cruncher">
+<head>
+  <meta charset="utf-8">
+  <title>{{application.event}}</title>
+  <link rel="stylesheet" href="../css/eggplant/jquery-ui-1.10.3.custom.min.css"/>
+  <link rel="stylesheet" href="../css/cruncher.css"/>
+  <link rel="stylesheet" href="../css/animate.css"/>
+</head>
+<body ng-controller="cruncherCtrl" class="fill-window">
+<center>
+  <div class="app-container ui-corner-all">
+    <img src="../img/sexstlbanner_ssm.png" style="display:inline"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <h2 id="appTitle" style="display:inline; vertical-align:middle;">{{application.event}}</h2>
+    <ul class="menu">
+      <li><a href="#/partners">Partners</a></li>
+      <li><a href="#/questions">Questions</a></li>
+    </ul>
+    <div ng-view></div>
+    <div id="footer">{{application.title}} version <span app-version>{{application.version}}</span></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+  <!--script src="../lib/angular/angular.js"></script>
+  <script src="../lib/angular/angular-route.js"></script-->  
+  <script src="../js/cruncher.js"></script>
+  <script src="../js/services.js"></script>
+  <script src="../js/controllers.js"></script>
+  <script src="../js/filters.js"></script>
+  <script src="../js/directives.js"></script>
+  <script type="text/javascript" language="JavaScript">
+    $(document).ready(initializeApp);
+  </script>
+</center>
+</body>
+</html>
+

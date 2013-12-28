@@ -1,0 +1,54 @@
+<div class="admin-questions">
+  <div class="section-title">Questions</div>
+
+<div style="color:red">Not fully implemented yet!</div>
+
+  <div>
+  	<div>Print Question Sheets</div>
+  </div>
+
+  <table><tbody>
+  	<tr>
+  	  <th>Number</th>
+  	  <th>Text</th>
+  	  <th>Category</th>
+  	  <th>Crudeness</th>
+  	  <th>Mood</th>
+  	  <th>Note</th>
+  	  <th>Enabled</th>
+  	  <th>Edit/Save</th>
+  	</tr>
+  	<tr>
+  	  <td>{{question.number}}</td>
+  	  <td>{{question.text}}</td>
+  	  <td>{{question.category}}</td>
+  	  <td>{{question.crudeness}}</td>
+  	  <td>{{question.mood}}</td>
+  	  <td>{{question.note}}</td>
+  	  <td>{{question.enabled}}</td>
+  	  <td><div>edit icon<div></td>
+  	</tr>
+  	<tr>
+  	  <td>{{question.number}}</td>
+  	  <td><input type="text" id="text" name="text"></input></td>
+  	  <td>
+  	  	<select id="category" name="category">
+  	  	  <option value="{{category.value}}">{{category.description}}</option>
+  	  	</select>
+  	  </td>
+  	  <td>
+  	  	<select id="crudeness" name="crudeness">
+  	  	  <option value="{{crudeness.value}}">{{crudeness.description}}</option>
+  	  	</select>
+  	  </td>
+  	  <td>
+  	  	<select id="mood" name="mood">
+  	  	  <option value="{{mood.value}}">{{mood.description}}</option>
+  	  	</select>
+  	  </td>
+  	  <td><input type="text" id="note" name="note"></input></td>
+  	  <td><input type="checkbox" name="enabled" ng-model="project.enabled"></input></td>
+  	  <td><div>save icon<div></td>
+  	</tr>
+  </tbody></table>
+</div>

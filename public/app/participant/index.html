@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" ng-app="cruncher">
+<head>
+  <meta charset="utf-8">
+  <title>{{application.event}}</title>
+  <link rel="stylesheet" href="../css/eggplant/jquery-ui-1.10.3.custom.min.css"/>
+  <link rel="stylesheet" href="../css/cruncher.css"/>
+  <link rel="stylesheet" href="../css/animate.css"/>
+</head>
+<body ng-controller="registrationCtrl">
+<center>
+  <div class="app-container resizable-container ui-corner-all">
+    <img src="../img/sexstlbanner.png"/>
+    <h3 id="presents">~ presents ~</h2>
+    <h1 id="appTitle">{{application.event}}</h1>
+
+    <br/>
+
+    <p id="privacyNotification">
+      <span class="animate-show" ng-hide="participant.nameMatchesOk && participant.emailMatchesOk">Other participants will <b>NOT</b> see your <span ng-hide="participant.nameMatchesOk">name<span ng-hide="participant.emailMatchesOk"> or </span></span><span ng-hide="participant.emailMatchesOk">email address</span>.<br/></span>
+      <span class="animate-show" ng-show="participant.nameMatchesOk || participant.emailMatchesOk">Other participants who match your questions <b>will</b> see your <span ng-show="participant.nameMatchesOk">name<span ng-show="participant.emailMatchesOk"> and </span></span><span ng-show="participant.emailMatchesOk">email address</span>.<br/></span>
+    </p>
+
+    <form action="register" name="registrationForm" class="registration-form">
+      
+    <!-- 
+    Need a mechanism to manage the events down the road, but for now we'll just hard code this eventName to be "SEXSTL No Workshop 2014-01-09"
+    -->
+      <input type="hidden" name="eventName" ng-model="participant.eventName" value="SEXSTL No Workshop 2014-01-09"></input>
+      <input type="hidden" id="registryLoop" name="registryLoop" value="false"></input>
+
+registration:{{registration}}
+
+      <div class="control-group" ng-class="{error: registrationForm.name.$invalid}">
+        <label for="name">Name</label>
+        <span ng-show="registrationForm.name.$error.required" class="help-inline">(Required)</span>
+        <br/>
+        <input type="text" name="name" ng-model="participant.name" placeholder="...or nickname" required>
+      </div>
+
+      <input type="checkbox" name="nameMatchesOk" class="big" ng-model="participant.nameMatchesOk"></input>
+      <label for="nameMatchesOk">May we send your name to your matches?</label>
+
+      <br/><br/>
+
+      <div class="control-group" ng-class="{error: registrationForm.email.$invalid}">
+        <label for="email">Email</label>
+        <span ng-show="registrationForm.email.$error.required" class="help-inline">(Required)</span>
+        <span ng-show="registrationForm.email.$error.email" class="help-inline">Not a valid email address</span>
+        <br/>
+        <input type="email" name="email" ng-model="participant.email" placeholder="...so we can send you your matches!"  required>
+      </div>
+
+      <input type="checkbox" name="emailMatchesOk" class="big" ng-model="participant.emailMatchesOk"></input>
+      <label for="emailMatchesOk">May we send your email address to your matches?</label>
+
+      <br/><br/>
+
+      <div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
+        <label for="name">Participant Number</label>
+        <br/>
+        <div ng-show="participant.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</br></div>
+        <div ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</br></div>
+        <br/>
+        <input type="number" name="number" ng-model="participant.number" style="width:80px; height:50px; font-size:3.0em;" min="0" max="100" required>
+      </div>
+
+      <br/>
+
+      <a href="/" class="btn bigger">Cancel</a>
+      <button ng-click="register()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary bigger">Register!</button>
+    </form>
+
+    <div id="footer">{{application.title}} version <span app-version>{{application.version}}</span></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+  <!--script src="../lib/angular/angular.js"></script-->  
+  <script src="../js/cruncher.js"></script>
+  <script src="../js/services.js"></script>
+  <script src="../js/controllers.js"></script>
+  <script src="../js/filters.js"></script>
+  <script src="../js/directives.js"></script>
+</center>
+</body>
+</html>
