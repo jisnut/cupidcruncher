@@ -1,15 +1,36 @@
-
-/*
- * GET home page.
- */
-
+var mainTitle = 'SEX+STL Cupid Cruncher';
 exports.index = function(req, res){
-  res.render('index', { title: 'Express' });
+  res.render('index', {title: mainTitle});
+};
+exports.qr = function(req, res){
+  res.render('qr', {title: 'QR Code - '+mainTitle});
+};
+exports.rules = function(req, res){
+  res.render('rules', {title: 'Rules - '+mainTitle});
+};
+exports.login = function(req, res){
+  res.render('login', {title: 'Admin Login - '+mainTitle});
+};
+exports.admin = function(req, res){
+  res.render('admin', {title: 'Administration - '+mainTitle});
+};
+exports.registration = function(req, res){
+  res.render('registration', {title: 'Registration - '+mainTitle});
+};
+exports.registrationLoop = function(req, res){
+  var registryLoop = '<input type="hidden" id="registryLoop" name="registryLoop" value="false"></input>';
+  res.render('registration', {title: 'Registration - '+mainTitle});
+};
+exports.play = function(req, res){
+  res.render('play', {title: mainTitle});
 };
 
-exports.helloworld = function(req, res){
-  res.render('helloworld', { title: 'Hello, World!' });
-};
+
+
+
+
+
+
 
 exports.userlist = function(db) {
     return function(req, res) {
@@ -21,11 +42,9 @@ exports.userlist = function(db) {
         });
     };
 };
-
 exports.newuser = function(req, res){
   res.render('newuser', { title: 'Add New User' });
 };
-
 exports.adduser = function(db) {
   return function(req, res) {
     // Get our form values. These rely on the "name" attributes
@@ -54,22 +73,23 @@ exports.adduser = function(db) {
 exports.newParticipant = function(req, res){
   res.render('newParticipant', { title: 'Add New Participant' });
 };
-
 exports.register = function(db) {
   return function(req, res) {
-    var participant;
-    if(req.body.participant){
-      participant = req.body.participant;
+    if(req.body){
+      var participant = req.body;
+
+// get new participant number
+
+      var collection = db.get('participant');
+      collection.insert(participant, function (err, doc) {
+        if(err){
+          res.json(500, {error: 'There was a problem registering the participant in the database.'})
+        } else {
+          res.json({success:"Registered!", participant:doc});
+        }
+      });
     } else {
       // throw error
     }
-    var collection = db.get('participant');
-    collection.insert(participant, function (err, doc) {
-      if(err){
-        res.json(500, {error: 'There was a problem registering the participant in the database.'})
-      } else {
-        res.json({success:"Registered!", participant:doc});
-      }
-    });
   }
 }

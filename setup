@@ -1,0 +1,148 @@
+This is a scratchpad for a list of common commands I've had to use to get this crazy shit working.
+
+It's sort of all thrown in here now, I'll organize it later.
+==================================================================================================
+
+
+Initial heroku toolbelt setup: 
+
+Get the Heroku Toolbelt command line interface for Linux:
+
+	wget -qO- https://toolbelt.heroku.com/install-ubuntu.sh | sh 
+
+	heroku login
+
+	git config --global user.email "jisnut@gmail.com"
+	git config --global user.name "jisnut"
+
+	git clone https://github.com/jisnut/cupidcruncher.git
+	git push origin master
+
+	git remote add cupid git@heroku.com:cupidcruncher.git
+
+
+
+List git remotes:
+	git remote -v
+
+	ssh-keygen -t rsa
+	heroku keys:add
+
+After deploying it's important you scale your web dynos. They start out at 0 for some dumb reason
+	heroku ps:scale web=1
+
+
+
+
+
+
+heroku addons:add loggly --app cupidcruncher
+
+
+
+
+
+Print the Heroku log stream
+
+	heroku logs
+
+
+List Heroku web processes running and scale them:
+
+	heroku ps --app cupidcruncher
+
+
+Deploy the app to Heroku: Pushes the code to the remote heroku repository and initiates building the slug...
+
+	git push cupid master -f
+
+
+Commit code changes in local repo
+	git add .
+	git commit -m "message"
+
+
+	git status
+
+	
+
+sudo npm install mongodb
+sudo npm install logfmt
+sudo npm install monk
+
+
+
+
+
+BE CAREFUL: This resets your workspace overwriting local files with what's in the master branch of the github repo:
+	git fetch --all
+	git reset --hard origin/master
+
+
+rdesktop -f -u <username> <hostname>
+
+https://github.com/node-inspector/node-inspector
+
+rdesktop -u jcleve01 -d NRG -g 1920x1160 NRG226
+
+
+connect to MongoDB with:
+
+mongo ds053218.mongolab.com:53218/heroku_app20014113 -u heroku_app20014113
+
+export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
+
+db.auth('<username>', '<password>')
+
+    //setup connection http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/
+    // http://mongodb.github.io/node-mongodb-native/   MONGODB_URL
+
+
+
+
+
+node --debug server/web.js
+
+node-inspector &
+
+
+http://192.168.2.3:5000/data?json={"o":"PartnerList","p":""}
+
+http://192.168.2.3:5000/data?json={"o":"QuestionList","p":""}
+
+http://192.168.2.3:8080/debug?port=5858
+
+http://bit.ly/1hAZpNb
+
+
+
+
+
+
+
+
+
+
+Technologies to check out down the road:
+OmniBinder
+Restangular (and using promises)
+http://jquery-countdown.googlecode.com/svn/trunk/index.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+  - console.log(title);
+  - console.log(content);
+  - var staticContent = 'static/index.html';
+
+
+

@@ -1,9 +1,27 @@
 doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/app/css/cruncher.css')
-    script(type='text/javascript', src="/app/js/util.js").
-    script(type='text/javascript', src="http://code.jquery.com/jquery-2.0.3.min.js").
-  body
-    block content
+html(lang="en", ng-app="cruncher")
+ head
+  meta(charset="utf-8")
+  title= title
+  link(rel='stylesheet', href='/css/eggplant/jquery-ui-1.10.3.custom.min.css')
+  link(rel='stylesheet', href='/css/cruncher.css')
+  link(rel='stylesheet', href='/css/animate.css')
+ body
+  center
+   block centeredBody
+   - var appTitle = 'Cupid Cruncher';	// Why can't we set these in web.js with app.set???
+   - var appVersion = 'v0.2';
+   div#footer #{appTitle} &nbsp;
+    span#appVersion #{appVersion}
+ script(type='text/javascript', src="/js/util.js")
+ script(type='text/javascript', src="http://code.jquery.com/jquery-2.0.3.min.js")
+ script(type='text/javascript', src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js")
+ script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js")
+ script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js")
+ script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js")
+ script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.min.js")
+ script(type='text/javascript', src="/js/cruncher.js")
+ script(type='text/javascript', src="/js/services.js")
+ script(type='text/javascript', src="/js/controllers.js")
+ script(type='text/javascript', src="/js/filters.js")
+ script(type='text/javascript', src="/js/directives.js")

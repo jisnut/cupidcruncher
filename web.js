@@ -54,6 +54,12 @@ app.use(logfmt.requestLogger());
 app.set('port', DEFAULT_PORT);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// These don't seem to be accessible in the templates
+//app.set('title', 'Cupid Cruncher');
+//app.set('appTitle', 'Cupid Cruncher');
+//app.set('appVersion', 'v0.2');
+
 app.use(express.favicon(path.join(__dirname, 'public/app/img/favicon.ico')));
 app.use(express.logger('dev'));
 app.use(express.json());
@@ -70,13 +76,20 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.get('/qr', routes.qr);
+app.get('/rules', routes.rules);
+app.get('/login', routes.login);
+app.get('/admin', routes.admin);
+app.get('/registration', routes.registration);
+app.get('/registrationLoop', routes.registrationLoop);
+app.get('/play', routes.play);
+
 app.get('/users', user.list);
-app.get('/helloworld', routes.helloworld);
 app.get('/userlist', routes.userlist(db));
 app.get('/newuser', routes.newuser);
 app.get('/newParticipant', routes.newParticipant);
-
 app.post('/adduser', routes.adduser(db));
+
 app.post('/register', routes.register(db));
 
 

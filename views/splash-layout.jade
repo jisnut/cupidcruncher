@@ -1,0 +1,10 @@
+extends layout
+
+block centeredBody
+ - var classes = ['app-container', 'ui-corner-all']
+ div(class=classes)
+  img(src="/img/sexstlbanner.png")
+  h2#presents ~ presents ~
+  div#eventTitle The "No" Workshop
+  br
+  block splashContent

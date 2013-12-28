@@ -1,0 +1,11 @@
+extends layout
+
+block centeredBody
+ - var classes = ['resizable-container', 'ui-corner-all']
+ div(class=classes)
+  img(src="/img/sexstlbanner_ssm.png" style="display:inline")
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  div#eventTitle The "No" Workshop
+  div#pageTitle(style="display:inline; vertical-align:middle;") {{application.event}} ~ Administration
+  br
+  block mainContent
