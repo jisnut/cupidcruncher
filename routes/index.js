@@ -11,8 +11,15 @@ exports.rules = function(req, res){
 exports.login = function(req, res){
   res.render('login', {title: 'Admin Login - '+mainTitle});
 };
-exports.admin = function(req, res){
-  res.render('admin', {title: 'Administration - '+mainTitle});
+exports.admin = function(db) {
+  return function(req, res){
+    if((req.body.username === 'justin' && req.body.password === 'nibor') ||
+      (req.body.username === 'robin' && req.body.password === 'jisnut')){
+      res.render('admin', {title: 'Administration - '+mainTitle});
+    } else {
+      res.render('login', {title: 'LOGIN FAILED: Admin Login - '+mainTitle});
+    }
+  };
 };
 exports.registration = function(req, res){
   res.render('registration', {title: 'Registration - '+mainTitle});

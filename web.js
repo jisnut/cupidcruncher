@@ -79,7 +79,6 @@ app.get('/', routes.index);
 app.get('/qr', routes.qr);
 app.get('/rules', routes.rules);
 app.get('/login', routes.login);
-app.get('/admin', routes.admin);
 app.get('/registration', routes.registration);
 app.get('/registrationLoop', routes.registrationLoop);
 
@@ -88,6 +87,7 @@ app.get('/userlist', routes.userlist(db));
 app.get('/newuser', routes.newuser);
 app.post('/adduser', routes.adduser(db));
 
+app.post('/admin', routes.admin(db));
 app.post('/register', routes.register(db));
 app.post('/play', routes.play(db));
 
