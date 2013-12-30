@@ -223,6 +223,8 @@ Table View of Participants database
 
 
 
+Angular scope problems:
+http://stackoverflow.com/questions/15112584/using-scope-watch-and-scope-apply
 
 
 
