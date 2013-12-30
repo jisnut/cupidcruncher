@@ -54,12 +54,28 @@ function resizeAppContainer() {
   });
 };
 
-
-function getNoWorkshopQuestions(spreadsheetData) {
+function parseNoWorkshopQuestions(spreadsheetData) {
+  var totalColumns=0, col=0, row=0, headings=[], questions=[];
   console.log(spreadsheetData);
   if(spreadsheetData.feed){
     $(spreadsheetData.feed.entry).each(function(i, value) {
-  console.log(i + ") "+ value.title.$t +": " + value.content.$t);
+console.log(i + ") "+ value.title.$t +": " + value.content.$t);
+      row = parseInt(value.title.$t.substr(1));
+      if(row == 1){
+        headings.push(value.content.$t);
+        totalColumns++;
+      } else {
+        row -= 2;
+        if(!questions[row]){
+          questions[row] = {};
+        }
+        questions[row][headings[col]] = value.content.$t;
+        col++;
+        if(col % totalColumns == 0){    //every cell must be filled for this to work
+          col = 0;
+        }
+      }
     });
   }
+  return questions;
 };

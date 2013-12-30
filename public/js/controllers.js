@@ -89,12 +89,39 @@ angular.module('cruncher.controllers', ['ngCookies'])
 
 // Admin controller functions
   .controller('setupCtrl', function($scope, $http, $routeParams) {
-    $scope.driveSpreadsheetUrl = 'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=getNoWorkshopQuestions';
+    $scope.questionsPreviewLabel = 'Preview Questions:';
+    $scope.driveSpreadsheetUrl = 'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=JSON_CALLBACK';
     $scope.loadQuestionsFromDrive = function() {
       var driveUrl = $scope.driveSpreadsheetUrl;
       $('#loadQuestionsButton').attr('disabled', 'disabled');
       console.log('Loading questions from Google Drive Spreadsheet: '+driveUrl);
-      $http.jsonp(driveUrl);
+      $http.jsonp(driveUrl).
+        success(function(data, status) {
+          $('#questionsPreview').show();
+          $scope.status = status;
+          $scope.questions = parseNoWorkshopQuestions(data);
+        }).
+        error(function(data, status) {
+          $scope.data = data || "Request failed";
+          $scope.status = status;
+        });
+    };
+    $scope.saveQuestionsToDB = function() {
+      $('#saveQuestionsToDbButton').attr('disabled', 'disabled');
+      console.log('Saving Questions to Database...');
+      $http.post('saveQuestionsToDb', $scope.questions).success(function(data) {
+        if(data.success){
+          $scope.questionsPreviewLabel = data.success;
+          $('#questionsPreviewLabel').effect('pulsate', 700);
+          $('#saveQuestionsToDbButton').removeAttr("disabled");
+        }
+      }).
+      error(function(data, status) {
+// Deal with this...
+        $scope.data = data || "Request failed";
+        $scope.status = status;
+        $('#saveQuestionsToDbButton').removeAttr('disabled');
+      });
     };
   })
 

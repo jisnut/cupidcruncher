@@ -23,5 +23,11 @@
     <input type="url" id="driveSpreadsheetUrl" ng-model="driveSpreadsheetUrl"></input>
     <button id="loadQuestionsButton" type="button" ng-click="loadQuestionsFromDrive()" class="btn btn-primary">Load Questions from Google Drive Spreadsheet</button>
 
+    <div id="questionsPreview" style="border: 2px solid yellow; padding 5px; display: none;">
+      <div id="questionsPreviewLabel" style="float:left; padding 5px;">{{questionsPreviewLabel}}</div>
+      <pre id="questionsJsonPreview" style="width: 90%; height: 300px; overflow: auto;">{{questions}}</pre>
+      <button id="saveQuestionsToDbButton" type="button" ng-click="saveQuestionsToDB()" class="btn btn-primary">Save Questions to Database</button>
+    </div>
+
   </div>
 </div>

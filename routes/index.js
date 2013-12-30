@@ -63,6 +63,27 @@ exports.play = function(db) {
 
 
 
+exports.saveQuestionsToDb = function(db) {
+  return function(req, res) {
+    if(req.body){
+      // Drop questions collection altogether first.
+      var questions = req.body;
+      var collection = db.get('questions');
+      collection.insert(questions, function (err, doc) {
+        if(err){
+          console.error('DB Error: '+err);
+          res.json(500, {error: 'There was a problem saving questions in the database: '+err})
+        } else {
+          res.json({success:'Questions SAVED to Database!'});
+        }
+      });
+    } else {
+      // throw error
+    }
+  };
+};
+
+
 
 
 exports.userlist = function(db) {

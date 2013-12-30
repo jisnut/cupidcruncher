@@ -60,7 +60,7 @@ app.set('view engine', 'jade');
 //app.set('appTitle', 'Cupid Cruncher');
 //app.set('appVersion', 'v0.2');
 
-app.use(express.favicon(path.join(__dirname, 'public/app/img/favicon.ico')));
+app.use(express.favicon(path.join(__dirname, 'public/img/favicon.ico')));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -87,9 +87,12 @@ app.get('/userlist', routes.userlist(db));
 app.get('/newuser', routes.newuser);
 app.post('/adduser', routes.adduser(db));
 
-app.post('/admin', routes.admin(db));
 app.post('/register', routes.register(db));
 app.post('/play', routes.play(db));
+
+app.post('/admin', routes.admin(db));
+app.post('/saveQuestionsToDb', routes.saveQuestionsToDb(db));
+
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
