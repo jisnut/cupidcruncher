@@ -60,8 +60,10 @@ angular.module('cruncher.controllers', ['ngCookies'])
     $scope.application = application;
   })
 
-  .controller('cruncherCtrl', function($scope) {
+  .controller('cruncherCtrl', function($scope, $http, $cookieStore) {
     $scope.application = application;
+    $scope.participant = $cookieStore.get('participant');
+    console.log($scope.participant);
 
   })
 
