@@ -1,8 +1,0 @@
-{
-  questionSetSize: '10',
-  showNotes: true,
-  showTimer: true,
-  questionSetDuration: '2.5',
-  allowMaybes: true,
-  allowPartnerNotes: true
-}
