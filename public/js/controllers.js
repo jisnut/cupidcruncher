@@ -20,6 +20,7 @@ angular.module('cruncher.controllers', ['ngCookies'])
     if(window.location.search === loopStr){
       $scope.loop = 'true';
       $('.registration').attr('action', '/').attr('href', '/registration'+loopStr).attr('method', 'get');
+      $('#registrationForm').attr('autocomplete', 'off');
     }
     $scope.register = function() {
       if(this.participant){
