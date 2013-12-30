@@ -21,11 +21,37 @@ exports.registrationLoop = function(req, res){
   var registryLoop = '<input type="hidden" id="registryLoop" name="registryLoop" value="false"></input>';
   res.render('registration', {title: 'Registration - '+mainTitle});
 };
-exports.play = function(req, res){
-  res.render('play', {title: mainTitle});
+exports.register = function(db) {
+  return function(req, res) {
+    if(req.body){
+      var participant = req.body;
+      var counters = db.get('counters');
+      var promise = counters.findAndModify({'query': {_id:'participantNumber'}, 'update': {'$inc': {'seq': 1}}, 'new':true});
+      promise.success(function(doc){
+        participant.number = doc.seq;
+        var collection = db.get('participant');
+        collection.insert(participant, function (err, doc) {
+          if(err){
+            console.error('DB Error: '+err);
+            res.json(500, {error: 'There was a problem registering the participant in the database: '+err})
+          } else {
+            res.json({success:"Registered!", participant:doc});
+          }
+        });
+      });
+      promise.error(function(err){
+        res.json(500, {error: 'There was a problem acquiring your participant number: '+err})
+      });
+    } else {
+      // throw error
+    }
+  };
 };
-
-
+exports.play = function(db) {
+  return function(req, res){
+    res.render('play', {title: mainTitle});
+  };
+};
 
 
 
@@ -67,29 +93,5 @@ exports.adduser = function(db) {
         res.redirect("userlist");
       }
     });
-  }
-}
-
-exports.newParticipant = function(req, res){
-  res.render('newParticipant', { title: 'Add New Participant' });
-};
-exports.register = function(db) {
-  return function(req, res) {
-    if(req.body){
-      var participant = req.body;
-
-// get new participant number
-
-      var collection = db.get('participant');
-      collection.insert(participant, function (err, doc) {
-        if(err){
-          res.json(500, {error: 'There was a problem registering the participant in the database.'})
-        } else {
-          res.json({success:"Registered!", participant:doc});
-        }
-      });
-    } else {
-      // throw error
-    }
   }
 }

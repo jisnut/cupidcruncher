@@ -8,34 +8,42 @@ angular.module('cruncher', [
   'cruncher.controllers'
 ]).
 config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/partners', {templateUrl: 'partials/partners.html', controller: 'partnersCtrl'});
-  $routeProvider.when('/questions', {templateUrl: 'partials/questions.html', controller: 'questionsCtrl'});
-  $routeProvider.when('/configuration', {templateUrl: 'partials/configuration.html', controller: 'configurationCtrl'});
-  $routeProvider.when('/setup', {templateUrl: 'partials/setup.html', controller: 'setupCtrl', controllerAs: 'config'});
-  $routeProvider.when('/eventDetails', {templateUrl: 'partials/eventDetails.html', controller: 'eventDetailsCtrl', controllerAs: 'eventDetails'});
-  $routeProvider.when('/participants', {templateUrl: 'partials/participants.html', controller: 'participantsCtrl', controllerAs: 'participants'});
-  $routeProvider.when('/questions', {templateUrl: 'partials/questions.html', controller: 'questionsCtrl', controllerAs: 'questions'});
-  $routeProvider.when('/reports', {templateUrl: 'partials/reports.html', controller: 'reportsCtrl', controllerAs: 'reports'});
-  $routeProvider.when('/stats', {templateUrl: 'partials/stats.html', controller: 'statsCtrl', controllerAs: 'stats'});
-  $routeProvider.when('/links', {templateUrl: 'partials/links.html', controller: 'linksCtrl', controllerAs: 'links'});
-  $routeProvider.otherwise({redirectTo: '/partners'});
+  $routeProvider.when('/partners', {templateUrl: 'participant/partners.html', controller: 'partnersCtrl'});
+  $routeProvider.when('/question', {templateUrl: 'participant/question.html', controller: 'questionCtrl'});
+  $routeProvider.when('/configuration', {templateUrl: 'participant/configuration.html', controller: 'configurationCtrl'});
+  $routeProvider.when('/setup', {templateUrl: 'admin/setup.html', controller: 'setupCtrl', controllerAs: 'config'});
+  $routeProvider.when('/eventDetails', {templateUrl: 'admin/eventDetails.html', controller: 'eventDetailsCtrl', controllerAs: 'eventDetails'});
+  $routeProvider.when('/participants', {templateUrl: 'admin/participants.html', controller: 'participantsCtrl', controllerAs: 'participants'});
+  $routeProvider.when('/questions', {templateUrl: 'admin/questions.html', controller: 'questionsCtrl', controllerAs: 'questions'});
+  $routeProvider.when('/reports', {templateUrl: 'admin/reports.html', controller: 'reportsCtrl', controllerAs: 'reports'});
+  $routeProvider.when('/stats', {templateUrl: 'admin/stats.html', controller: 'statsCtrl', controllerAs: 'stats'});
+  $routeProvider.when('/links', {templateUrl: 'admin/links.html', controller: 'linksCtrl', controllerAs: 'links'});
+  $routeProvider.otherwise({redirectTo: 'participant/partners'});
 }]);
 
 var resizable_containers;
 function initializeApp() {
   resizable_containers = $('.resizable-container');
   resizable_containers.each(function(index, value) {
-    if(value.id=='adminContainer') {
-      value.wOffset = 50; value.hOffset = 50;
+    if(value.id=='appContainer') {
+      value.wOffset = 55; value.hOffset = 105;
     }
     if(value.id=='adminTabContainer') {
+      value.wOffset = 60; value.hOffset = 270;
+    }
+
+
+
+    if(value.id=='playTabContainer') {
       value.wOffset = 50; value.hOffset = 300;
     }
+
+
+
   });
   window.onresize=resizeAppContainer;
   resizeAppContainer();
 };
-
 
 function resizeAppContainer() {
   var w = parseInt(window.innerWidth),
@@ -46,25 +54,12 @@ function resizeAppContainer() {
   });
 };
 
-var registrationConfirmationDialog = $('#registrationConfirmationDialog').dialog({
-  autoOpen: false,
-  resizable: false,
-  modal: true,
-  height: 330,
-  width: 660,
-  open: function(){
-//      if($('#divDeploymentRequests').is(':visible')){
-//        $('#drsCanceledWarning').show();
-//      }
-  },
-  close: function(){
-//    $('#drsCanceledWarning').hide();
-  },
-  buttons: {
-    Next: function(){
-//      setReleasePhaseSlider(true, 0); // Rollback to Dev
-//        updateRelease({projectEnvironment: selectedProject.projectEnvironments[0]});
-      $(this).dialog('close');
-    }
+
+function getNoWorkshopQuestions(spreadsheetData) {
+  console.log(spreadsheetData);
+  if(spreadsheetData.feed){
+    $(spreadsheetData.feed.entry).each(function(i, value) {
+  console.log(i + ") "+ value.title.$t +": " + value.content.$t);
+    });
   }
-});
+};

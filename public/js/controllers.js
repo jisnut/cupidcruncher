@@ -11,31 +11,39 @@ var application = {
 
 /* Controllers */
 
-angular.module('cruncher.controllers', [])
+angular.module('cruncher.controllers', ['ngCookies'])
 
-  .controller('registrationCtrl', function($scope, $http, $location, $routeParams) {
+  .controller('registrationCtrl', function($scope, $http, $cookieStore, $location, $routeParams) {
     $scope.application = application;
+    $scope.loop = false;
+    var loopStr = '?registryLoop=true';
+    if(window.location.search === loopStr){
+      $scope.loop = 'true';
+      $('.registration').attr('action', '/').attr('href', '/registration'+loopStr).attr('method', 'get');
+    }
     $scope.register = function() {
-      var loop = $('#registryLoop').val();
-      if(loop == 'true'){
-        loop = true;
-      } else {
-        loop = false;
+      if(this.participant){
+        $('#registerButton').attr('disabled', 'disabled');
+        console.log('Registering: '+this.participant.name);
+        $http.post('register', this.participant).success(function(data) {
+          if(data.success){
+            $('#registrationForm').hide();
+            $('#registrationConfirmation').show();
+            console.log(data.success + ' Participant #:' + data.participant.number);
+            $scope.participant = data.participant;
+            $cookieStore.put('participant', $scope.participant);
+            $('.message-reminder').effect('pulsate', 700);
+            $('#registerButton').removeAttr("disabled");
+          }
+        }).
+        error(function(data, status) {
+// Deal with this...
+          $scope.data = data || "Request failed";
+          $scope.status = status;
+          $('#registerButton').removeAttr('disabled');
+        });
       }
-      console.log('Registering: '+this.participant.name);
-      $http.post('register', this.participant).success(function(data) {
-        if(data.success){
-          console.log(data.success + ' Participant #:' + data.participant.number);
-          $scope.participant = data.participant;
-          $('#registrationConfirmationDialog').dialog('open');
-        }
-      }).
-      error(function(data, status) {
-// Deal with this...        
-        $scope.data = data || "Request failed";
-        $scope.status = status;
-      });
-      return false; // prevent the submit action???
+//      return false; // prevent the submit action???
     };
   })
 
@@ -63,8 +71,9 @@ angular.module('cruncher.controllers', [])
     });
   })
 
-  .controller('questionsCtrl', function($scope, $http) {
-    $http.get('data/questions.json').success(function(data) {
+  .controller('questionCtrl', function($scope, $http) {
+    $http.get('data/partners.json').success(function(data) {
+//    $http.get('data/questions.json').success(function(data) {
       $scope.questions = data;
     });
   })
@@ -76,9 +85,14 @@ angular.module('cruncher.controllers', [])
   })
 
 // Admin controller functions
-  .controller('setupCtrl', function($scope, $routeParams) {
-      this.name = "BookCntl";
-      this.params = $routeParams;
+  .controller('setupCtrl', function($scope, $http, $routeParams) {
+    $scope.driveSpreadsheetUrl = 'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=getNoWorkshopQuestions';
+    $scope.loadQuestionsFromDrive = function() {
+      var driveUrl = $scope.driveSpreadsheetUrl;
+      $('#loadQuestionsButton').attr('disabled', 'disabled');
+      console.log('Loading questions from Google Drive Spreadsheet: '+driveUrl);
+      $http.jsonp(driveUrl);
+    };
   })
 
   .controller('eventDetailsCtrl', function($scope, $http) {

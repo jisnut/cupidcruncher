@@ -82,16 +82,14 @@ app.get('/login', routes.login);
 app.get('/admin', routes.admin);
 app.get('/registration', routes.registration);
 app.get('/registrationLoop', routes.registrationLoop);
-app.get('/play', routes.play);
 
 app.get('/users', user.list);
 app.get('/userlist', routes.userlist(db));
 app.get('/newuser', routes.newuser);
-app.get('/newParticipant', routes.newParticipant);
 app.post('/adduser', routes.adduser(db));
 
 app.post('/register', routes.register(db));
-
+app.post('/play', routes.play(db));
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

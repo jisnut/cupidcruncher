@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en" ng-app="cruncher">
+<head>
+  <meta charset="utf-8">
+  <title>{{application.event}}</title>
+  <link rel="stylesheet" href="../css/eggplant/jquery-ui-1.10.3.custom.min.css"/>
+  <link rel="stylesheet" href="../css/cruncher.css"/>
+  <link rel="stylesheet" href="../css/animate.css"/>
+</head>
+<body ng-controller="adminCtrl as admin" class="fill-window">
+<center>
+  <div id="adminContainer" class="admin-container resizable-container ui-corner-all">
+    <img src="../img/sexstlbanner_ssm.png" style="display:inline"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <h3 id="pageTitle" style="display:inline; vertical-align:middle;">{{application.event}} ~ Administration</h3>
+    <br/>
+    
+    <form name="adminForm" class="registration-form">
+      <div class="admin-menu">
+        <span><a href="#/setup">Setup</a></span>
+        <span><a href="#/eventDetails">Event Details</a></span>
+        <span><a href="#/participants">Participants</a></span>
+        <span><a href="#/questions">Questions</a></span>
+        <span><a href="#/reports">Reports</a></span>
+        <span><a href="#/stats">Cruncher Stats</a></span>
+        <span><a href="#/links">Links</a></span>
+      </div>
+      <div id="adminTabContainer" class="view-animate-container resizable-container">
+        <div ng-view class="view-animate"></div>
+      </div>
+
+      <br/><br/>
+
+<!-- http://docs.angularjs.org/api/ngRoute.directive:ngView -->
+
+      <div style="display:block;">
+        <pre>
+          $location.path() = {{admin.$location.path()}}
+          $route.current.templateUrl = {{admin.$route.current.templateUrl}}
+          $route.current.params = {{admin.$route.current.params}}
+          $route.current.scope.name = {{admin.$route.current.scope.name}}
+          $routeParams = {{admin.$routeParams}}
+        </pre>
+      </div>
+
+    </form>
+
+    <div id="footer">{{application.title}} version <span app-version>{{application.version}}</span></div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-animate.min.js"></script>
+  <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+  <!--script src="../lib/angular/angular.js"></script-->
+  <!--script src="../lib/angular/angular-route.js"></script-->  
+  <!--script src="../lib/angular/angular-resource.js"></script-->  
+  <script src="../js/cruncher.js"></script>
+  <script src="../js/services.js"></script>
+  <script src="../js/controllers.js"></script>
+  <script src="../js/filters.js"></script>
+  <script src="../js/directives.js"></script>
+  <script type="text/javascript" language="JavaScript">
+    $(document).ready(initializeApp);
+  </script>
+</center>
+</body>
+</html>

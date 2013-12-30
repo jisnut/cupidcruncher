@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" ng-app="cruncher">
+<head>
+  <meta charset="utf-8">
+  <title>Administrative Login - SEX+STL Cupid Cruncher</title>
+  <link rel="stylesheet" href="css/cruncher.css"/>
+</head>
+<body>
+  <center>
+    <div ng-controller="loginCtrl" class="app-container ui-corner-all">
+
+      <img src="img/sexstlbanner_ssm.png" style="display:inline"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <h2 id="eventTitle" style="display:inline; vertical-align:middle;">{{application.event}}</h2>
+      <br/><br/>
+      <h2 id="appTitle">{{application.title}}</h2>
+      <h3 id="adminTitle">Administrative Login</h3>
+      <br/>
+
+      <form action="admin/login" name="adminLoginForm" ng-submit="adminLogin();" class="registration-form">
+        <div class="control-group" ng-class="{error: adminLoginForm.username.$invalid}">
+          <label for="username" class="text">Username</label>
+          <br/>
+          <input type="text" name="username" ng-model="admin.username" placeholder="username" required>
+        </div>
+        <br/>
+        <div class="control-group" ng-class="{error: adminLoginForm.password.$invalid}">
+          <label for="name" class="text">Password</label>
+          <br/>
+          <input type="password" name="password" ng-model="admin.password" placeholder="***********" required>
+        </div>
+        <br/>
+        <a href="../" class="btn big">Cancel</a>
+        <button ng-click="loginAdmin()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary big">Login</button>
+      </form>
+
+      <div id="footer">{{application.title}} version <span app-version>{{application.version}}</span></div>
+    </div>
+  </center>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.js"></script>
+  <!--script src="lib/angular/angular.js"></script>
+  <script src="lib/angular/angular-route.js"></script-->
+  <script src="js/cruncher.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/directives.js"></script>
+</body>
+</html>

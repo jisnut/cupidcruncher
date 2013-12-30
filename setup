@@ -93,6 +93,7 @@ mongo ds053218.mongolab.com:53218/heroku_app20014113 -u heroku_app20014113
 export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
 
 db.auth('<username>', '<password>')
+db.auth('jisnut', '<password>')
 
     //setup connection http://cwbuecheler.com/web/tutorials/2013/node-express-mongo/
     // http://mongodb.github.io/node-mongodb-native/   MONGODB_URL
@@ -146,3 +147,152 @@ http://jquery-countdown.googlecode.com/svn/trunk/index.html
 
 
 
+
+Insert into the counters collection, the initial value for the participantNumber:
+
+db.counters.insert({
+  _id: "participantNumber",
+  seq: 0
+})
+
+
+
+
+
+Create a getNextSequence function that accepts a name of the sequence. The function uses the findAndModify() method to atomically increment the seq value and return this new value:
+
+function getNextSequence(name) {
+  var ret = db.counters.findAndModify({
+    query: {_id: name},
+    update: {$inc: {seq: 1}},
+    new: true
+  });
+  return ret.seq;
+}
+
+Also define a set sequence function so we can reset it when necessary"
+
+function setSequence(name, value) {
+  var ret = db.counters.findAndModify({
+    query: {_id: name},
+    update: {seq: value},
+    new: true
+  });
+  return ret.seq;
+}
+
+Lastly define a get current sequence function so we can look it up from the admin page using a similar mechanism without actually modifying it:
+
+function getCurrentSequence(name) {
+  return db.counters.find({_id: name});
+}
+
+
+Use this getNextSequence() function during insert().
+db.participants.insert(
+   {
+     number: getNextSequence("participantNumber"),
+     name: "Sarah C."
+   }
+)
+db.participants.insert(
+   {
+     number: getNextSequence("participantNumber"),
+     name: "Bob D."
+   }
+)
+
+
+
+
+
+
+Table View of Participants database
+
+{
+    "#": "number",
+    "Name": "name",
+    "Email": "email",
+    "Share Name": "nameMatchesOk",
+    "Share Email": "emailMatchesOk"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+JUNK
+
+link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css')
+
+ script(type='text/javascript', src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js")
+ script(type='text/javascript', src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.9.0.min.js")
+
+      <!-- 
+      <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+          <h3>Im a modal</h3>
+        </div>
+        <div class="modal-body">
+          <ul>
+            <li ng-repeat="item in items">
+              <a ng-click="selected.item = item">{{ item }}</a>
+            </li>
+          </ul>
+          Selected: <b>{{ selected.item }}</b>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" ng-click="ok()">OK</button>
+          <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+      </script>
+      <div ng-show="selected">Selection from a modal: {{ selected }}</div>
+
+      /*
+angular.module('cruncher.controllers', ['ui.bootstrap'])
+  .controller('registrationCtrl', function($scope, $modal, $http, $location, $routeParams) {
+
+      .
+      .
+      .
+
+      $scope.items = ['item1', 'item2', 'item3'];
+
+      var modalInstance = $modal.open({
+        templateUrl: 'myModalContent.html',
+        controller: ModalInstanceCtrl,
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        $scope.selected = selectedItem;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+      */
+    -->
+
+
+
+
+    <!-- div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
+      <label for="name">Participant Number</label>
+      <br/>
+      <div ng-show="participant.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</br></div>
+      <div ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</br></div>
+      <br/>
+      <input type="number" name="number" ng-model="participant.number" style="width:80px; height:50px; font-size:3.0em;" min="0" max="100" required>
+    </div>
+    <br/ -->

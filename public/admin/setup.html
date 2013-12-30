@@ -1,0 +1,27 @@
+<div class="admin-setup">
+  <div class="section-title">Cupid Cruncher Setup</div>
+
+<div style="color:red">Not fully implemented yet!</div>
+
+  <div id="setup">
+  	<div>
+  	  <label for="participantSplash">Participant Splash Screen:</label>
+  	  <textarea id="participantSplash" name="participantSplash"></textarea>
+  	</div>
+  	<hr/>
+  	<h2>Reference Data</h2>
+  	<div>
+  	  <label for="categories">Categories:</label>
+  	  <input type="text" id="categories" name="categories"></input>
+  	</div>
+  	<div>
+  	  <label for="categories">Moods:</label>
+  	  <input type="text" id="categories" name="categories"></input>
+  	</div>
+
+
+    <input type="url" id="driveSpreadsheetUrl" ng-model="driveSpreadsheetUrl"></input>
+    <button id="loadQuestionsButton" type="button" ng-click="loadQuestionsFromDrive()" class="btn btn-primary">Load Questions from Google Drive Spreadsheet</button>
+
+  </div>
+</div>

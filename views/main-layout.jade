@@ -1,11 +1,10 @@
 extends layout
 
 block centeredBody
- - var classes = ['resizable-container', 'ui-corner-all']
- div(class=classes)
-  img(src="/img/sexstlbanner_ssm.png" style="display:inline")
-  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  div#eventTitle The "No" Workshop
-  div#pageTitle(style="display:inline; vertical-align:middle;") {{application.event}} ~ Administration
-  br
+ img(src="/img/sexstlbanner_ssm.png" style="display:inline; margin-top:5px;")
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ div#eventTitleSm The "No" Workshop
+ div#pageTitle(style="display:inline; vertical-align:middle;") {{application.event}}
+ - var classes = ['app-container', 'resizable-container', 'ui-corner-all']
+ div#appContainer(class=classes)
   block mainContent

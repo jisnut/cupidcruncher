@@ -1,0 +1,33 @@
+<div ng-controller="adminCtrl as admin" id="adminContainer" class="fill-window">
+  <form name="adminForm" class="registration-form">
+    <div class="admin-menu">
+      <span><a href="#/setup">Setup</a></span>
+      <span><a href="#/eventDetails">Event Details</a></span>
+      <span><a href="#/participants">Participants</a></span>
+      <span><a href="#/questions">Questions</a></span>
+      <span><a href="#/reports">Reports</a></span>
+      <span><a href="#/stats">Cruncher Stats</a></span>
+      <span><a href="#/links">Links</a></span>
+    </div>
+    <div id="adminTabContainer" class="view-animate-container resizable-container">
+      <div ng-view class="view-animate"></div>
+    </div>
+
+<!-- http://docs.angularjs.org/api/ngRoute.directive:ngView -->
+
+    <div style="display:block;">
+      <pre>
+        $location.path() = {{admin.$location.path()}}
+        $route.current.templateUrl = {{admin.$route.current.templateUrl}}
+        $route.current.params = {{admin.$route.current.params}}
+        $route.current.scope.name = {{admin.$route.current.scope.name}}
+        $routeParams = {{admin.$routeParams}}
+      </pre>
+    </div>
+
+  </form>
+</div>
+
+<script type="text/javascript" language="JavaScript">
+  $(document).ready(initializeApp);
+</script>

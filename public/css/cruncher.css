@@ -41,6 +41,15 @@ input[type=checkbox].big{
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   line-height: 50px;
 }
+#eventTitleSm{
+  font-size: 2.8em;
+  color: #bf9734;
+  font-weight: bold;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  line-height: 40px;
+  display: inline;
+  vertical-align: middle;
+}
 
 a.big,
 button.big{
@@ -65,7 +74,7 @@ button.bigger{
   border: 4px solid #bf9734;
   width: 700px;
   padding: 10px;  
-  margin: 10px;
+  margin: 10px 10px 0px 10px;
   background-color: #d8bed3;
 }
 .admin-container{
@@ -215,6 +224,40 @@ select:focus:required:invalid:focus {
 }
 .privacy-points {
   font-size: 1.3em;
+}
+.ui-dialog-title{
+  text-align: left;
+}
+
+#registrationConfirmation {
+  background-color: #502948;
+  border: 4px solid #bf9734;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 15px;
+}
+#registrationConfirmation .message{
+  color: #aaaaff;
+  font-size: 1.9em;
+  padding: 10px;
+}
+#registrationConfirmation .message-number{
+  color: #ffffff;
+  vertical-align: middle;
+  font-size: 2.4em;
+  line-height: 3.5em;
+}
+#registrationConfirmation .number{
+  color: #bf9734;
+  font-size: 3.5em;
+  vertical-align: middle;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+#registrationConfirmation .message-reminder{
+  color: #ffaaaa;
+  font-size: 1.6em;
+  line-height: 3.0em;
+  padding: 20px;
 }
 
 #appTitle {
