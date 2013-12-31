@@ -125,13 +125,19 @@ button.bigger{
 .admin-tab-content{
   overflow: auto;
 }
-
 .section-title{
   clear: both;
-  font-size: 1.3em;
+  font-size: 1.4em;
   font-weight: bold;
   float: left;
   padding-left: 0px;
+}
+.admin-form{
+  vertical-align: middle;
+  font-size: 1.2em;
+}
+.admin-form input{
+  margin-top: 10px;
 }
 
 .question-container{

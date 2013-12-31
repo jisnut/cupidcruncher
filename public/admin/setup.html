@@ -1,33 +1,39 @@
 <div class="admin-setup">
   <div class="section-title">Cupid Cruncher Setup</div>
 
-<div style="color:red">Not fully implemented yet!</div>
+<div style="color:red; float: right;">These DB operations are buggy.<br/>They hang the database.<br/>Use them carefully!</div>
 
+  <div id="status" style="color:red; padding: 20px; clear: both;"> {{status}} {{error}}</div>
   <div id="setup">
-  	<div>
+  	<!-- div>
   	  <label for="participantSplash">Participant Splash Screen:</label>
   	  <textarea id="participantSplash" name="participantSplash"></textarea>
   	</div>
-  	<hr/>
-  	<h2>Reference Data</h2>
+  	<hr/-->
   	<div>
-  	  <label for="categories">Categories:</label>
-  	  <input type="text" id="categories" name="categories"></input>
+  	  <label for="enableRegistration">Enable Registration:</label>&nbsp;
+  	  <input type="checkbox" id="enableRegistration" class="big" ng-model="setup.enableRegistration" ng-click="enableRegistration()"></input>
   	</div>
-  	<div>
-  	  <label for="categories">Moods:</label>
-  	  <input type="text" id="categories" name="categories"></input>
-  	</div>
-
-
-    <input type="url" id="driveSpreadsheetUrl" ng-model="driveSpreadsheetUrl"></input>
-    <button id="loadQuestionsButton" type="button" ng-click="loadQuestionsFromDrive()" class="btn btn-primary">Load Questions from Google Drive Spreadsheet</button>
-
-    <div id="questionsPreview" style="border: 2px solid yellow; padding 5px; display: none;">
-      <div id="questionsPreviewLabel" style="float:left; padding 5px;">{{questionsPreviewLabel}}</div>
-      <pre id="questionsJsonPreview" style="width: 90%; height: 300px; overflow: auto;">{{questions}}</pre>
-      <button id="saveQuestionsToDbButton" type="button" ng-click="saveQuestionsToDB()" class="btn btn-primary">Save Questions to Database</button>
+    <br/>
     </div>
-
+      <button id="dropParticipantsFromDbButton" type="button" ng-click="dropParticipantsFromDB()" class="btn btn-primary">Drop Participants From Database</button>&nbsp;&nbsp;
+    </div>
+    <div>
+      <label for="participantCounterStart">Participant Counter Start:</label>&nbsp;
+      <input type="number" id="participantCounterStart" ng-model="setup.participantCounterStart" style="width: 50px;"></input>&nbsp;
+      <button id="resetParticipantCounterButton" type="button" ng-click="resetParticipantCounter()" class="btn btn-primary">Reset Participant Counter</button>
+    </div>
+    <br/>
+    <div>
+      <label for="driveSpreadsheetUrl">Google Drive spreadsheet feed URL:</label>&nbsp;
+      <input type="url" id="driveSpreadsheetUrl" ng-model="setup.driveSpreadsheetUrl"></input>&nbsp;
+      <button id="loadQuestionsButton" type="button" ng-click="loadQuestionsFromDrive()" class="btn btn-primary">Load Questions</button>
+      <div id="questionsPreview" style="border: 2px solid yellow; padding: 5px; display: none;">
+        <div id="questionsPreviewLabel" style="float:left; padding: 5px; font-weight: bold;">{{questionsPreviewLabel}}</div>
+        <pre id="questionsJsonPreview" style="text-align: left; width: 95%; height: 300px; overflow: auto;">{{prettyPrintQuestions()}}</pre>
+        <button id="dropQuestionsFromDbButton" type="button" ng-click="dropQuestionsFromDB()" class="btn btn-primary">Drop Questions From Database</button>&nbsp;&nbsp;
+        <button id="saveQuestionsToDbButton" type="button" ng-click="saveQuestionsToDB()" class="btn btn-primary">Save Questions to Database</button>
+      </div>
+    </div>
   </div>
 </div>

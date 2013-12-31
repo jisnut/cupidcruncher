@@ -29,7 +29,7 @@ function initializeApp() {
       value.wOffset = 55; value.hOffset = 105;
     }
     if(value.id=='adminTabContainer') {
-      value.wOffset = 60; value.hOffset = 270;
+      value.wOffset = 60; value.hOffset = 150;
     }
 
 
@@ -55,25 +55,21 @@ function resizeAppContainer() {
 };
 
 function parseNoWorkshopQuestions(spreadsheetData) {
-  var totalColumns=0, col=0, row=0, headings=[], questions=[];
-  console.log(spreadsheetData);
+  var headings=[], questions=[];
   if(spreadsheetData.feed){
+    var col=0, row=0;
     $(spreadsheetData.feed.entry).each(function(i, value) {
-console.log(i + ") "+ value.title.$t +": " + value.content.$t);
+      //console.log(i + ") "+ value.title.$t +": " + value.content.$t);
+      col = value.title.$t.charCodeAt(0)-65;
       row = parseInt(value.title.$t.substr(1));
       if(row == 1){
         headings.push(value.content.$t);
-        totalColumns++;
       } else {
         row -= 2;
         if(!questions[row]){
           questions[row] = {};
         }
         questions[row][headings[col]] = value.content.$t;
-        col++;
-        if(col % totalColumns == 0){    //every cell must be filled for this to work
-          col = 0;
-        }
       }
     });
   }

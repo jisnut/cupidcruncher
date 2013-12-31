@@ -62,24 +62,83 @@ exports.play = function(db) {
 
 
 
-
+// Admin setup functions
+exports.saveConfiguration = function(db) {
+  return function(req, res) {
+    if(req.body){
+      var configPair = req.body;
+      var collection = db.get('configuration');   // Client provides a key string identifying the configuration document to modify
+      var promise = collection.findAndModify({'query': {_id: configPair.key}, 'update': configPair.configuration, 'new':true});
+      promise.success(function(doc){
+        res.json({success:"Configuration updated", participantNumber:doc});
+      });
+      promise.error(function(err){
+        res.json(500, {error: 'There was a problem updating the configuration: '+err})
+      });
+    } else {
+      // throw error
+    }
+  };
+};
+exports.resetParticipantCounter = function(db) {
+  return function(req, res) {
+    if(req.body){
+      var value = req.body.value;
+      var counters = db.get('counters');
+      var promise = counters.findAndModify({'query': {_id:'participantNumber'}, 'update': {'seq': value}});
+      promise.success(function(doc){
+        res.json({success:"Participant number counter reset."});
+      });
+      promise.error(function(err){
+        res.json(500, {error: 'There was a problem resetting the participant number counter: '+err})
+      });
+    } else {
+      // throw error
+    }
+  };
+};
+exports.dropParticipantsFromDB = function(db) {
+  return function(req, res) {
+    var collection = db.get('participant');
+    collection.drop(function (err, doc) {
+      if(err){
+        console.error('DB Error: '+err);
+        res.json(500, {error: 'There was a problem dropping the participants collection from the database: '+err});
+      } else {
+        res.json({success:'All participants dropped from database!'});
+      }
+    });
+  };
+};
 exports.saveQuestionsToDb = function(db) {
   return function(req, res) {
     if(req.body){
-      // Drop questions collection altogether first.
       var questions = req.body;
       var collection = db.get('questions');
       collection.insert(questions, function (err, doc) {
         if(err){
           console.error('DB Error: '+err);
-          res.json(500, {error: 'There was a problem saving questions in the database: '+err})
+          res.json(500, {error: 'There was a problem saving questions in the database: '+err});
         } else {
-          res.json({success:'Questions SAVED to Database!'});
+          res.json({success:'Questions saved to database!'});
         }
       });
     } else {
       // throw error
     }
+  };
+};
+exports.dropQuestionsFromDb = function(db) {
+  return function(req, res) {
+    var collection = db.get('questions');
+    collection.drop(function (err, doc) {
+      if(err){
+        console.error('DB Error: '+err);
+        res.json(500, {error: 'There was a problem dropping the questions collection from the database: '+err});
+      } else {
+        res.json({success:'Questions dropped from database!'});
+      }
+    });
   };
 };
 

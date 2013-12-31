@@ -91,6 +91,9 @@ app.post('/register', routes.register(db));
 app.post('/play', routes.play(db));
 
 app.post('/admin', routes.admin(db));
+app.post('/resetParticipantCounter', routes.resetParticipantCounter(db));
+app.post('/dropParticipantsFromDB', routes.dropParticipantsFromDB(db));
+app.post('/dropQuestionsFromDb', routes.dropQuestionsFromDb(db));
 app.post('/saveQuestionsToDb', routes.saveQuestionsToDb(db));
 
 

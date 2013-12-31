@@ -20,13 +20,14 @@ angular.module('cruncher.controllers', ['ngCookies'])
     if(window.location.search === loopStr){
       $scope.loop = 'true';
       $('.registration').attr('action', '/').attr('href', '/registration'+loopStr).attr('method', 'get');
+      $('.registrationCancel').attr('href', '/'+loopStr);
       $('#registrationForm').attr('autocomplete', 'off');
     }
     $scope.register = function() {
       if(this.participant){
         $('#registerButton').attr('disabled', 'disabled');
-        console.log('Registering: '+this.participant.name);
-        $http.post('register', this.participant).success(function(data) {
+        console.log('Registering: '+$scope.participant.name);
+        $http.post('register', $scope.participant).success(function(data) {
           if(data.success){
             $('#registrationForm').hide();
             $('#registrationConfirmation').show();
@@ -89,38 +90,100 @@ angular.module('cruncher.controllers', ['ngCookies'])
 
 // Admin controller functions
   .controller('setupCtrl', function($scope, $http, $routeParams) {
-    $scope.questionsPreviewLabel = 'Preview Questions:';
-    $scope.driveSpreadsheetUrl = 'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=JSON_CALLBACK';
+    $scope.setup={};
+    $scope.setup.participantCounterStart=1;
+    $scope.questionsPreviewLabel='Preview Questions:';
+    $scope.setup.driveSpreadsheetUrl=
+      'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=JSON_CALLBACK';
+    $scope.enableRegistration = function() {
+      $http.post('enableRegistration', $scope.setup.enableRegistration).
+      success(function(data) {
+        if(data.success){
+          $scope.status = data.success;
+          $('#status').effect('pulsate', 700);
+        }
+      }).
+      error(function(error, status) {
+        $scope.error = error || "Request failed";
+        $scope.status = status;
+      });
+    };
+    $scope.resetParticipantCounter = function() {
+      $http.post('resetParticipantCounter', {value: $scope.setup.participantCounterStart}).
+      success(function(data) {
+        if(data.success){
+          $scope.status = data.success;
+          $('#status').effect('pulsate', 700);
+        }
+      }).
+      error(function(error, status) {
+        $scope.error = error || "Request failed";
+        $scope.status = status;
+      });
+    };
+    $scope.dropParticipantsFromDB = function() {
+      $('#dropParticipantsFromDbButton').attr('disabled', 'disabled');
+      $http.post('dropParticipantsFromDB').
+      success(function(data) {
+        if(data.success){
+          $scope.status = data.success;
+          $('#status').effect('pulsate', 700);
+          $('#dropParticipantsFromDbButton').removeAttr("disabled");
+        }
+      }).
+      error(function(error, status) {
+        $scope.error = error || "Request failed";
+        $scope.status = status;
+        $('#dropParticipantsFromDbButton').removeAttr('disabled');
+      });
+    };
     $scope.loadQuestionsFromDrive = function() {
-      var driveUrl = $scope.driveSpreadsheetUrl;
       $('#loadQuestionsButton').attr('disabled', 'disabled');
-      console.log('Loading questions from Google Drive Spreadsheet: '+driveUrl);
-      $http.jsonp(driveUrl).
+      $http.jsonp($scope.setup.driveSpreadsheetUrl).
         success(function(data, status) {
           $('#questionsPreview').show();
-          $scope.status = status;
           $scope.questions = parseNoWorkshopQuestions(data);
+          $('#loadQuestionsButton').removeAttr("disabled");
         }).
-        error(function(data, status) {
-          $scope.data = data || "Request failed";
+        error(function(error, status) {
+          $scope.error = error || "Request failed";
           $scope.status = status;
+          $('#loadQuestionsButton').removeAttr("disabled");
         });
+    };
+    $scope.prettyPrintQuestions = function() {
+      return JSON.stringify($scope.questions, undefined, ' ');
     };
     $scope.saveQuestionsToDB = function() {
       $('#saveQuestionsToDbButton').attr('disabled', 'disabled');
-      console.log('Saving Questions to Database...');
-      $http.post('saveQuestionsToDb', $scope.questions).success(function(data) {
+      $http.post('saveQuestionsToDb', $scope.questions).
+      success(function(data) {
         if(data.success){
           $scope.questionsPreviewLabel = data.success;
           $('#questionsPreviewLabel').effect('pulsate', 700);
           $('#saveQuestionsToDbButton').removeAttr("disabled");
         }
       }).
-      error(function(data, status) {
-// Deal with this...
-        $scope.data = data || "Request failed";
+      error(function(error, status) {
+        $scope.error = error || "Request failed";
         $scope.status = status;
         $('#saveQuestionsToDbButton').removeAttr('disabled');
+      });
+    };
+    $scope.dropQuestionsFromDB = function() {
+      $('#dropQuestionsFromDbButton').attr('disabled', 'disabled');
+      $http.post('dropQuestionsFromDb').
+      success(function(data) {
+        if(data.success){
+          $scope.status = data.success;
+          $('#status').effect('pulsate', 700);
+          $('#dropQuestionsFromDbButton').removeAttr("disabled");
+        }
+      }).
+      error(function(error, status) {
+        $scope.error = error || "Request failed";
+        $scope.status = status;
+        $('#dropQuestionsFromDbButton').removeAttr('disabled');
       });
     };
   })
