@@ -1,19 +1,39 @@
-<!--label>Partner Number:</label><span id="partnerNumber">{{partner.number}}</span-->
-<button ng-click="switchPartner()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Partner Number: {{partner.number}}</button>&nbsp;
-<!--label>Question Set:</label><span id="questionSet">{{questionSet}}</span-->
-<button ng-click="switchQuestionSet()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Question Set: {{questionSet}}</button>
-<div class="question-container ui-corner-all">
-  <div class="question-number">{{question.number}}</div>
-  <div class="question-text">{{question.text}}</div>
-  <div class="question-note">{{question.note}}</div>
-  <div class="countdown-timer">{{timer}}</div>
+<div class="play">
+<br/>
+<div id="participant">
+  <label class="participant-number-label">Your Number: </span>
+  <span class="participant-number">{{participant.number}}</span>
 </div>
-<div>
-  <button ng-click="yes()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Yes!</button>&nbsp;
-  <button ng-click="maybe()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Maybe?</button>&nbsp;
-  <button ng-click="no()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">No.</button>
-</div>
-<div>
-  <button ng-click="change()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">...on second thought</button>&nbsp;
-  <button ng-click="maybe()" ng-disabled="isClean() || myForm.$invalid" class="btn btn-primary">Next Question ></button>
+<br/><br/>
+<form id="partner" class="play-screen">
+  <label for="partnerNumber">Your Partner's #:</label><br/><br/>
+  <input type="number" id="partnerNumber" ng-model="partner.number" class="switch-number partner-number"></input><br/><br/>
+  <button type="button" ng-click="saveNewPartner()" ng-disabled="isClean() || partner.$invalid" class="btn btn-primary bigger">Continue...</button>
+</form>
+<form id="questionSet" class="play-screen" style="display: none;">
+  <label for="questionSetNumber">Choose a new question set...</label>
+  <input type="number" id="questionSetNumber" ng-model="questionSet.number" class="switch-number question-set"></input>
+  <button type="button" ng-click="saveNewQuestionSet()" ng-disabled="isClean() || questionSet.$invalid" class="btn btn-primary bigger">Continue...</button>
+</form>
+<form id="answer" class="play-screen" style="display: none;">
+  <button ng-click="switchPartner()" class="btn btn-primary bigger">Your Partner's Number: {{partner.number}}</button>&nbsp;
+  <button ng-click="switchQuestionSet()" class="btn btn-primary bigger">Question Set: {{questionSet}}</button>
+  <div id="questionContainer" class="question-container ui-corner-all">
+    <div id="questions">
+      <div class="question-number">{{question.number}}</div>
+      <div class="question-text">{{question.text}}</div>
+      <div class="question-note">{{question.note}}</div>
+    </div>
+  </div>
+  <div id="answerButtons">
+    <button ng-click="yes()" class="btn btn-primary bigger">Yes!</button>&nbsp;
+    <button ng-click="maybe()" class="btn btn-primary bigger">Maybe?</button>&nbsp;
+    <button ng-click="no()" class="btn btn-primary bigger">No.</button>
+  </div>
+  <div id="navigationButtons">
+    <button ng-click="change()" class="btn btn-primary bigger">...on second thought</button>&nbsp;
+    <button ng-click="maybe()" class="btn btn-primary bigger">Next Question...</button>
+  </div>
+</form>
+<div id="countdownTimer" class="countdown-timer"></div>
 </div>

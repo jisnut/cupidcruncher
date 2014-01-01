@@ -18,7 +18,7 @@ config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/reports', {templateUrl: 'admin/reports.html', controller: 'reportsCtrl', controllerAs: 'reports'});
   $routeProvider.when('/stats', {templateUrl: 'admin/stats.html', controller: 'statsCtrl', controllerAs: 'stats'});
   $routeProvider.when('/links', {templateUrl: 'admin/links.html', controller: 'linksCtrl', controllerAs: 'links'});
-  $routeProvider.otherwise({redirectTo: 'participant/partners'});
+  $routeProvider.otherwise({redirectTo: '/question'});
 }]);
 
 var resizable_containers;
@@ -31,15 +31,12 @@ function initializeApp() {
     if(value.id=='adminTabContainer') {
       value.wOffset = 60; value.hOffset = 150;
     }
-
-
-
-    if(value.id=='playTabContainer') {
-      value.wOffset = 50; value.hOffset = 300;
+//    if(value.id=='playTabContainer') {
+//      value.wOffset = 50; value.hOffset = 300;
+//    }
+    if(value.id=='questionContainer') {
+      value.wOffset = 100; value.hOffset = 400;
     }
-
-
-
   });
   window.onresize=resizeAppContainer;
   resizeAppContainer();

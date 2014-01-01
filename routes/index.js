@@ -142,7 +142,38 @@ exports.dropQuestionsFromDb = function(db) {
   };
 };
 
-
+exports.configuration = function(db) {
+  return function(req, res) {
+    var collection = db.get('configuration');
+    collection.findOne({_id: configPair.key},{},function(e,docs){
+      res.json(docs);
+    });
+  };
+};
+exports.participants = function(db) {
+  return function(req, res) {
+    var collection = db.get('participant');
+    collection.find({},{},function(e,docs){
+      res.json(docs);
+    });
+  };
+};
+exports.questions = function(db) {
+  return function(req, res) {
+    var collection = db.get('questions');
+    collection.find({},{},function(e,docs){
+      res.json(docs);
+    });
+  };
+};
+exports.partners = function(db) {
+  return function(req, res) {
+    var collection = db.get('partners');
+    collection.find({},{},function(e,docs){
+      res.json(docs);
+    });
+  };
+};
 
 
 exports.userlist = function(db) {

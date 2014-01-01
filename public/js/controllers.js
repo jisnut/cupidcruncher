@@ -11,7 +11,7 @@ var application = {
 
 /* Controllers */
 
-angular.module('cruncher.controllers', ['ngCookies'])
+angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
 
   .controller('registrationCtrl', function($scope, $http, $cookieStore, $location, $routeParams) {
     $scope.application = application;
@@ -75,11 +75,38 @@ angular.module('cruncher.controllers', ['ngCookies'])
     });
   })
 
-  .controller('questionCtrl', function($scope, $http) {
-    $http.get('data/partners.json').success(function(data) {
-//    $http.get('data/questions.json').success(function(data) {
-      $scope.questions = data;
-    });
+  .controller('questionCtrl', function($scope, $http, $resource) {
+    $scope.questions = [];
+    $scope.question = {};
+//    $scope.view = '/questions.html';
+    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    $scope.listQuestions = function() {
+//      $scope.view = '/questions.html';
+      questionResource.query(function(data) {
+        $scope.questions = data;
+      }, errorMessage);
+    };
+    $scope.listQuestions();
+/*
+$scope.switchPartner()      partner.number
+$scope.switchQuestionSet()  questionSet
+  partner.number
+$scope.saveNewPartner()
+
+question.number
+question.text
+question.note
+
+$scope.saveNewQuestionSet() questionSet.number
+$scope.yes()
+$scope.maybe()
+$scope.no()
+$scope.change()
+$scope.maybe()
+*/
   })
 
   .controller('configurationCtrl', function($scope, $http) {
@@ -189,16 +216,39 @@ angular.module('cruncher.controllers', ['ngCookies'])
   })
 
   .controller('eventDetailsCtrl', function($scope, $http) {
-    console.log('firing eventDetailsCtrl');
-//    console.log('$scope: '+$scope);
-  })
-
-  .controller('participantsCtrl', function($scope, $http) {
 
   })
 
-  .controller('questionsCtrl', function($scope, $http) {
+  .controller('participantsCtrl', function($scope, $http, $resource) {
+    $scope.participants = [];
+    $scope.participant = {};
+    var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    $scope.listParticipants = function() {
+      participantResource.query(function(data) {
+        $scope.participants = data;
+      }, errorMessage);
+    };
+    $scope.listParticipants();
+  })
 
+  .controller('questionsCtrl', function($scope, $http, $resource) {
+    $scope.questions = [];
+    $scope.question = {};
+//    $scope.view = '/questions.html';
+    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    $scope.listQuestions = function() {
+//      $scope.view = '/questions.html';
+      questionResource.query(function(data) {
+        $scope.questions = data;
+      }, errorMessage);
+    };
+    $scope.listQuestions();
   })
 
   .controller('reportsCtrl', function($scope, $http) {

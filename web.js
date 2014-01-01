@@ -96,6 +96,9 @@ app.post('/dropParticipantsFromDB', routes.dropParticipantsFromDB(db));
 app.post('/dropQuestionsFromDb', routes.dropQuestionsFromDb(db));
 app.post('/saveQuestionsToDb', routes.saveQuestionsToDb(db));
 
+app.get('/configuration', routes.configuration(db));
+app.get('/participants', routes.participants(db));
+app.get('/questions', routes.questions(db));
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
