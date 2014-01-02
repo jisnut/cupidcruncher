@@ -23,6 +23,11 @@ config(['$routeProvider', function($routeProvider) {
 
 var resizable_containers;
 function initializeApp() {
+  initializeResizableContainers();
+
+};
+
+function initializeResizableContainers() {
   resizable_containers = $('.resizable-container');
   resizable_containers.each(function(index, value) {
     if(value.id=='appContainer') {
@@ -35,7 +40,10 @@ function initializeApp() {
 //      value.wOffset = 50; value.hOffset = 300;
 //    }
     if(value.id=='questionContainer') {
-      value.wOffset = 100; value.hOffset = 400;
+      value.wOffset = 130; value.hOffset = 430;
+    }
+    if(value.id=='questionText') {
+      value.wOffset = 140; value.hOffset = 500;
     }
   });
   window.onresize=resizeAppContainer;

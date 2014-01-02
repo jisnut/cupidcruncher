@@ -39,13 +39,11 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
           }
         }).
         error(function(data, status) {
-// Deal with this...
           $scope.data = data || "Request failed";
           $scope.status = status;
           $('#registerButton').removeAttr('disabled');
         });
       }
-//      return false; // prevent the submit action???
     };
   })
 
@@ -76,36 +74,90 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
   })
 
   .controller('questionCtrl', function($scope, $http, $resource) {
+    initializeResizableContainers();
+    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var partnerResource = $resource('/partner' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    $scope.questionsPerSet = 5;     // TODO: make this a configuration value in the DB
     $scope.questions = [];
     $scope.question = {};
-//    $scope.view = '/questions.html';
-    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    $scope.partner = {
+      yeses: [],
+      maybes: [],
+      nos: []
+    };
     function errorMessage(err) {
       $scope.message = err;
     };
     $scope.listQuestions = function() {
-//      $scope.view = '/questions.html';
       questionResource.query(function(data) {
         $scope.questions = data;
+        $scope.questionsSetTotal = Math.ceil(data.length / $scope.questionsPerSet);
       }, errorMessage);
     };
     $scope.listQuestions();
+    $scope.showSwitchPartner = function() {
+      $('#question').hide(); $('#partner').show();
+    }
+    $scope.showSwitchQuestionSet = function() {
+      $('#question').hide(); $('#questionSet').show();
+    }
+    $scope.switchPartner = function() {
+      if($scope.partner.number){
+          // TODO: validate the participant with $scope.partner.number exists 
+        $('#partner').hide(); $('#questionSet').show();
+      } else {
+        $('#partnerNumber').effect('pulsate', 700);
+      }
+    };
+    $scope.switchQuestionSet = function() {
+      if($scope.questionSet && $scope.questionSet.number && $scope.questionSet.number <= $scope.questionsSetTotal){
+        $scope.question = $scope.questions[($scope.questionSet.number-1) * $scope.questionsPerSet];
+        $('#questionSet').hide();
+        $('#question').show();
+      } else {
+        $('#questionSetNumber').effect('pulsate', 700);
+      }
+    };
+    $scope.yes = function() {
+      $scope.question.answer = 'Yes!';
+      $('#answerButtons').hide(); $('#navigationButtons').show();
+    };
+    $scope.maybe = function() {
+      $scope.question.answer = 'Maybe?';
+      $('#answerButtons').hide(); $('#navigationButtons').show();
+    };
+    $scope.no = function() {
+      $scope.question.answer = 'No.';
+      $('#answerButtons').hide(); $('#navigationButtons').show();
+    };
+    $scope.saveParticipantAnswer = function() {
+      if($scope.question.answer === 'Yes!') {
+        $scope.partner.yeses.push($scope.question.number);    
+        // Actually, we should immediattely push this participant's number into their current 
+        // partner's yesses/nos/maybes arrays respectively for easy correlation and report 
+        // generation later. This could be done server side.
+      }
+      if($scope.question.answer === 'Maybe?') {
+        $scope.partner.maybes.push($scope.question.number);
+      }
+      if($scope.question.answer === 'No.') {
+        $scope.partner.nos.push($scope.question.number);
+      }
+      partnerResource.update(function(data) {
+        // switch to next question
+        $scope.question = $scope.questions[$scope.question.number + 1];
+        $('#navigationButtons').hide();
+        $('#answerButtons').show();
+      }, errorMessage);
+    };
 /*
 $scope.switchPartner()      partner.number
-$scope.switchQuestionSet()  questionSet
-  partner.number
-$scope.saveNewPartner()
+$scope.switchQuestionSet()  questionSet.number
 
 question.number
 question.text
 question.note
 
-$scope.saveNewQuestionSet() questionSet.number
-$scope.yes()
-$scope.maybe()
-$scope.no()
-$scope.change()
-$scope.maybe()
 */
   })
 

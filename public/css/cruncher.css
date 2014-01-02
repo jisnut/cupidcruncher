@@ -75,7 +75,7 @@ button.bigger{
   border: 4px solid #bf9734;
   width: 700px;
   padding: 10px;  
-  margin: 10px 10px 0px 10px;
+  margin: 5px 5px 0px 5px;
   background-color: #d8bed3;
 }
 .admin-container{
@@ -262,7 +262,10 @@ select:focus:required:invalid:focus {
   font-size: 1.7em;
 }
 .play-screen{
-  margin: 30px;
+  margin: 15px;
+}
+.play-screen label{
+  font-size: 2.2em;
 }
 .participant-number-label{
   font-size: 1.8em;
@@ -280,23 +283,51 @@ select:focus:required:invalid:focus {
   height: 110px;
   font-size: 6.5em;
   text-align: center;
-  vertical-align: middle;
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 .partner-number{
   color: #88cc99;
+  vertical-align: middle;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 .question-set{
   color: #cc8899;
+  vertical-align: middle;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+button .partner-number,
+button .question-set{
+  font-size: 1.5em;
+  vertical-align: middle;
+}
+#questionSetExplaination{
+  font-size: 1.5em;
+  line-height: 1.3em;
 }
 .question-container{
   border: 3px solid #bf9734;
   width: 500px;
-  padding: 30px;  
-  margin: 10px;
+  padding: 10px;  
+  margin: 10px -10px 10px -10px;
   background-color: #bf9734;
+}
+.question-number{
+  font-size: 1.8em;
+  vertical-align: middle;
+  margin-bottom: 10px;
+}
+.question-text{
+  font-size: 3.0em;
+  line-height: 1.2em;
   white-space: pre-wrap;
   overflow: auto;
+}
+.question-note{
+  font-size: 1.8em;
+  margin: 20px;
+}
+.answer{
+  font-size: 1.5em;
+  color: #442222;
 }
 
 

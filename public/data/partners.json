@@ -1,10 +1,11 @@
 [
- {
+ {			
   "number": 7,
   "hotness": 4,
   "note": "Red haired stranger",
   "shareName": true,
   "shareEmail": true,
+  "questions": [{"number":14, "answer":"Yes!"}, {"number":13, "answer":"Maybe?"}],
   "yeses": [14, 17, 19, 73, 75, 79],
   "maybes": [13, 18, 74]
  },
