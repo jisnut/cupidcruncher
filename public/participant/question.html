@@ -24,20 +24,20 @@
 </form>
 <form id="question" class="play-screen" style="display: none;">
   <div id="switchButtons">
-  	<button ng-click="showSwitchPartner()" class="btn btn-primary bigger" style="margin-bottom:10px;">Partner's #: <span class="partner-number">{{partner.number}}</span></button>
-  	<button ng-click="showSwitchQuestionSet()" class="btn btn-primary bigger" style="margin-top: -10px;">Question Set: <span class="question-set">{{questionSet.number}}</span></button>
+  	<button ng-click="showSwitchPartner()" class="btn btn-primary bigger" style="margin-bottom:10px;">Partner's #: <span class="partner-number">{{partner.number}}</span></button><div class="play-spacer"></div>
+  	<button ng-click="showSwitchQuestionSet()" class="btn btn-primary bigger" style="margin-top: -10px;">Question Set: <span class="question-set">{{questionSet.number}}</span></button><div class="play-spacer"></div>
   </div>
   <div id="questionContainer" class="question-container resizable-container ui-corner-all">
     <div id="questions">
-      <div class="question-number" style="float: left;">
+      <div class="question-number">
         <span>Question #:</span>
         <span>{{question.number}}</span>
       </div>
+      <div id="questionNote" class="question-note">{{question.note}}</div>
       <div id="questionText" class="question-text resizable-container">{{question.text}}</div>
-      <div class="question-note">{{question.note}}</div>
-      <div class="answer yes">Yes!</div>
-      <div class="answer maybe">Maybe?</div>
-      <div class="answer no">No.</div>
+      <div id="answerYes" class="answer yes ui-corner-all">{{question.answer}}</div>
+      <div id="answerMaybe" class="answer maybe ui-corner-all">{{question.answer}}</div>
+      <div id="answerNo" class="answer no ui-corner-all">{{question.answer}}</div>
     </div>
   </div>
   <div id="answerButtons">

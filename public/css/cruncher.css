@@ -299,6 +299,10 @@ button .question-set{
   font-size: 1.5em;
   vertical-align: middle;
 }
+.play-spacer{
+  display: none;
+  height: 5px;
+}
 #questionSetExplaination{
   font-size: 1.5em;
   line-height: 1.3em;
@@ -313,7 +317,8 @@ button .question-set{
 .question-number{
   font-size: 1.8em;
   vertical-align: middle;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  float: left;
 }
 .question-text{
   font-size: 3.0em;
@@ -321,23 +326,33 @@ button .question-set{
   white-space: pre-wrap;
   overflow-x: hidden;
   overflow-y: auto;
+  color: #000000;
+  margin: 0px;
 }
 .question-note{
   font-size: 1.8em;
-  margin: 20px;
+  float: right;
 }
 .answer{
-  font-size: 4.0em;
   display: none;
+  position: relative;
+  padding-top: 60px;
+  top: -190px;
+  width: 230px;
+  height: 100px;
+  font-size: 4.0em;
+  vertical-align: middle;
+  background-color: rgba(25, 25, 25, .5);
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }
 .yes{
-  color: #228822;
+  color: #22aa22;
 }
 .maybe{
-  color: #442244;
+  color: #cfa744;
 }
 .no{
-  color: #882222;
+  color: #aa2222;
 }
 #switchButtons{
   margin-bottom: -10px;

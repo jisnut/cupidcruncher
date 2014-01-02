@@ -85,6 +85,9 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       maybes: [],
       nos: []
     };
+    var answerYes = $('#answerYes');
+    var answerMaybe = $('#answerMaybe');
+    var answerNo = $('#answerNo');
     function errorMessage(err) {
       $scope.message = err;
     };
@@ -112,6 +115,9 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.switchQuestionSet = function() {
       if($scope.questionSet && $scope.questionSet.number && $scope.questionSet.number <= $scope.questionsSetTotal){
         $scope.question = $scope.questions[($scope.questionSet.number-1) * $scope.questionsPerSet];
+        if($scope.question.note){
+          $('#questionNote').show('fade', 2000);
+        }
         $('#questionSet').hide();
         $('#question').show();
       } else {
@@ -121,14 +127,20 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.yes = function() {
       $scope.question.answer = 'Yes!';
       $('#answerButtons').hide(); $('#navigationButtons').show();
+      answerYes.show('fade', 300);
+      setTimeout(function() {answerYes.effect('puff', 1000);}, 2000);
     };
     $scope.maybe = function() {
       $scope.question.answer = 'Maybe?';
       $('#answerButtons').hide(); $('#navigationButtons').show();
+      answerMaybe.show('fade', 300);
+      setTimeout(function() {answerMaybe.effect('puff', 1000);}, 2000);
     };
     $scope.no = function() {
       $scope.question.answer = 'No.';
       $('#answerButtons').hide(); $('#navigationButtons').show();
+      answerNo.show('fade', 300);
+      setTimeout(function() {answerNo.effect('puff', 1000);}, 2000);
     };
     $scope.change = function() {
       $scope.question.answer = null;

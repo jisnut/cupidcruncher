@@ -22,12 +22,14 @@ config(['$routeProvider', function($routeProvider) {
 }]);
 
 var resizable_containers;
+var playspacer;
 function initializeApp() {
   initializeResizableContainers();
 
 };
 
 function initializeResizableContainers() {
+  playspacer = $('.play-spacer');
   resizable_containers = $('.resizable-container');
   resizable_containers.each(function(index, value) {
     if(value.id=='appContainer') {
@@ -36,14 +38,11 @@ function initializeResizableContainers() {
     if(value.id=='adminTabContainer') {
       value.wOffset = 60; value.hOffset = 150;
     }
-//    if(value.id=='playTabContainer') {
-//      value.wOffset = 50; value.hOffset = 300;
-//    }
     if(value.id=='questionContainer') {
-      value.wOffset = 80; value.hOffset = 420;
+      value.wOffset = 80; // hOffset conditionally set below
     }
     if(value.id=='questionText') {
-      value.wOffset = 140; value.hOffset = 500;
+      value.wOffset = 80; // hOffset conditionally set below
     }
   });
   window.onresize=resizeAppContainer;
@@ -53,6 +52,18 @@ function initializeResizableContainers() {
 function resizeAppContainer() {
   var w = parseInt(window.innerWidth),
       h = parseInt(window.innerHeight);
+  if(resizable_containers[1] && resizable_containers[2]){
+    if(w<700){
+      resizable_containers[1].hOffset = 420;
+      resizable_containers[2].hOffset = 450;
+      playspacer.show();
+    } else {
+      resizable_containers[1].hOffset = 360;
+      resizable_containers[2].hOffset = 390;
+      playspacer.hide();
+    }
+    console.log(resizable_containers[2].hOffset);
+  }
   resizable_containers.each(function(index, value) {
     value.style.width=(w-value.wOffset)+'px';
     value.style.height=(h-value.hOffset)+'px';
