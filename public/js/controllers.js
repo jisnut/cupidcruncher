@@ -149,7 +149,7 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       }
 //      partnerResource.update(function(data) {
         // switch to next question
-        $scope.question = $scope.questions[$scope.question.number + 1];
+        $scope.question = $scope.questions[parseInt($scope.question.number) + 1];
         $('#navigationButtons').hide();
         $('#answerButtons').show();
 //      }, errorMessage);
