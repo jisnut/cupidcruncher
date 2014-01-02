@@ -40,7 +40,7 @@ function initializeResizableContainers() {
 //      value.wOffset = 50; value.hOffset = 300;
 //    }
     if(value.id=='questionContainer') {
-      value.wOffset = 130; value.hOffset = 430;
+      value.wOffset = 80; value.hOffset = 420;
     }
     if(value.id=='questionText') {
       value.wOffset = 140; value.hOffset = 500;

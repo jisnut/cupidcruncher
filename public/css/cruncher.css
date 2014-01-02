@@ -262,7 +262,7 @@ select:focus:required:invalid:focus {
   font-size: 1.7em;
 }
 .play-screen{
-  margin: 15px;
+  margin: 10px 0px 10px 0px;
 }
 .play-screen label{
   font-size: 2.2em;
@@ -307,7 +307,7 @@ button .question-set{
   border: 3px solid #bf9734;
   width: 500px;
   padding: 10px;  
-  margin: 10px -10px 10px -10px;
+  margin: 10px 0px 10px 0px;
   background-color: #bf9734;
 }
 .question-number{
@@ -319,16 +319,30 @@ button .question-set{
   font-size: 3.0em;
   line-height: 1.2em;
   white-space: pre-wrap;
-  overflow: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .question-note{
   font-size: 1.8em;
   margin: 20px;
 }
 .answer{
-  font-size: 1.5em;
-  color: #442222;
+  font-size: 4.0em;
+  display: none;
 }
+.yes{
+  color: #228822;
+}
+.maybe{
+  color: #442244;
+}
+.no{
+  color: #882222;
+}
+#navigationButtons button{
+  line-height: 1.1em;
+}
+
 
 
 #appTitle {

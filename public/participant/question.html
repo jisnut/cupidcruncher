@@ -33,7 +33,9 @@
       </div>
       <div id="questionText" class="question-text resizable-container">{{question.text}}</div>
       <div class="question-note">{{question.note}}</div>
-      <div class="answer" style="float: right;">{{answer}}</div>
+      <div class="answer yes">Yes!</div>
+      <div class="answer maybe">Maybe?</div>
+      <div class="answer no">No.</div>
     </div>
   </div>
   <div id="answerButtons">
@@ -42,8 +44,8 @@
     <button ng-click="no()" class="btn btn-primary bigger">No.</button>
   </div>
   <div id="navigationButtons" style="display: none;">
-    <button ng-click="change()" class="btn btn-primary bigger">...on second thought?</button>&nbsp;
-    <button ng-click="saveParticipantAnswer()" class="btn btn-primary bigger">Next Question!</button>
+    <button ng-click="change()" class="btn btn-primary big">...on second<br/>thought?</button>&nbsp;
+    <button ng-click="saveParticipantAnswer()" class="btn btn-primary big">Next<br/>Question!</button>
   </div>
 </form>
 <div id="countdownTimer" class="countdown-timer"></div>

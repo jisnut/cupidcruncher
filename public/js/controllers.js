@@ -130,6 +130,10 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       $scope.question.answer = 'No.';
       $('#answerButtons').hide(); $('#navigationButtons').show();
     };
+    $scope.change = function() {
+      $scope.question.answer = null;
+      $('#navigationButtons').hide(); $('#answerButtons').show();
+    };
     $scope.saveParticipantAnswer = function() {
       if($scope.question.answer === 'Yes!') {
         $scope.partner.yeses.push($scope.question.number);    
@@ -143,12 +147,12 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       if($scope.question.answer === 'No.') {
         $scope.partner.nos.push($scope.question.number);
       }
-      partnerResource.update(function(data) {
+//      partnerResource.update(function(data) {
         // switch to next question
         $scope.question = $scope.questions[$scope.question.number + 1];
         $('#navigationButtons').hide();
         $('#answerButtons').show();
-      }, errorMessage);
+//      }, errorMessage);
     };
 /*
 $scope.switchPartner()      partner.number
