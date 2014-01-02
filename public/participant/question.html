@@ -23,8 +23,10 @@
   <button type="button" ng-click="switchQuestionSet()" ng-disabled="isClean() || questionSet.$invalid" class="btn btn-primary bigger">Continue...</button>
 </form>
 <form id="question" class="play-screen" style="display: none;">
-  <button ng-click="showSwitchPartner()" class="btn btn-primary bigger" style="margin-bottom:10px;">Partner's #: <span class="partner-number">{{partner.number}}</span></button><br/>
-  <button ng-click="showSwitchQuestionSet()" class="btn btn-primary bigger">Question Set: <span class="question-set">{{questionSet.number}}</span></button>
+  <div id="switchButtons">
+  	<button ng-click="showSwitchPartner()" class="btn btn-primary bigger" style="margin-bottom:10px;">Partner's #: <span class="partner-number">{{partner.number}}</span></button>
+  	<button ng-click="showSwitchQuestionSet()" class="btn btn-primary bigger" style="margin-top: -10px;">Question Set: <span class="question-set">{{questionSet.number}}</span></button>
+  </div>
   <div id="questionContainer" class="question-container resizable-container ui-corner-all">
     <div id="questions">
       <div class="question-number" style="float: left;">

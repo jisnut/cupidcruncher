@@ -339,6 +339,14 @@ button .question-set{
 .no{
   color: #882222;
 }
+#switchButtons{
+  margin-bottom: -10px;
+}
+#answerButtons button{
+  padding-top: 25px;
+  padding-bottom: 25px;
+  line-height: 1.1em;
+}
 #navigationButtons button{
   line-height: 1.1em;
 }
