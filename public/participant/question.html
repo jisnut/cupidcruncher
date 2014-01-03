@@ -1,5 +1,5 @@
 <div class="play">
-<div id="status" style="color:red; margin-bottom: 10px; clear: both;">{{message}}</div>
+<div id="status">{{message}}</div>
 <div id="participant">
   <label class="participant-number-label">Your #: </span>
   <span class="participant-number">{{participant.number}}</span>
@@ -7,11 +7,11 @@
 <form id="partner" class="play-screen">
   <br/>
   <label for="partnerNumber">Your Partner's #:</label><br/><br/>
-  <input type="number" id="partnerNumber" ng-model="partner.number" min="1" max="200" class="switch-number partner-number"></input><br/><br/>
+  <input type="number" id="partnerNumber" ng-model="participant.partner.number" min="1" max="200" class="switch-number partner-number"></input><br/><br/>
 <!-- input type="number" id="partnerRating" ng-model="partner.rating" class="switch-number partner-number"></input><br/><br/ -->
   <div id="personalNote" style="display:none;">
     <label for="partnerNote">Optional personal note about this partner:<br/><span >(This will NOT be shared with anyone else)</span></label><br/>
-    <textarea id="partnerNote" ng-model="partner.note" class="partner-note"></textarea><br/><br/>
+    <textarea id="partnerNote" ng-model="participant.partner.note" class="partner-note"></textarea><br/><br/>
   </div>
   <button type="button" ng-click="switchPartner()" ng-disabled="isClean() || partner.$invalid" class="btn btn-primary bigger">Continue...</button>
 </form>
@@ -24,7 +24,7 @@
 </form>
 <form id="question" class="play-screen" style="display: none;">
   <div id="switchButtons">
-  	<button ng-click="showSwitchPartner()" class="btn btn-primary bigger" style="margin-bottom:10px;">Partner's #: <span class="partner-number">{{partner.number}}</span></button><div class="play-spacer"></div>
+  	<button ng-click="showSwitchPartner()" class="btn btn-primary bigger" style="margin-bottom:10px;">Partner's #: <span class="partner-number">{{participant.partner.number}}</span></button><div class="play-spacer"></div>
   	<button ng-click="showSwitchQuestionSet()" class="btn btn-primary bigger" style="margin-top: -10px;">Question Set: <span class="question-set">{{questionSet.number}}</span></button><div class="play-spacer"></div>
   </div>
   <div id="questionContainer" class="question-container resizable-container ui-corner-all">

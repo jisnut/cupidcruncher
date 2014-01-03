@@ -119,7 +119,9 @@ http://bit.ly/1hAZpNb
 
 
 
-
+        // Actually, maybe we should immediattely push this participant's number into their current 
+        // partner's yesses/nos/maybes arrays respectively for easy correlation and report 
+        // generation later. This could be done server side.
 
 
 

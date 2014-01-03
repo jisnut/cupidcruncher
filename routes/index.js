@@ -1,4 +1,5 @@
 var mainTitle = 'SEX+STL Cupid Cruncher';
+var NODATA = {error: 'ERROR: No data sent in request body.'};
 exports.index = function(req, res){
   res.render('index', {title: mainTitle});
 };
@@ -50,7 +51,7 @@ exports.register = function(db) {
         res.json(500, {error: 'There was a problem acquiring your participant number: '+err})
       });
     } else {
-      // throw error
+      res.json(500, NODATA);
     }
   };
 };
@@ -76,7 +77,7 @@ exports.saveConfiguration = function(db) {
         res.json(500, {error: 'There was a problem updating the configuration: '+err})
       });
     } else {
-      // throw error
+      res.json(500, NODATA);
     }
   };
 };
@@ -93,7 +94,7 @@ exports.resetParticipantCounter = function(db) {
         res.json(500, {error: 'There was a problem resetting the participant number counter: '+err})
       });
     } else {
-      // throw error
+      res.json(500, NODATA);
     }
   };
 };
@@ -124,7 +125,7 @@ exports.saveQuestionsToDb = function(db) {
         }
       });
     } else {
-      // throw error
+      res.json(500, NODATA);
     }
   };
 };
@@ -174,7 +175,33 @@ exports.partners = function(db) {
     });
   };
 };
-
+exports.participant = function(db) {
+  return function(req, res) {
+    if(req.body){
+      // var participant = req.cookies.participant; // Cool we can do this, but we're passing in the whole participant object now.
+      var participant = req.body; // First: Find this participant.
+      var collection = db.get('participant');
+      collection.updateById(participant._id, participant)
+        .success(function(doc){
+          var message = doc+" participant(s) were updated";
+          console.log(message);
+          if(!doc){
+            res.json(500, {error: message});
+          }
+        // Next: update this record with the participants partner
+//        collection.find({number: partner.number});
+//        promise.success(function(doc){
+          //now update their partner's record with their this participant's answers
+          res.json({success:"Participant updated.", participant:doc});
+        })
+        .error(function(err){
+          res.json(500, {error: 'There was a problem saving your answer: '+err});
+        });
+    } else {
+      res.json(500, NODATA);
+    }
+  };
+};
 
 exports.userlist = function(db) {
     return function(req, res) {

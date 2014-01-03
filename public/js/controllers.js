@@ -76,20 +76,25 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
   .controller('questionCtrl', function($scope, $http, $resource) {
     initializeResizableContainers();
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
-    var partnerResource = $resource('/partner' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     $scope.questionsPerSet = 5;     // TODO: make this a configuration value in the DB
     $scope.questions = [];
     $scope.question = {};
-    $scope.partner = {
-      yeses: [],
-      maybes: [],
-      nos: []
-    };
+    $scope.participants = [];
+//    $scope.participant = {};    COOKIE!!!
+//    $scope.participant.partner = {
+//      yeses: [],
+//      maybes: [],
+//      nos: []
+//    };
     var answerYes = $('#answerYes');
     var answerMaybe = $('#answerMaybe');
     var answerNo = $('#answerNo');
     function errorMessage(err) {
       $scope.message = err;
+    };
+    function clearErrorMessage() {
+      $scope.message = '';
     };
     $scope.listQuestions = function() {
       questionResource.query(function(data) {
@@ -97,26 +102,65 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
         $scope.questionsSetTotal = Math.ceil(data.length / $scope.questionsPerSet);
       }, errorMessage);
     };
-    $scope.listQuestions();
+    $scope.listQuestions(); // Initialize our list of questions.
+    $scope.listParticipants = function() {
+      participantResource.query(function(data) {
+        $scope.participants = data;
+      }, errorMessage);
+    };
+    $scope.listParticipants(); // Initialize our list of participants.
     $scope.showSwitchPartner = function() {
+      // Refresh our list of participants.
+      $scope.listParticipants();
       $('#question').hide(); $('#partner').show();
-    }
+    };
     $scope.showSwitchQuestionSet = function() {
       $('#question').hide(); $('#questionSet').show();
-    }
+    };
+    function getPartner(num){
+      var partner = null;
+      if($scope.participant.partners){ // First search this participant's existing list of partners and return anything we find
+        for(var i=0; i<$scope.participant.partners.length; i++){
+          if($scope.participant.partners[i].number == num){
+            return $scope.participant.partners[i];
+          }
+        }
+      } // If we don't find an existing partner they've been with, we fall through to here and search the full list
+      for(var i=0; i<$scope.participants.length; i++){
+        if($scope.participants[i].number == num){
+          partner = $scope.participants[i];
+        }
+      }
+      return partner;
+    };
     $scope.switchPartner = function() {
-      if($scope.partner.number){
-          // TODO: validate the participant with $scope.partner.number exists 
+      if($scope.participant.partner.number){
+        var num = $scope.participant.partner.number;
+        if(num == $scope.participant.number){
+          errorMessage("That's YOUR number sillyhead!\n\nEnter your PARTNER'S number below!\n");
+          return;
+        }
+        $scope.participant.partner = getPartner(num);
+        if(!$scope.participant.partner){
+          errorMessage("Participant #"+num+" has not been registered.\n\nVerify this with your workshop coordinator and try again.\n");
+          return;
+        }
+        clearErrorMessage();
         $('#partner').hide(); $('#questionSet').show();
+        if(!$scope.participant.partners){
+          $scope.participant.partners = [];
+        }
+        $scope.participant.partners.push($scope.participant.partner);
       } else {
         $('#partnerNumber').effect('pulsate', 700);
       }
     };
     $scope.switchQuestionSet = function() {
       if($scope.questionSet && $scope.questionSet.number && $scope.questionSet.number <= $scope.questionsSetTotal){
-        $scope.question = $scope.questions[($scope.questionSet.number-1) * $scope.questionsPerSet];
+        $('#questionNote').hide();
+        $scope.question = $scope.questions[($scope.questionSet.number-1) * $scope.questionsPerSet]; // THIS is NOT working right
         if($scope.question.note){
-          $('#questionNote').show('fade', 2000);
+          setTimeout(function() {$('#questionNote').show('fade', {easing:'easeInElastic'}, 1000)}, 500);
         }
         $('#questionSet').hide();
         $('#question').show();
@@ -148,33 +192,37 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     };
     $scope.saveParticipantAnswer = function() {
       if($scope.question.answer === 'Yes!') {
-        $scope.partner.yeses.push($scope.question.number);    
-        // Actually, we should immediattely push this participant's number into their current 
-        // partner's yesses/nos/maybes arrays respectively for easy correlation and report 
-        // generation later. This could be done server side.
+        if(!$scope.participant.partner.yeses){
+          $scope.participant.partner.yeses = [];
+        }
+        $scope.participant.partner.yeses.push($scope.question.number);    
       }
       if($scope.question.answer === 'Maybe?') {
-        $scope.partner.maybes.push($scope.question.number);
+        if(!$scope.participant.partner.maybes){
+          $scope.participant.partner.maybes = [];
+        }
+        $scope.participant.partner.maybes.push($scope.question.number);
       }
       if($scope.question.answer === 'No.') {
-        $scope.partner.nos.push($scope.question.number);
+        if(!$scope.participant.partner.nos){
+          $scope.participant.partner.nos = [];
+        }
+        $scope.participant.partner.nos.push($scope.question.number);
       }
-//      partnerResource.update(function(data) {
-        // switch to next question
-        $scope.question = $scope.questions[parseInt($scope.question.number) + 1];
+
+// Do we still need to search for that pre-existing participant in their list????
+
+      participantResource.update($scope.participant, function(data) {
+        // Answer recorded... Switch to next question!
+        var nextQuestionNumber = parseInt($scope.question.number) + 1;
+        if(nextQuestionNumber % $scope.questionsPerSet == 0){
+          $scope.questionSet.number++;
+        }
+        $scope.question = $scope.questions[nextQuestionNumber];
         $('#navigationButtons').hide();
         $('#answerButtons').show();
-//      }, errorMessage);
+      }, errorMessage);
     };
-/*
-$scope.switchPartner()      partner.number
-$scope.switchQuestionSet()  questionSet.number
-
-question.number
-question.text
-question.note
-
-*/
   })
 
   .controller('configurationCtrl', function($scope, $http) {

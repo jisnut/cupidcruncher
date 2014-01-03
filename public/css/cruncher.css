@@ -299,6 +299,13 @@ button .question-set{
   font-size: 1.5em;
   vertical-align: middle;
 }
+#status{
+  color: red;
+  margin-bottom: 5px;
+  clear: both;
+  white-space: pre-wrap;
+  font-size: 1.2em;
+}
 .play-spacer{
   display: none;
   height: 5px;
@@ -330,7 +337,8 @@ button .question-set{
   margin: 0px;
 }
 .question-note{
-  font-size: 1.8em;
+  display: none;
+  font-size: 1.7em;
   float: right;
 }
 .answer{
@@ -349,10 +357,10 @@ button .question-set{
   color: #22aa22;
 }
 .maybe{
-  color: #cfa744;
+  color: yellow;
 }
 .no{
-  color: #aa2222;
+  color: #ff2222;
 }
 #switchButtons{
   margin-bottom: -10px;

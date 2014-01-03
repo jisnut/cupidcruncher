@@ -62,7 +62,6 @@ function resizeAppContainer() {
       resizable_containers[2].hOffset = 390;
       playspacer.hide();
     }
-    console.log(resizable_containers[2].hOffset);
   }
   resizable_containers.each(function(index, value) {
     value.style.width=(w-value.wOffset)+'px';
