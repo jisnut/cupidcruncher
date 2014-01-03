@@ -61,8 +61,6 @@ exports.play = function(db) {
   };
 };
 
-
-
 // Admin setup functions
 exports.saveConfiguration = function(db) {
   return function(req, res) {
@@ -187,12 +185,36 @@ exports.participant = function(db) {
           console.log(message);
           if(!doc){
             res.json(500, {error: message});
+          } else {
+// Next: update this participant's partner's answers list with their responses
+//                                                                  if(participant.partner.answer === 'Yes!'){
+//                                                                    yesList [participant.number]: question number
+//                                                                  }
+//            collection.updateById(participant.partner._id, {$set: {yeses: yesList}} )
+//              .success(function(doc){
+//                var message = doc+" participant(s) were updated";
+//                console.log(message);
+//                if(!doc){
+//                  res.json(500, {error: message});
+//                } else {
+                  res.json({success:"Participants updated.", participant:doc});
+//                }
+//              })
+//              .error(function(err){
+//                res.json(500, {error: 'There was a problem saving your answer: '+err});
+//              });
           }
-        // Next: update this record with the participants partner
-//        collection.find({number: partner.number});
-//        promise.success(function(doc){
-          //now update their partner's record with their this participant's answers
-          res.json({success:"Participant updated.", participant:doc});
+          play.responses.total++;
+          if(participant.partner.answer === 'Yes!'){
+            play.responses.yeses++;
+          }
+          if(participant.partner.answer === 'Maybe?'){
+            play.responses.maybes++;
+          }
+          if(participant.partner.answer === 'No.'){
+            play.responses.nos++;
+          }
+//          play.matrix[];
         })
         .error(function(err){
           res.json(500, {error: 'There was a problem saving your answer: '+err});

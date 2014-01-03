@@ -88,7 +88,7 @@ rdesktop -u jcleve01 -d NRG -g 1920x1160 NRG226
 
 connect to MongoDB with:
 
-mongo ds053218.mongolab.com:53218/heroku_app20014113 -u heroku_app20014113
+mongo ds053218.mongolab.com:53218/heroku_app20014113
 
 export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
 
@@ -115,7 +115,7 @@ http://192.168.2.3:8080/debug?port=5858
 
 http://bit.ly/1hAZpNb
 
-
+participant.partner.answer
 
 
 

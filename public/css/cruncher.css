@@ -7,8 +7,6 @@ body{
   color:#333333;
   background-color: #502948;
   text-align:center;
-}
-body.fill-window{
   overflow: hidden;
 }
 a{
@@ -335,6 +333,7 @@ button .question-set{
   overflow-y: auto;
   color: #000000;
   margin: 0px;
+  clear: both;
 }
 .question-note{
   display: none;

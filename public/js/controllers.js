@@ -81,12 +81,6 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.questions = [];
     $scope.question = {};
     $scope.participants = [];
-//    $scope.participant = {};    COOKIE!!!
-//    $scope.participant.partner = {
-//      yeses: [],
-//      maybes: [],
-//      nos: []
-//    };
     var answerYes = $('#answerYes');
     var answerMaybe = $('#answerMaybe');
     var answerNo = $('#answerNo');
@@ -169,49 +163,48 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       }
     };
     $scope.yes = function() {
-      $scope.question.answer = 'Yes!';
+      $scope.participant.partner.answer = 'Yes!';
       $('#answerButtons').hide(); $('#navigationButtons').show();
       answerYes.show('fade', 300);
       setTimeout(function() {answerYes.effect('puff', 1000);}, 2000);
     };
     $scope.maybe = function() {
-      $scope.question.answer = 'Maybe?';
+      $scope.participant.partner.answer = 'Maybe?';
       $('#answerButtons').hide(); $('#navigationButtons').show();
       answerMaybe.show('fade', 300);
       setTimeout(function() {answerMaybe.effect('puff', 1000);}, 2000);
     };
     $scope.no = function() {
-      $scope.question.answer = 'No.';
+      $scope.participant.partner.answer = 'No.';
       $('#answerButtons').hide(); $('#navigationButtons').show();
       answerNo.show('fade', 300);
       setTimeout(function() {answerNo.effect('puff', 1000);}, 2000);
     };
     $scope.change = function() {
-      $scope.question.answer = null;
+      $scope.participant.partner.answer = null;
       $('#navigationButtons').hide(); $('#answerButtons').show();
     };
     $scope.saveParticipantAnswer = function() {
-      if($scope.question.answer === 'Yes!') {
+      if($scope.participant.partner.answer === 'Yes!') {
         if(!$scope.participant.partner.yeses){
           $scope.participant.partner.yeses = [];
         }
         $scope.participant.partner.yeses.push($scope.question.number);    
       }
-      if($scope.question.answer === 'Maybe?') {
+      if($scope.participant.partner.answer === 'Maybe?') {
         if(!$scope.participant.partner.maybes){
           $scope.participant.partner.maybes = [];
         }
         $scope.participant.partner.maybes.push($scope.question.number);
       }
-      if($scope.question.answer === 'No.') {
+      if($scope.participant.partner.answer === 'No.') {
         if(!$scope.participant.partner.nos){
           $scope.participant.partner.nos = [];
         }
         $scope.participant.partner.nos.push($scope.question.number);
       }
-
 // Do we still need to search for that pre-existing participant in their list????
-
+      $scope.participant.partner.questionNumber = question.number;
       participantResource.update($scope.participant, function(data) {
         // Answer recorded... Switch to next question!
         var nextQuestionNumber = parseInt($scope.question.number) + 1;
