@@ -1,3 +1,15 @@
+
+// Running statistics (NOT saved to the DB)...
+var play = {
+  responses: {
+    total: 0,
+    yeses: 0,
+    maybes: 0,
+    nos: 0
+  },
+  matrix: []
+};
+
 var mainTitle = 'SEX+STL Cupid Cruncher';
 var NODATA = {error: 'ERROR: No data sent in request body.'};
 exports.index = function(req, res){

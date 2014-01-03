@@ -75,15 +75,6 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-var play = {
-  responses: {
-    total: 0,
-    yeses: 0,
-    maybes: 0,
-    nos: 0
-  },
-  matrix: []
-};
 app.get('/', routes.index);
 app.get('/qr', routes.qr);
 app.get('/rules', routes.rules);

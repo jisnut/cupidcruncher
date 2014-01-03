@@ -18,7 +18,7 @@ config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/reports', {templateUrl: 'admin/reports.html', controller: 'reportsCtrl', controllerAs: 'reports'});
   $routeProvider.when('/stats', {templateUrl: 'admin/stats.html', controller: 'statsCtrl', controllerAs: 'stats'});
   $routeProvider.when('/links', {templateUrl: 'admin/links.html', controller: 'linksCtrl', controllerAs: 'links'});
-  $routeProvider.otherwise({redirectTo: '/question'});
+//  $routeProvider.otherwise({redirectTo: '/question'});
 }]);
 
 var resizable_containers;

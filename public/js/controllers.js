@@ -128,7 +128,9 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       return partner;
     };
     $scope.switchPartner = function() {
-      if($scope.participant.partner.number){
+      if(!$scope.participant.partner || !$scope.participant.partner.number){
+        $('#partnerNumber').effect('pulsate', 700);
+      } else {
         var num = $scope.participant.partner.number;
         if(num == $scope.participant.number){
           errorMessage("That's YOUR number sillyhead!\n\nEnter your PARTNER'S number below!\n");
@@ -145,8 +147,6 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
           $scope.participant.partners = [];
         }
         $scope.participant.partners.push($scope.participant.partner);
-      } else {
-        $('#partnerNumber').effect('pulsate', 700);
       }
     };
     $scope.switchQuestionSet = function() {
