@@ -231,19 +231,6 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.questionsPreviewLabel='Preview Questions:';
     $scope.setup.driveSpreadsheetUrl=
       'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=JSON_CALLBACK';
-    $scope.enableRegistration = function() {
-      $http.post('enableRegistration', $scope.setup.enableRegistration).
-      success(function(data) {
-        if(data.success){
-          $scope.status = data.success;
-          $('#status').effect('pulsate', 700);
-        }
-      }).
-      error(function(error, status) {
-        $scope.error = error || "Request failed";
-        $scope.status = status;
-      });
-    };
     $scope.resetParticipantCounter = function() {
       $http.post('resetParticipantCounter', {value: $scope.setup.participantCounterStart}).
       success(function(data) {
@@ -325,7 +312,19 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
   })
 
   .controller('eventDetailsCtrl', function($scope, $http) {
-
+    $scope.enableRegistration = function() {
+      $http.post('enableRegistration', $scope.enableRegistration).   //breaks here Set value in a configuration object here
+      success(function(data) {
+        if(data.success){
+          $scope.status = data.success;
+          $('#status').effect('pulsate', 700);
+        }
+      }).
+      error(function(error, status) {
+        $scope.error = error || "Request failed";
+        $scope.status = status;
+      });
+    };
   })
 
   .controller('participantsCtrl', function($scope, $http, $resource) {

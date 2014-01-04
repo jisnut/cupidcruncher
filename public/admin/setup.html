@@ -1,7 +1,7 @@
 <div class="admin-setup">
   <div class="section-title">Cupid Cruncher Setup</div>
 
-<div style="color:red; float: right;">These DB operations are buggy.<br/>They hang the database.<br/>Use them carefully!</div>
+<!-- div style="color:red; float: right;">These DB operations are buggy.<br/>They hang the database.<br/>Use them carefully!</div -->
 
   <div id="status" style="color:red; padding: 20px; clear: both;"> {{status}} {{error}}</div>
   <div id="setup">
@@ -10,11 +10,6 @@
   	  <textarea id="participantSplash" name="participantSplash"></textarea>
   	</div>
   	<hr/-->
-  	<div>
-  	  <label for="enableRegistration">Enable Registration:</label>&nbsp;
-  	  <input type="checkbox" id="enableRegistration" class="big" ng-model="setup.enableRegistration" ng-click="enableRegistration()"></input>
-  	</div>
-    <br/>
     </div>
       <button id="dropParticipantsFromDbButton" type="button" ng-click="dropParticipantsFromDB()" class="btn btn-primary">Drop Participants From Database</button>&nbsp;&nbsp;
     </div>
