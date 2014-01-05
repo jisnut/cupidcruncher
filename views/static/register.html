@@ -1,9 +1,16 @@
 <div ng-controller="registrationCtrl">
-  <p id="privacyNotification">
+  <div id="status">{{message}}</div>
+  <p id="privacyNotification" ng-show="configuration.event.registration.enabled">
     <span class="animate-show" ng-hide="participant.nameMatchesOk && participant.emailMatchesOk">Other participants will <b>NOT</b> see your <span ng-hide="participant.nameMatchesOk">name<span ng-hide="participant.emailMatchesOk"> or </span></span><span ng-hide="participant.emailMatchesOk">email address</span>.<br/></span>
     <span class="animate-show" ng-show="participant.nameMatchesOk || participant.emailMatchesOk">Other participants who match your questions <b>will</b> see your <span ng-show="participant.nameMatchesOk">name<span ng-show="participant.emailMatchesOk"> and </span></span><span ng-show="participant.emailMatchesOk">email address</span>.<br/></span>
   </p>
-  <form id="registrationForm" action="register" method="post" name="registrationForm" class="registration-form">
+  <div id="registrationNotAllowed" ng-hide="configuration.event.registration.enabled">
+    <br/><br/><br/><br/>
+    Registration for The "No" Workshop is not allowed at this time.<br/><br/>
+    Please wait for the facilitator to officially launch the event.<br/><br/><br/><br/><br/><br/>
+    <a href="/" class="btn btn-primary bigger" style="padding:30px;">Try again?</a><br/><br/>
+  </div>
+  <form id="registrationForm" action="register" method="post" name="registrationForm" class="registration-form" ng-show="configuration.event.registration.enabled">
   <!-- Need a mechanism to manage the events down the road, but for now we'll just hard code this eventName to be "SEXSTL No Workshop 2014-01-09" -->
     <input type="hidden" name="eventName" ng-model="participant.eventName" value="SEXSTL No Workshop 2014-01-09"></input>
     <input type="hidden" id="registryLoop" name="registryLoop"></input>

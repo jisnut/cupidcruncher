@@ -1,6 +1,13 @@
 <div class="admin-stats">
-  <div class="section-title">Cruncher Stats</div>
-
-<div style="color:red">Not fully implemented yet!</div>
-
+  <div class="section-title">Cruncher Statistics</div>
+  <div id="status">{{message}}</div>
+  <br/>
+  <div id="statDisplay">
+    <div id="statTotalLabel"><span>Total Questions Asked: </span><span id="statTotal">{{play.responses.total}}</span></div>
+    <div id="statYesLabel"><span>Total Yeses! </span><span id="statTotal">{{play.responses.yeses}}</span></div>
+    <div id="statMaybeLabel"><span>Total Maybes? </span><span id="statTotal">{{play.responses.maybes}}</span></div>
+    <div id="statNoLabel"><span>Total Nos. </span><span id="statTotal">{{play.responses.nos}}</span></div>
+  </div>
+  <br/>
+  <button type="button" class="btn btn-primary bigger">Play!</button>
 </div>

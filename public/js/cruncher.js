@@ -88,5 +88,6 @@ function parseNoWorkshopQuestions(spreadsheetData) {
       }
     });
   }
+  questions.splice(0, 0, {"number": "0", "text": "This is not a question.", "note": "This is a placeholder!"});
   return questions;
 };

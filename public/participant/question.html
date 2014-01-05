@@ -21,7 +21,7 @@
 <form id="questionSet" class="play-screen" style="display: none;">
   <br/>
   <label for="questionSetNumber">Choose a new question set...</label><br/><br/>
-  <div id="questionSetExplaination">There are {{questions.length}} questions total divided into {{questionsSetTotal}} sets. Just pick a number between 1 and {{questionsSetTotal}} at random. Seriously! You're going to want to mix it up a little.<br/><span style="font-weight:bold; color: #551111;">Just make sure your partner is using the same question set you are on their paper form or web app!</span></div><br/>
+  <div id="questionSetExplaination">There are {{questions.length-1}} questions total divided into {{questionsSetTotal}} sets. Just pick a number between 1 and {{questionsSetTotal}} at random. Seriously! You're going to want to mix it up a little.<br/><span style="font-weight:bold; color: #551111;">Just make sure your partner is using the same question set you are on their paper form or web app!</span></div><br/>
   <input type="number" id="questionSetNumber" ng-model="questionSet.number" min="1" max="{{questionsSetTotal}}" class="switch-number question-set"></input><br/><br/>
   <button type="button" ng-click="switchQuestionSet()" ng-disabled="isClean() || questionSet.$invalid" class="btn btn-primary bigger">Continue...</button>
 </form>
@@ -38,6 +38,7 @@
       </div>
       <div id="questionNote" class="question-note">{{question.note}}</div>
       <div id="questionText" class="question-text resizable-container">{{question.text}}</div>
+	  <div id="wrapAround" class="wrap-around ui-corner-all">You've reached the end of our question list.<br/><br/>We're sending you back to Question Set #1</div>
       <div id="answerYes" class="answer yes ui-corner-all">{{participant.partner.answer}}</div>
       <div id="answerMaybe" class="answer maybe ui-corner-all">{{participant.partner.answer}}</div>
       <div id="answerNo" class="answer no ui-corner-all">{{participant.partner.answer}}</div>
@@ -45,7 +46,7 @@
   </div>
   <div id="answerButtons">
     <button ng-click="yes()" class="btn btn-primary bigger">Yes!</button>&nbsp;&nbsp;
-    <button ng-click="maybe()" class="btn btn-primary bigger">Maybe?</button>&nbsp;&nbsp;
+    <button ng-click="maybe()" class="btn btn-primary bigger" ng-show="configuration.event.maybes.allowed">Maybe?</button>&nbsp;&nbsp;
     <button ng-click="no()" class="btn btn-primary bigger">No.</button>
   </div>
   <div id="navigationButtons" style="display: none;">

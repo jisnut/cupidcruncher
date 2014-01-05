@@ -1,15 +1,43 @@
 
 // Running statistics (NOT saved to the DB)...
 var play = {
+  participants: {
+    total: 0
+  },
   responses: {
     total: 0,
     yeses: 0,
     maybes: 0,
     nos: 0
   },
-  matrix: []
+  pairings: [],
+  questions: []
 };
-
+var configuration = {
+  event: {
+    name: 'SEX+STL No Workshop',
+    registration: {
+      enabled: true,
+      requireEmail: false
+    },
+    date: '2014-01-09',
+    questionSetSize: 5,
+    questionSetDuration: 3,
+    maybes: {
+      allowed: true,
+      matchesYeses: true
+    },
+    participant: {
+      showNotes: true,
+      showTimer: false,
+      rateQuestions: false
+    },
+    partner: {
+      notesAllowed: false,
+      ratingsAllowed: false
+    }
+  }
+}
 var mainTitle = 'SEX+STL Cupid Cruncher';
 var NODATA = {error: 'ERROR: No data sent in request body.'};
 exports.index = function(req, res){
@@ -74,18 +102,36 @@ exports.play = function(db) {
 };
 
 // Admin setup functions
+exports.loadConfiguration = function(db) {
+  return function(req, res) {
+//    if(req.body){
+//      var configPair = req.body;
+//      var collection = db.get('configuration');   // Client provides a key string identifying the configuration document to modify
+//      var promise = collection.find({_id: configPair.key});
+//      promise.success(function(doc){
+        res.json([configuration]);
+//      });
+//      promise.error(function(err){
+//        res.json(500, {error: 'There was a problem updating the configuration: '+err})
+//      });
+//    } else {
+//      res.json(500, NODATA);
+//    }
+  };
+};
 exports.saveConfiguration = function(db) {
   return function(req, res) {
     if(req.body){
-      var configPair = req.body;
-      var collection = db.get('configuration');   // Client provides a key string identifying the configuration document to modify
-      var promise = collection.findAndModify({'query': {_id: configPair.key}, 'update': configPair.configuration, 'new':true});
-      promise.success(function(doc){
-        res.json({success:"Configuration updated", participantNumber:doc});
-      });
-      promise.error(function(err){
-        res.json(500, {error: 'There was a problem updating the configuration: '+err})
-      });
+//      var configPair = req.body;
+//      var collection = db.get('configuration');   // Client provides a key string identifying the configuration document to modify
+//      var promise = collection.findAndModify({'query': {_id: configPair.key}, 'update': configPair.configuration, 'new':true});
+//      promise.success(function(doc){
+        configuration = req.body;
+        res.json(configuration);
+//      });
+//      promise.error(function(err){
+//        res.json(500, {error: 'There was a problem updating the configuration: '+err})
+//      });
     } else {
       res.json(500, NODATA);
     }
@@ -234,6 +280,15 @@ exports.participant = function(db) {
     } else {
       res.json(500, NODATA);
     }
+  };
+};
+
+exports.stats = function(db) {
+  return function(req, res) {
+//    var collection = db.get('___________');
+//    collection.findOne({_id: configPair.key},{},function(e,docs){
+    res.json([play]);
+//    });
   };
 };
 

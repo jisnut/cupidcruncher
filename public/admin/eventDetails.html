@@ -1,45 +1,55 @@
 <div id="admin-eventDetails">
   <div class="section-title">Event Details</div>
 
-<div style="color:red; float: right;">Not fully implemented yet!</div>
+<div style="color:red; float: right;">Not all properties have been fully implemented!</div>
 
   <div id="eventDetails">
+    <br/>
+    <br/>
+    <div id="status">{{message}}</div>
+    <br/>
     <div>
   	  <label for="enableRegistration">Enable Registration:</label>&nbsp;
-  	  <input type="checkbox" id="enableRegistration" class="big" ng-model="setup.enableRegistration" ng-click="enableRegistration()"></input>
+  	  <input type="checkbox" id="enableRegistration" class="big" ng-model="configuration.event.registration.enabled" ng-click="enableRegistration()"></input>
   	</div>
   	<div>
   	  <label for="eventName">Event Name:</label>
-  	  <input type="text" id="eventName" name="eventName" ng-model="project.eventName"></input>
+  	  <input type="text" id="eventName" name="eventName" ng-model="configuration.event.name"></input>
   	</div>
   	<div>
   	  <label for="eventDate">Event Date:</label>
-  	  <input type="date" id="eventDate" name="eventDate" ng-model="project.eventDate"></input>
+  	  <input type="date" id="eventDate" name="eventDate" ng-model="configuration.event.date"></input>
   	</div>
   	<div>
   	  <label for="questionSetSize">Question Set Size:</label>
-  	  <input type="number" id="questionSetSize" name="questionSetSize" value="5"></input>
+  	  <input type="number" id="questionSetSize" name="questionSetSize" ng-model="configuration.event.questionSetSize"></input>
   	</div>
   	<div>
   	  <label for="questionSetDuration">Question Set Duration:</label>
-  	  <input type="number" id="questionSetDuration" name="questionSetDuration" value="2.5"></input>
+  	  <input type="number" id="questionSetDuration" name="questionSetDuration" ng-model="configuration.event.questionSetDuration"></input>
   	  <span style="">&nbsp;Minutes</span>
   	</div>
   	<div>
   	  <label for="allowMaybes">Allow Maybes:</label>
-  	  <input type="checkbox" id="allowMaybes" name="allowMaybes" ng-model="project.allowMaybes"></input>
+  	  <input type="checkbox" id="allowMaybes" name="allowMaybes" ng-model="configuration.event.maybes.allowed"></input>&nbsp;&nbsp;&nbsp;
+   	  <label for="maybesMatchYeses">Maybes match yeses:</label>
+  	  <input type="checkbox" id="maybesMatchYeses" name="maybesMatchYeses" ng-model="configuration.event.maybes.matchesYeses"></input>
+  	</div>
+    <div>
+  	  <label for="showNotes">Show notes:</label>
+  	  <input type="checkbox" id="showNotes" name="showNotes" ng-model="configuration.event.participant.showNotes"></input>&nbsp;&nbsp;&nbsp;
+   	  <label for="showTimer">Show timer:</label>
+  	  <input type="checkbox" id="showTimer" name="showTimer" ng-model="configuration.event.participant.showTimer"></input>&nbsp;&nbsp;&nbsp;
+   	  <label for="rateQuestions">Rate questions:</label>
+  	  <input type="checkbox" id="rateQuestions" name="rateQuestions" ng-model="configuration.event.participant.rateQuestions"></input>
   	</div>
   	<div>
-  	  <label for="allowPartnerNotes">Allow Partner Notes:</label>
-  	  <input type="checkbox" id="allowPartnerNotes" name="allowPartnerNotes" ng-model="project.allowPartnerNotes"></input>
-  	</div>
-  	<div>
-  	  <label for="showNotesToParticipants">Show Notes To User:</label>
-  	  <input type="checkbox" id="showNotesToParticipants" name="showNotesToParticipants" ng-model="project.showNotesToParticipants"></input>
-  	</div>
-  	<div>
-  	  <label for="showTimer">Show Timer:</label>
-  	  <input type="checkbox" id="showTimer" name="showTimer" ng-model="project.showTimer"></input>
+   	  <label for="notesAllowed">Allow partner notes:</label>
+  	  <input type="checkbox" id="notesAllowed" name="notesAllowed" ng-model="configuration.event.partner.notesAllowed"></input>&nbsp;&nbsp;&nbsp;
+   	  <label for="ratingsAllowed">Allow partner ratings:</label>
+  	  <input type="checkbox" id="ratingsAllowed" name="ratingsAllowed" ng-model="configuration.event.partner.ratingsAllowed"></input>
   	</div>
   </div>
+  <br/>
+  <button id="saveConfigurationButton" type="button" ng-click="saveConfiguration()" class="btn btn-primary">Save Event Configuration</button>
 </div>

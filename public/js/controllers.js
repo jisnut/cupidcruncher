@@ -13,10 +13,23 @@ var application = {
 
 angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
 
-  .controller('registrationCtrl', function($scope, $http, $cookieStore, $location, $routeParams) {
+  .controller('registrationCtrl', function($scope, $http, $resource, $cookieStore, $location, $routeParams) {
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     $scope.application = application;
     $scope.loop = false;
     var loopStr = '?registryLoop=true';
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    function clearErrorMessage() {
+      $scope.message = '';
+    };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
     if(window.location.search === loopStr){
       $scope.loop = 'true';
       $('.registration').attr('action', '/').attr('href', '/registration'+loopStr).attr('method', 'get');
@@ -75,25 +88,32 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
 
   .controller('questionCtrl', function($scope, $http, $resource) {
     initializeResizableContainers();
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
-    $scope.questionsPerSet = 5;     // TODO: make this a configuration value in the DB
-    $scope.questions = [];
-    $scope.question = {};
-    $scope.participants = [];
+//    $scope.configuration.event.questionSetSize = 5;     // TODO: make this a configuration value in the DB
+//    $scope.questions = [];
+//    $scope.question = {};
+//    $scope.participants = [];
     var answerYes = $('#answerYes');
     var answerMaybe = $('#answerMaybe');
     var answerNo = $('#answerNo');
+    var wrapAround = $('#wrapAround');
     function errorMessage(err) {
       $scope.message = err;
     };
     function clearErrorMessage() {
       $scope.message = '';
     };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
     $scope.listQuestions = function() {
       questionResource.query(function(data) {
         $scope.questions = data;
-        $scope.questionsSetTotal = Math.ceil(data.length / $scope.questionsPerSet);
       }, errorMessage);
     };
     $scope.listQuestions(); // Initialize our list of questions.
@@ -104,12 +124,32 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     };
     $scope.listParticipants(); // Initialize our list of participants.
     $scope.showSwitchPartner = function() {
+      if(!$scope.configuration){
+        errorMessage('Error: Global application configuration object was not loaded');
+        return;
+      }
+      if(!$scope.configuration.event){
+        errorMessage('Error: Event configuration object was not loaded');
+        return
+      }
       // Refresh our list of participants.
       $scope.listParticipants();
-      $('#question').hide(); $('#partner').show();
+      $('#question').hide();
+      $('#partner').show();
     };
     $scope.showSwitchQuestionSet = function() {
-      $('#question').hide(); $('#questionSet').show();
+      if(!$scope.configuration.event.questionSetSize){
+        errorMessage('Error: Event configuration object did not load qestion set size.');
+        return
+      }
+      if(!$scope.questions){
+        errorMessage('Error: Did not load question data.');
+        return
+      }
+      $scope.questionsSetTotal = Math.ceil($scope.questions.length / $scope.configuration.event.questionSetSize);
+      $('#partner').hide();
+      $('#question').hide();
+      $('#questionSet').show();
     };
     function getPartner(num){
       var partner = null;
@@ -133,29 +173,33 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       } else {
         var num = $scope.participant.partner.number;
         if(num == $scope.participant.number){
-          errorMessage("That's YOUR number sillyhead!\n\nEnter your PARTNER'S number below!\n");
+          errorMessage("That's YOUR number sillyhead!\n\nEnter your PARTNER'S number below!\n\n");
           return;
         }
         $scope.participant.partner = getPartner(num);
         if(!$scope.participant.partner){
-          errorMessage("Participant #"+num+" has not been registered.\n\nVerify this with your workshop coordinator and try again.\n");
+          $scope.listParticipants();
+          errorMessage("Participant #"+num+" has not been registered.\n\nVerify this with your workshop coordinator and try again.\n\n");
           return;
         }
         clearErrorMessage();
-        $('#partner').hide(); $('#questionSet').show();
+        $scope.showSwitchQuestionSet();
         if(!$scope.participant.partners){
           $scope.participant.partners = [];
         }
         $scope.participant.partners.push($scope.participant.partner);
       }
     };
+    function switchQuestionNumber(number){
+      $('#questionNote').hide();
+      $scope.question = $scope.questions[number];
+        if($scope.question.note && $scope.configuration.event.participant.showNotes){
+          setTimeout(function() {$('#questionNote').show('blind', 700)}, 500);
+        }
+    };
     $scope.switchQuestionSet = function() {
       if($scope.questionSet && $scope.questionSet.number && $scope.questionSet.number <= $scope.questionsSetTotal){
-        $('#questionNote').hide();
-        $scope.question = $scope.questions[($scope.questionSet.number-1) * $scope.questionsPerSet]; // THIS is NOT working right
-        if($scope.question.note){
-          setTimeout(function() {$('#questionNote').show('fade', {easing:'easeInElastic'}, 1000)}, 500);
-        }
+        switchQuestionNumber((($scope.questionSet.number-1) * $scope.configuration.event.questionSetSize) + 1);
         $('#questionSet').hide();
         $('#question').show();
       } else {
@@ -208,10 +252,19 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       participantResource.update($scope.participant, function(data) {
         // Answer recorded... Switch to next question!
         var nextQuestionNumber = parseInt($scope.question.number) + 1;
-        if(nextQuestionNumber % $scope.questionsPerSet == 0){
-          $scope.questionSet.number++;
+        if(nextQuestionNumber >= $scope.questions.length){
+          // Wrap around
+          switchQuestionNumber(1);
+          $scope.questionSet.number = 1;
+          wrapAround.show('fade', 300);
+          setTimeout(function() {wrapAround.effect('puff', 1000);}, 8000);
+        } else {
+          if(nextQuestionNumber % $scope.configuration.event.questionSetSize == 1){
+            // Increment the question set number
+            $scope.questionSet.number++;
+          }
+          switchQuestionNumber(nextQuestionNumber);
         }
-        $scope.question = $scope.questions[nextQuestionNumber];
         $('#navigationButtons').hide();
         $('#answerButtons').show();
       }, errorMessage);
@@ -219,18 +272,40 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
   })
 
   .controller('configurationCtrl', function($scope, $http) {
-    $http.get('data/configuration.json').success(function(data) {
-      $scope.configuration = data;
-    });
+//unused
   })
 
-// Admin controller functions
-  .controller('setupCtrl', function($scope, $http, $routeParams) {
+  
+/*
+*
+* Admin controller functions
+*
+*/
+  .controller('setupCtrl', function($scope, $http, $resource, $routeParams) {
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     $scope.setup={};
     $scope.setup.participantCounterStart=1;
     $scope.questionsPreviewLabel='Preview Questions:';
     $scope.setup.driveSpreadsheetUrl=
       'https://spreadsheets.google.com/feeds/cells/0AonL0RA7C8fwdHhFNVpyQTFnTkw5VXNxS3Z2X1hFamc/od6/public/basic?alt=json-in-script&callback=JSON_CALLBACK';
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    function clearErrorMessage() {
+      $scope.message = '';
+    };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
+    $scope.saveConfiguration = function() {
+      //TODO: eventually need to provide a key (event name and date) to save this and look it up.
+      configurationResource.update($scope.configuration, function(data){
+        $scope.configuration = data;
+      }, errorMessage);
+    };
     $scope.resetParticipantCounter = function() {
       $http.post('resetParticipantCounter', {value: $scope.setup.participantCounterStart}).
       success(function(data) {
@@ -311,19 +386,30 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     };
   })
 
-  .controller('eventDetailsCtrl', function($scope, $http) {
-    $scope.enableRegistration = function() {
-      $http.post('enableRegistration', $scope.enableRegistration).   //breaks here Set value in a configuration object here
-      success(function(data) {
-        if(data.success){
-          $scope.status = data.success;
-          $('#status').effect('pulsate', 700);
-        }
-      }).
-      error(function(error, status) {
-        $scope.error = error || "Request failed";
-        $scope.status = status;
-      });
+  .controller('eventDetailsCtrl', function($scope, $http, $resource) {
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    function clearErrorMessage() {
+      $scope.message = '';
+    };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
+    $scope.saveConfiguration = function() {
+      //TODO: eventually need to provide a key (event name and date) to save this and look it up.
+      configurationResource.update($scope.configuration, function(data){
+        $scope.configuration = data;
+        
+        // ...for now til we build a better messaging system
+        errorMessage('Event configuration saved!');
+        $('#status').effect('pulsate', 700);
+        
+      }, errorMessage);
     };
   })
 
@@ -363,8 +449,20 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
 
   })
 
-  .controller('statsCtrl', function($scope, $http) {
-
+  .controller('statsCtrl', function($scope, $resource) {
+    var statsResource = $resource('/stats', {id: '@_id'});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    $scope.getResponses = function() {
+      statsResource.query(function(data) {
+        $scope.play = data[0];
+      }, errorMessage);
+    };
+    
+    $scope.getResponses();
+    
+    // setTimeout autoRefresh
   })
 
   .controller('linksCtrl', function($scope, $http) {
