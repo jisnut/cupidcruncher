@@ -83,6 +83,7 @@ exports.register = function(db) {
             console.error('DB Error: '+err);
             res.json(500, {error: 'There was a problem registering the participant in the database: '+err})
           } else {
+            play.participants.total++;
             res.json({success:"Registered!", participant:doc});
           }
         });
@@ -162,6 +163,7 @@ exports.dropParticipantsFromDB = function(db) {
         console.error('DB Error: '+err);
         res.json(500, {error: 'There was a problem dropping the participants collection from the database: '+err});
       } else {
+        play.participants.total=0;
         res.json({success:'All participants dropped from database!'});
       }
     });

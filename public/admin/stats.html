@@ -2,12 +2,28 @@
   <div class="section-title">Cruncher Statistics</div>
   <div id="status">{{message}}</div>
   <br/>
-  <div id="statDisplay">
-    <div id="statTotalLabel"><span>Total Questions Asked: </span><span id="statTotal">{{play.responses.total}}</span></div>
-    <div id="statYesLabel"><span>Total Yeses! </span><span id="statTotal">{{play.responses.yeses}}</span></div>
-    <div id="statMaybeLabel"><span>Total Maybes? </span><span id="statTotal">{{play.responses.maybes}}</span></div>
-    <div id="statNoLabel"><span>Total Nos. </span><span id="statTotal">{{play.responses.nos}}</span></div>
+  <div id="statDisplay" class="ui-corner-all">
+    <div id="statTotalParticipants">
+      <span id="statTotalParticipantsLabel" class="stat-label">Total Participants: </span>
+      <span id="statTotalParticipantsValue" class="stat-value stat-total stat-total-participants">{{play.participants.total}}</span>
+    </div>
+    <div id="statTotalQuestions">
+      <span id="statTotalQuestionsLabel" class="stat-label">Total Questions Asked: </span>
+      <span id="statTotalQuestionsValue" class="stat-value stat-total stat-total-questions">{{play.responses.total}}</span>
+    </div>
+    <div id="statYeses">
+      <span id="statYesesLabel" class="stat-label">Total Yeses! </span>
+      <span id="statYesesValue" class="stat-value stat-yeses">{{play.responses.yeses}}</span>
+    </div>
+    <div id="statMaybes">
+      <span id="statMaybesLabel" class="stat-label">Total Maybes? </span>
+      <span id="statMaybesValue" class="stat-value stat-maybes">{{play.responses.maybes}}</span>
+    </div>
+    <div id="statNos">
+      <span id="statNosLabel" class="stat-label">Total Nos. </span>
+      <span id="statNosValue" class="stat-value stat-nos">{{play.responses.nos}}</span>
+    </div>
   </div>
   <br/>
-  <button type="button" class="btn btn-primary bigger">Play!</button>
+  <button type="button" id="updateStatsButton" ng-click="toggleAutoUpdateStats()" class="btn btn-primary bigger">Play</button>
 </div>

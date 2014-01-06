@@ -426,6 +426,13 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       }, errorMessage);
     };
     $scope.listParticipants();
+    $scope.editParticipantButton = function() {
+      errorMessage("Not yet implemented!");
+    }
+    $scope.reportGenerationButton = function(){
+      errorMessage("Not yet implemented!");
+      
+    }
   })
 
   .controller('questionsCtrl', function($scope, $http, $resource) {
@@ -451,18 +458,29 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
 
   .controller('statsCtrl', function($scope, $resource) {
     var statsResource = $resource('/stats', {id: '@_id'});
+    $scope.updateStats = false;
     function errorMessage(err) {
       $scope.message = err;
     };
     $scope.getResponses = function() {
       statsResource.query(function(data) {
-        $scope.play = data[0];
+        if($scope.updateStats){
+          $scope.play = data[0];
+          setTimeout($scope.getResponses, 5000);
+        }
       }, errorMessage);
     };
-    
-    $scope.getResponses();
-    
-    // setTimeout autoRefresh
+
+    $scope.toggleAutoUpdateStats = function() {
+      if($scope.updateStats){
+        $scope.updateStats = false;
+        $('#updateStatsButton').text('Play');
+      } else {
+        $scope.updateStats = true;
+        $('#updateStatsButton').text('Stop');
+        $scope.getResponses();
+      }
+    }
   })
 
   .controller('linksCtrl', function($scope, $http) {
