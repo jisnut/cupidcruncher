@@ -212,7 +212,7 @@ exports.configuration = function(db) {
 exports.participants = function(db) {
   return function(req, res) {
     var collection = db.get('participant');
-    collection.find({},{},function(e,docs){
+    collection.find({$query: {}, $orderby: {number: 1}}, {},function(e,docs){
       res.json(docs);
     });
   };
@@ -273,6 +273,13 @@ exports.participant = function(db) {
           }
           if(participant.partner.answer === 'No.'){
             play.responses.nos++;
+          }
+          if(participant.partner.questionNumber){
+            if(!play.questions[participant.partner.questionNumber]){
+              play.questions[participant.partner.questionNumber] = 1;
+            } else {
+              play.questions[participant.partner.questionNumber]++;
+            }
           }
 //          play.matrix[];
         })

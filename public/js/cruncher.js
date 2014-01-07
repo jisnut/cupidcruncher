@@ -91,3 +91,74 @@ function parseNoWorkshopQuestions(spreadsheetData) {
   questions.splice(0, 0, {"number": "0", "text": "This is not a question.", "note": "This is a placeholder!"});
   return questions;
 };
+
+function generateMatchReport(thisParticipant, participants, config) {
+  var matchedPartners = [];
+  if(thisParticipant.partners) {
+    for(var i=0; i<thisParticipant.partners.length; i++) {
+      var partner = thisParticipant.partners[i];
+      var responses = getPartnersResponses(thisParticipant.number, partner.number, participants);
+      if(responses) {
+        var matchedYeses = [], matchedMaybes = [];
+        if(thisParticipant.partners[i].yeses) {
+          for(var j=0; j<thisParticipant.partners[i].yeses.length; j++){
+            var myYesQuestion = thisParticipant.partners[i].yeses[j];
+            if(responses.yeses){
+              for(var k=0; k<responses.yeses.length; k++){
+                if(responses.yeses[k] == myYesQuestion) {
+                  matchedYeses.push(myYesQuestion);
+                }
+              }
+            }
+            if(responses.maybes && config.event.maybes.matchesYeses){
+              for(var k=0; k<responses.maybes.length; k++){
+                if(responses.maybes[k] == myYesQuestion) {
+                  matchedMaybes.push(myYesQuestion);
+                }
+              }
+            }
+          }
+        }
+        if(thisParticipant.partners[i].maybes) {
+          for(var j=0; j<thisParticipant.partners[i].maybes.length; j++){
+            var myMaybeQuestion = thisParticipant.partners[i].maybes[j];
+            if(responses.yeses && config.event.maybes.matchesYeses){
+              for(var k=0; k<responses.yeses.length; k++){
+                if(responses.yeses[k] == myMaybeQuestion) {
+                  matchedYeses.push(myMaybeQuestion);
+                }
+              }
+            }
+            if(responses.maybes){
+              for(var k=0; k<responses.maybes.length; k++){
+                if(responses.maybes[k] == myMaybeQuestion) {
+                  matchedMaybes.push(myMaybeQuestion);
+                }
+              }
+            }
+          }
+        }
+        matchedPartners.push({partner: partner, matches: {yeses: matchedYeses, maybes: matchedMaybes}});
+      }
+    }
+  }
+  return matchedPartners;
+};
+
+function getPartnersResponses(thisParticipantsNumber, partnersNumber, participants) {
+  for(var i=0; i<participants.length; i++){
+    if(participants[i].number == partnersNumber) {
+      if(participants[i].partners) {
+        for(var j=0; j<participants[i].partners.length; j++){
+          if(participants[i].partners[j].number == thisParticipantsNumber) {
+            return {
+              yeses: participants[i].partners[j].yeses,
+              maybes: participants[i].partners[j].maybes
+            };
+          }
+        }
+      }
+    }
+  }
+  return null;
+};

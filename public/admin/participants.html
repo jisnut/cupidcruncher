@@ -5,14 +5,16 @@
 
   <div id="status" style="color:red; padding: 20px; clear: both;">{{message}}</div> 
   <div id="participants">
-    <table><tbody>
+    <table id="participantTable"><tbody>
     	<tr>
-    	  <th>Number</th>
+    	  <th>#</th>
     	  <th>Name</th>
     	  <th>Share</th>
     	  <th>Email</th>
     	  <th>Share</th>
+        <th>Partners</th>
     	  <th>Edit</th>
+        <th>Responses</th>
         <th>Report</th>
     	</tr>
     	<tr ng-repeat="participant in participants">
@@ -21,8 +23,10 @@
     	  <td><span class="name-matches-ok" ng-show="participant.nameMatchesOk">&#x2713;</span></td>
     	  <td>{{participant.email}}</td>
     	  <td><span class="email-matches-ok" ng-show="participant.emailMatchesOk">&#x2713;</span></td>
-    	  <td><button type="button" id="editParticipantButton" class="btn btn-primary" ng-click="editParticipant()"><!--div class="ui-icon ui-icon-pencil"><div-->Edit</button></td>
-        <td><button type="button" id="reportGenerationButton" class="btn btn-primary" ng-click="generateReport()">Run</button></td>
+        <td>{{participant.partners.length}}</td>
+    	  <td><button type="button" id="editParticipantButton" class="btn btn-primary" ng-click="editParticipant(participant)"><!--div class="ui-icon ui-icon-pencil"><div-->Edit</button></td>
+        <td><button type="button" id="editResponsesButton" class="btn btn-primary" ng-click="editResponses(participant)">Responses</button></td>
+        <td><button type="button" id="reportGenerationButton" class="btn btn-primary" ng-click="generateReport(participant)">Run</button></td>
     	</tr>
     	<!-- tr>
     	  <td>{{participant.number}}</td>
@@ -34,5 +38,6 @@
     	</tr -->
     </tbody></table>
   </div>
-  <button type="button" id="updateParticipantsButton" ng-click="listParticipants()" class="btn btn-primary bigger">Update!</button>
+  <br/>
+  <button type="button" id="updateParticipantsButton" ng-click="listParticipants()" class="btn btn-primary">Update Participant List</button>
 </div>

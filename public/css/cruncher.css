@@ -408,6 +408,13 @@ button .question-set{
   padding: 0 0 0.5em;
 }
 
+#participantTable{
+  width: 90%;
+}
+#participantTable td {
+  text-align: center;
+}
+
 #statDisplay{
   background-color: rgba(190, 90, 190, .5);
   padding: 30px;

@@ -3,8 +3,6 @@
 
 <div style="color:red; float: right;">Not fully implemented!</div>
 
-<!-- Print Question Sheets Button --> 
-
   <div id="status" style="color:red; padding: 20px; clear: both;">{{message}}</div>
   <div id="questions">
     <table><tbody>
@@ -34,10 +32,10 @@
         <td>{{question.intimacyLevel}}</td>
     	  <td><div>edit icon</div></td>
     	</tr>
-    	<tr>
+    	<!-- tr>
     	  <td>{{(question.number + 1)}}</td>
     	  <td><input type="text" id="text" name="text"></input></td>
-    	  <!--td>
+    	  <td>
     	  	<select id="category" name="category">
     	  	  <option value="{{category.value}}">{{category.description}}</option>
     	  	</select>
@@ -54,8 +52,10 @@
     	  </td>
     	  <td><input type="text" id="note" name="note"></input></td>
     	  <td><input type="checkbox" name="enabled" ng-model="project.enabled"></input></td>
-    	  <td><div>save icon</div></td -->
-    	</tr>
+    	  <td><div>save icon</div></td>
+    	</tr -->
     </tbody></table>
   </div>
+  <br/>
+  <a href="\admin\generateQuestionSheet" id="generateQuestionSheetButton" target="_blank" class="btn btn-primary">Generate Question Sheets</a>
 </div>

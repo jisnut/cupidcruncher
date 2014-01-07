@@ -39,12 +39,12 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.register = function() {
       if(this.participant){
         $('#registerButton').attr('disabled', 'disabled');
-        console.log('Registering: '+$scope.participant.name);
+//        console.log('Registering: '+$scope.participant.name);
         $http.post('register', $scope.participant).success(function(data) {
           if(data.success){
             $('#registrationForm').hide();
             $('#registrationConfirmation').show();
-            console.log(data.success + ' Participant #:' + data.participant.number);
+//            console.log(data.success + ' Participant #:' + data.participant.number);
             $scope.participant = data.participant;
             $cookieStore.put('participant', $scope.participant);
             $('.message-reminder').effect('pulsate', 700);
@@ -72,11 +72,10 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.application = application;
   })
 
-  .controller('cruncherCtrl', function($scope, $http, $cookieStore) {
+  .controller('cruncherCtrl', function($scope, $http) {
     $scope.application = application;
-    $scope.participant = $cookieStore.get('participant');
-    console.log($scope.participant);
-
+//    $scope.participant = $cookieStore.get('participant');
+//    console.log($scope.participant);
   })
 
 // Participant controller functions
@@ -86,15 +85,11 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     });
   })
 
-  .controller('questionCtrl', function($scope, $http, $resource) {
+  .controller('questionCtrl', function($scope, $http, $resource, $cookieStore) {
     initializeResizableContainers();
     var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
-//    $scope.configuration.event.questionSetSize = 5;     // TODO: make this a configuration value in the DB
-//    $scope.questions = [];
-//    $scope.question = {};
-//    $scope.participants = [];
     var answerYes = $('#answerYes');
     var answerMaybe = $('#answerMaybe');
     var answerNo = $('#answerNo');
@@ -117,23 +112,35 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       }, errorMessage);
     };
     $scope.listQuestions(); // Initialize our list of questions.
+    function findParticipant(p){
+      for(var i=0; i<$scope.participants.length; i++){
+        if($scope.participants[i].number == p.number){
+          return $scope.participants[i];
+        }
+      }
+      errorMessage('Error: Oops! We seem to have lost your registration information.');
+      return null;
+    };
     $scope.listParticipants = function() {
       participantResource.query(function(data) {
         $scope.participants = data;
+        $scope.participant = findParticipant($cookieStore.get('participant'));
       }, errorMessage);
     };
     $scope.listParticipants(); // Initialize our list of participants.
     $scope.showSwitchPartner = function() {
       if(!$scope.configuration){
-        errorMessage('Error: Global application configuration object was not loaded');
+        errorMessage('Error: Global application configuration object was not loaded.');
         return;
       }
       if(!$scope.configuration.event){
-        errorMessage('Error: Event configuration object was not loaded');
+        errorMessage('Error: Event configuration object was not loaded.');
         return
       }
       // Refresh our list of participants.
       $scope.listParticipants();
+      // Clear the current partner information
+      $scope.participant.partner = null;
       $('#question').hide();
       $('#partner').show();
     };
@@ -152,20 +159,36 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       $('#questionSet').show();
     };
     function getPartner(num){
-      var partner = null;
+//      var partnerCopy = null;
       if($scope.participant.partners){ // First search this participant's existing list of partners and return anything we find
         for(var i=0; i<$scope.participant.partners.length; i++){
           if($scope.participant.partners[i].number == num){
+            $scope.participant.partners[i].appendMatches = true;
             return $scope.participant.partners[i];
+/*
+            return {
+              number: $scope.participant.partners[i].number,
+              name: $scope.participant.partners[i].name,
+              nameMatchesOk: $scope.participant.partners[i].nameMatchesOk,
+              email: $scope.participant.partners[i].email,
+              emailMatchesOk: $scope.participant.partners[i].emailMatchesOk
+            }
+*/
           }
         }
       } // If we don't find an existing partner they've been with, we fall through to here and search the full list
       for(var i=0; i<$scope.participants.length; i++){
         if($scope.participants[i].number == num){
-          partner = $scope.participants[i];
+          return {
+            number: $scope.participants[i].number,
+            name: $scope.participants[i].name,
+            nameMatchesOk: $scope.participants[i].nameMatchesOk,
+            email: $scope.participants[i].email,
+            emailMatchesOk: $scope.participants[i].emailMatchesOk
+          };
         }
       }
-      return partner;
+      return null;
     };
     $scope.switchPartner = function() {
       if(!$scope.participant.partner || !$scope.participant.partner.number){
@@ -187,7 +210,9 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
         if(!$scope.participant.partners){
           $scope.participant.partners = [];
         }
-        $scope.participant.partners.push($scope.participant.partner);
+        if(!$scope.participant.partner.appendMatches){
+          $scope.participant.partners.push($scope.participant.partner);
+        }
       }
     };
     function switchQuestionNumber(number){
@@ -229,35 +254,55 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       $('#navigationButtons').hide(); $('#answerButtons').show();
     };
     $scope.saveParticipantAnswer = function() {
+      if(!$scope.participant.partner.yeses){$scope.participant.partner.yeses = [];}
+      if(!$scope.participant.partner.maybes){$scope.participant.partner.maybes = [];}
+      if(!$scope.participant.partner.nos){$scope.participant.partner.nos = [];}
+      var inYeses = $.inArray($scope.question.number, $scope.participant.partner.yeses);
+      var inMaybes = $.inArray($scope.question.number, $scope.participant.partner.maybes);
+      var inNos = $.inArray($scope.question.number, $scope.participant.partner.nos);
       if($scope.participant.partner.answer === 'Yes!') {
-        if(!$scope.participant.partner.yeses){
-          $scope.participant.partner.yeses = [];
+        if(inYeses<0){                                                              // if not already in the yeses array
+          $scope.participant.partner.yeses.push($scope.question.number);            // put it in.
         }
-        $scope.participant.partner.yeses.push($scope.question.number);    
+        if(inMaybes>=0){                                                            // if already in the maybes array
+          $scope.participant.partner.maybes.splice(inMaybes, 1);                    // take it out.
+        }
+        if(inNos>=0){                                                               // if already in the nos array
+          $scope.participant.partner.nos.splice(inNos, 1);                          // take it out.
+        }
       }
       if($scope.participant.partner.answer === 'Maybe?') {
-        if(!$scope.participant.partner.maybes){
-          $scope.participant.partner.maybes = [];
+        if(inYeses>=0){                                                             // if already in the yeses array
+          $scope.participant.partner.yeses.splice(inYeses, 1);                      // take it out.
         }
-        $scope.participant.partner.maybes.push($scope.question.number);
+        if(inMaybes<0){                                                             // if not already in the maybes array
+          $scope.participant.partner.maybes.push($scope.question.number);           // put it in.
+        }
+        if(inNos>=0){                                                               // if already in the nos array
+          $scope.participant.partner.nos.splice(inNos, 1);                          // take it out.
+        }
       }
       if($scope.participant.partner.answer === 'No.') {
-        if(!$scope.participant.partner.nos){
-          $scope.participant.partner.nos = [];
+        if(inYeses>=0){                                                             // if already in the yeses array
+          $scope.participant.partner.yeses.splice(inYeses, 1);                      // take it out.
         }
-        $scope.participant.partner.nos.push($scope.question.number);
+        if(inMaybes>=0){                                                            // if already in the maybes array
+          $scope.participant.partner.maybes.splice(inMaybes, 1);                    // take it out.
+        }
+        if(inNos<0){                                                                // if not already in the nos array
+          $scope.participant.partner.nos.push($scope.question.number);              // put it in.
+        }
       }
-// Do we still need to search for that pre-existing participant in their list????
-      $scope.participant.partner.questionNumber = question.number;
+      $scope.participant.partner.questionNumber = $scope.question.number;
       participantResource.update($scope.participant, function(data) {
         // Answer recorded... Switch to next question!
         var nextQuestionNumber = parseInt($scope.question.number) + 1;
         if(nextQuestionNumber >= $scope.questions.length){
-          // Wrap around
+          // Wrap around to the beginning
           switchQuestionNumber(1);
           $scope.questionSet.number = 1;
           wrapAround.show('fade', 300);
-          setTimeout(function() {wrapAround.effect('puff', 1000);}, 8000);
+          setTimeout(function() {wrapAround.effect('puff', 1000);}, 7000);
         } else {
           if(nextQuestionNumber % $scope.configuration.event.questionSetSize == 1){
             // Increment the question set number
@@ -414,42 +459,125 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
   })
 
   .controller('participantsCtrl', function($scope, $http, $resource) {
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     $scope.participants = [];
     $scope.participant = {};
-    var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     function errorMessage(err) {
       $scope.message = err;
     };
+    function clearErrorMessage() {
+      $scope.message = '';
+      $scope.$apply();
+    };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
     $scope.listParticipants = function() {
       participantResource.query(function(data) {
         $scope.participants = data;
       }, errorMessage);
     };
     $scope.listParticipants();
-    $scope.editParticipantButton = function() {
-      errorMessage("Not yet implemented!");
-    }
-    $scope.reportGenerationButton = function(){
-      errorMessage("Not yet implemented!");
-      
-    }
-  })
-
-  .controller('questionsCtrl', function($scope, $http, $resource) {
-    $scope.questions = [];
-    $scope.question = {};
-//    $scope.view = '/questions.html';
-    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
-    function errorMessage(err) {
-      $scope.message = err;
-    };
-    $scope.listQuestions = function() {
-//      $scope.view = '/questions.html';
+    $scope.listQuestions = function() {               // refactor this and use a nested controller patern so we don;t have to redefine these resources over and over again
       questionResource.query(function(data) {
         $scope.questions = data;
       }, errorMessage);
     };
     $scope.listQuestions();
+    $scope.editParticipant = function(participant) {
+      errorMessage("Edit participant not yet implemented!" + participant.number);
+    };
+    $scope.editResponses = function(participant) {
+      errorMessage("Edit responses not yet implemented!" + participant.number);
+      
+      
+      
+    };
+    $scope.generateReport = function(participant){
+      errorMessage("Generating report for: "+participant.name);
+      $('#status').effect('pulsate', 1000);
+      setTimeout(clearErrorMessage, 5000);
+      var report = generateMatchReport(participant, $scope.participants, $scope.configuration);
+      console.log('The "No" Workshop Match Report');
+      var matchedClause = ' matched the following questions you responded to:';
+      
+      for(var i=0; i<report.length; i++){
+        var name = '', email = '', contact = '';
+        if(report[i].partner.nameMatchesOk){          //Be sure to check report[i].partner.nameMatchesOk and report[i].partner.emailMatchesOk on report rendering before displaying the name and email respectively
+          name = report[i].partner.name;
+        }
+        if(report[i].partner.emailMatchesOk){
+          email = report[i].partner.email;
+        }
+        if(!name && !email){
+          contact = 'Participant #'+report[i].partner.number+' chose not to share any contact information at the beginning of the workshop.\nThey did match the following questions you responded to however:';
+        } else if(name){
+          contact = name;
+          if(email){
+            contact += ' ('+email+')';
+          }
+          contact += matchedClause;
+        } else {
+          contact = email + matchedClause;
+        }
+        console.log(contact);
+        if(report[i].matches.yeses.length){
+          console.log('They said "Yes!" to you in response to the following questions:');
+        }
+        for(var j=0; j<report[i].matches.yeses.length; j++){
+          var question = report[i].matches.yeses[j] + ')  ';
+          question += $scope.questions[report[i].matches.yeses[j]].text;
+          console.log('\t'+question);
+          // You said Yes! / Maybe? to them.
+        }
+        if(report[i].matches.maybes.length){
+          console.log('They said "Maybe?" to you in response to the following questions:');
+        }
+        for(var j=0; j<report[i].matches.maybes.length; j++){
+          var question = report[i].matches.maybes[j] + ')  ';
+          question += $scope.questions[report[i].matches.maybes[j]].text;
+          console.log('\t'+question);
+          // You said Yes! / Maybe? to them.
+        }
+        console.log('\n');
+      }
+    };
+  })
+
+  .controller('questionsCtrl', function($scope, $http, $resource) {
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    function clearErrorMessage() {
+      $scope.message = '';
+    };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
+    $scope.listQuestions = function() {
+      questionResource.query(function(data) {
+        $scope.questions = data;
+      }, errorMessage);
+    };
+    $scope.listQuestions();
+    $scope.generateQuestionSheets = function(){
+      errorMessage("Generating question sheets...");
+      $('#status').effect('pulsate', 1000);
+      setTimeout(clearErrorMessage, 5000);
+
+      
+
+    }
   })
 
   .controller('reportsCtrl', function($scope, $http) {
