@@ -12,7 +12,7 @@
     	  <th>Share</th>
     	  <th>Email</th>
     	  <th>Share</th>
-          <th>Partners</th>
+        <th>Partners</th>
     	  <th>Edit</th>
         <th>Responses</th>
         <th>Report</th>
@@ -23,7 +23,7 @@
     	  <td><span class="name-matches-ok" ng-show="participant.nameMatchesOk">&#x2713;</span></td>
     	  <td>{{participant.email}}</td>
     	  <td><span class="email-matches-ok" ng-show="participant.emailMatchesOk">&#x2713;</span></td>
-          <td>{{participant.partners.length}}</td>
+        <td>{{participant.partners.length}}</td>
     	  <td><button type="button" id="editParticipantButton" class="btn btn-primary" ng-click="editParticipant(participant)"><!--div class="ui-icon ui-icon-pencil"><div-->Edit</button></td>
         <td><button type="button" id="editResponsesButton" class="btn btn-primary" ng-click="editResponses(participant)">Responses</button></td>
         <td><button type="button" id="reportGenerationButton" class="btn btn-primary" ng-click="generateReport(participant)">Run</button></td>
@@ -46,6 +46,32 @@
       <a type="button" id="emailReportButton" class="btn btn-primary" ng-click="emailReport()">Email</a>
     </div>
   </div>
+
+  <div id="participantResponses" class="participant-responses ui-corner-all">
+    <div style="font-size:1.3em">Question Sheet Responses for Participant #<b>{{responses.participant.number}}</b> ({{responses.participant.name}})</div>
+    <div ng-repeat="question in questions">
+      <span>Q#<b style="font-size:1.2em;">{{question.number}}</b> </span>&nbsp;
+      <span class="response-partner-label">Yes(s) to partner #: </span>
+      <input type="number" ng-model="responses.questions[$index].yeses[0]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].yeses[1]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].yeses[2]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].yeses[3]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].yeses[4]" class="response-partner"></input>&nbsp;&nbsp;&nbsp;
+      <span class="response-partner-label">Maybe(s) to partner #: </span>
+      <input type="number" ng-model="responses.questions[$index].maybes[0]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].maybes[1]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].maybes[2]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].maybes[3]" class="response-partner"></input>
+      <input type="number" ng-model="responses.questions[$index].maybes[4]" class="response-partner"></input>
+    </div>
+    <br/>
+    <div id="responseActions">
+      <button type="button" id="cancelReportButton" class="btn" ng-click="cancelResponses()">Cancel</button>
+      <a type="button" id="saveResponsesButton" class="btn btn-primary" ng-click="saveResponses()">Save Responses</a>
+    </div>
+  </div>
+
   <br/>
   <button type="button" id="updateParticipantsButton" ng-click="listParticipants()" class="btn btn-primary">Update Participant List</button>
+  <div style="color:red;">Update before generating email responses!</div>
 </div>

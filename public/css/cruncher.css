@@ -395,11 +395,32 @@ button .question-set{
   display: none;
   position: relative;
   padding: 20px;
-  top: -250px;
-  width: 750px;
-  height: 550px;
+  top: -350px;
+  width: 700px;
+  height: 450px;
   font-size: 1.0em;
   background-color: rgba(25, 25, 25, .5);
+}
+
+.participant-responses{
+  display: none;
+  position: relative;
+  padding: 10px;
+  top: -450px;
+  width: 850px;
+  height: 550px;
+  font-size: 0.9em;
+  background-color: #999999;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+.response-partner-label{
+  font-size: 0.8em;
+  font-weight: bold;
+}
+.response-partner{
+  width: 35px;
 }
 
 .report-container{

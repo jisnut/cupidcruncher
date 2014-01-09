@@ -462,6 +462,8 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var participantResponses = $('#participantResponses');
+
     var participantReport = $('#participantReport');
     var reportContainer = $('#reportContainer');
     $scope.participants = [];
@@ -493,12 +495,101 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.listQuestions();
     $scope.editParticipant = function(participant) {
       errorMessage("Edit participant not yet implemented!" + participant.number);
+
+
     };
     $scope.editResponses = function(participant) {
-      errorMessage("Edit responses not yet implemented!" + participant.number);
-      
-      
-      
+      participantResponses.show();
+      $scope.responses = {};
+      $scope.responses.participant = participant;
+      $scope.responses.questions = [];
+      for(var i=0; i<$scope.questions.length; i++) {
+        var partnerResponse = {yeses:[0, 0, 0, 0, 0], maybes:[0, 0, 0, 0, 0]};
+        $scope.responses.questions.push(partnerResponse);
+      }
+    };
+    $scope.cancelResponses = function() {
+      participantResponses.hide();
+    };
+    function recordPartnerAnswer(participant, questionNumber, answer, partnerNumber){
+      var partner = null;
+      for(var i=0; i<participant.partners.length; i++) {
+        if(participant.partners[i].number == partnerNumber){
+          partner = participant.partners[i];
+        }
+      }
+      if(!partner) {
+        for(var i=0; i<$scope.participants.length; i++) {
+          if($scope.participants[i].number == partnerNumber){
+            partner = {
+              number: $scope.participants[i].number,
+              name: $scope.participants[i].name,
+              nameMatchesOk: $scope.participants[i].nameMatchesOk,
+              email: $scope.participants[i].email,
+              emailMatchesOk: $scope.participants[i].emailMatchesOk
+            };
+          }
+        }
+        participant.partners.push(partner);
+      }
+      if(partner) {
+        if(!partner.yeses){partner.yeses = [];}
+        if(!partner.maybes){partner.maybes = [];}
+        if(!partner.nos){partner.nos = [];}
+        var inYeses = $.inArray(questionNumber, partner.yeses);
+        var inMaybes = $.inArray(questionNumber, partner.maybes);
+//      var inNos = $.inArray($scope.question.number, partner.nos);
+        if(answer === 'yes') {
+          if(inYeses<0){                                           // if not already in the yeses array
+            partner.yeses.push(questionNumber);            // put it in.
+          }
+          if(inMaybes>=0){                                         // if already in the maybes array
+            partner.maybes.splice(inMaybes, 1);                    // take it out.
+          }
+//          if(inNos>=0){                                            // if already in the nos array
+//            partner.nos.splice(inNos, 1);                          // take it out.
+//          }
+        }
+        if(answer === 'maybe') {
+          if(inYeses>=0){                                          // if already in the yeses array
+            partner.yeses.splice(inYeses, 1);                      // take it out.
+          }
+          if(inMaybes<0){                                          // if not already in the maybes array
+            partner.maybes.push(questionNumber);           // put it in.
+          }
+//          if(inNos>=0){                                            // if already in the nos array
+//            partner.nos.splice(inNos, 1);                          // take it out.
+//          }
+        }
+//      participant.partners.push(partner);
+      }
+    };
+    $scope.saveResponses = function() {
+      participantResponses.hide();
+console.log('Saving responses for: '+$scope.responses.participant.name);
+//$scope.responses.questions 
+      if(!$scope.responses.participant.partners){
+        $scope.responses.participant.partners = [];
+      }
+      for(var i=1; i<$scope.responses.questions.length; i++) {
+        var partnerResponse = $scope.responses.questions[i];
+        for(var j=0; j<partnerResponse.yeses.length; j++) {
+          if(partnerResponse.yeses[j]){
+            recordPartnerAnswer($scope.responses.participant, i, 'yes', partnerResponse.yeses[j]);
+          }
+        }
+        for(var j=0; j<partnerResponse.maybes.length; j++) {
+          if(partnerResponse.maybes[j]){
+            recordPartnerAnswer($scope.responses.participant, i, 'maybe', partnerResponse.maybes[j]);
+          }
+        }
+      }
+
+console.log($scope.responses.participant);
+      //SAVE the participant to the database!
+      participantResource.update($scope.responses.participant, function(data) {
+        errorMessage('Participant updated successfully!');  // <-- NOT ACTUALLY AN ERROR!
+      }, errorMessage);
     };
     $scope.generateReport = function(participant){
       errorMessage("Generating report for: "+participant.name);
@@ -537,7 +628,7 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
         for(var j=0; j<$scope.report.data[i].matches.yeses.length; j++){
           var question = $scope.report.data[i].matches.yeses[j] + ')  ';
           question += $scope.questions[$scope.report.data[i].matches.yeses[j]].text;
-          console.log('\t'+question);
+          $scope.report.text += '\n     '+question;
           // You said Yes! / Maybe? to them.
         }
         if($scope.report.data[i].matches.maybes.length){
@@ -546,7 +637,7 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
         for(var j=0; j<$scope.report.data[i].matches.maybes.length; j++){
           var question = $scope.report.data[i].matches.maybes[j] + ')  ';
           question += $scope.questions[$scope.report.data[i].matches.maybes[j]].text;
-          console.log('\t'+question);
+          $scope.report.text += '\n     '+question;
           // You said Yes! / Maybe? to them.
         }
         $scope.report.text += '\n';
@@ -554,10 +645,10 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
 
       participantReport.show();
     };
-    $scope.cancelReport = function(participant) {
+    $scope.cancelReport = function() {
       participantReport.hide();
     };
-    $scope.emailReport = function(participant) {
+    $scope.emailReport = function() {
 //      var reportHtml = reportContainer.html();
       if($scope.report.participant && $scope.report.participant.email){
         var mailto = 'mailto:'
