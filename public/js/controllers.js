@@ -85,7 +85,7 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     });
   })
 
-  .controller('questionCtrl', function($scope, $http, $resource, $cookieStore) {
+  .controller('questionCtrl', function($scope, $resource, $cookieStore) {
     initializeResizableContainers();
     var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
@@ -431,7 +431,7 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     };
   })
 
-  .controller('eventDetailsCtrl', function($scope, $http, $resource) {
+  .controller('eventDetailsCtrl', function($scope, $resource) {
     var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     function errorMessage(err) {
       $scope.message = err;
@@ -458,10 +458,12 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     };
   })
 
-  .controller('participantsCtrl', function($scope, $http, $resource) {
+  .controller('participantsCtrl', function($scope, $resource) {
     var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var participantResource = $resource('/participants' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var participantReport = $('#participantReport');
+    var reportContainer = $('#reportContainer');
     $scope.participants = [];
     $scope.participant = {};
     function errorMessage(err) {
@@ -502,20 +504,21 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       errorMessage("Generating report for: "+participant.name);
       $('#status').effect('pulsate', 1000);
       setTimeout(clearErrorMessage, 5000);
-      var report = generateMatchReport(participant, $scope.participants, $scope.configuration);
+      $scope.report = generateMatchReport(participant, $scope.participants, $scope.configuration);
+
       console.log('The "No" Workshop Match Report');
       var matchedClause = ' matched the following questions you responded to:';
       
-      for(var i=0; i<report.length; i++){
+      for(var i=0; i<$scope.report.length; i++){
         var name = '', email = '', contact = '';
-        if(report[i].partner.nameMatchesOk){          //Be sure to check report[i].partner.nameMatchesOk and report[i].partner.emailMatchesOk on report rendering before displaying the name and email respectively
-          name = report[i].partner.name;
+        if($scope.report[i].partner.nameMatchesOk){          //Be sure to check $scope.report[i].partner.nameMatchesOk and $scope.report[i].partner.emailMatchesOk on $scope.report rendering before displaying the name and email respectively
+          name = $scope.report[i].partner.name;
         }
-        if(report[i].partner.emailMatchesOk){
-          email = report[i].partner.email;
+        if($scope.report[i].partner.emailMatchesOk){
+          email = $scope.report[i].partner.email;
         }
         if(!name && !email){
-          contact = 'Participant #'+report[i].partner.number+' chose not to share any contact information at the beginning of the workshop.\nThey did match the following questions you responded to however:';
+          contact = 'Participant #'+$scope.report[i].partner.number+' chose not to share any contact information at the beginning of the workshop.\nThey did match the following questions you responded to however:';
         } else if(name){
           contact = name;
           if(email){
@@ -526,30 +529,45 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
           contact = email + matchedClause;
         }
         console.log(contact);
-        if(report[i].matches.yeses.length){
+        if($scope.report[i].matches.yeses.length){
           console.log('They said "Yes!" to you in response to the following questions:');
         }
-        for(var j=0; j<report[i].matches.yeses.length; j++){
-          var question = report[i].matches.yeses[j] + ')  ';
-          question += $scope.questions[report[i].matches.yeses[j]].text;
+        for(var j=0; j<$scope.report[i].matches.yeses.length; j++){
+          var question = $scope.report[i].matches.yeses[j] + ')  ';
+          question += $scope.questions[$scope.report[i].matches.yeses[j]].text;
           console.log('\t'+question);
           // You said Yes! / Maybe? to them.
         }
-        if(report[i].matches.maybes.length){
+        if($scope.report[i].matches.maybes.length){
           console.log('They said "Maybe?" to you in response to the following questions:');
         }
-        for(var j=0; j<report[i].matches.maybes.length; j++){
-          var question = report[i].matches.maybes[j] + ')  ';
-          question += $scope.questions[report[i].matches.maybes[j]].text;
+        for(var j=0; j<$scope.report[i].matches.maybes.length; j++){
+          var question = $scope.report[i].matches.maybes[j] + ')  ';
+          question += $scope.questions[$scope.report[i].matches.maybes[j]].text;
           console.log('\t'+question);
           // You said Yes! / Maybe? to them.
         }
         console.log('\n');
       }
+
+      participantReport.show();
+    };
+    $scope.cancelReport = function(participant) {
+      participantReport.hide();
+    };
+    $scope.emailReport = function(participant) {
+      var reportHtml = reportContainer.html();
+      var mailto = 'mailto:'
+      //mailto += participant.email;
+mailto += 'jisnut@gmail.com';
+      mailto += '?subject=Your Personal "No" Workshop Match Report';
+      mailto += '&body='+"sample text\nwith line breaks\n\t...and a tab!";
+      $('#emailReportButton').attr('href', mailto);
+      return true;
     };
   })
 
-  .controller('questionsCtrl', function($scope, $http, $resource) {
+  .controller('questionsCtrl', function($scope, $resource) {
     var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
     function errorMessage(err) {
@@ -575,9 +593,46 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       $('#status').effect('pulsate', 1000);
       setTimeout(clearErrorMessage, 5000);
 
-      
+      //I don't think this is used!
 
     }
+  })
+
+  .controller('questionSheetCtrl', function($scope, $resource) {
+    var configurationResource = $resource('/configuration' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    var questionResource = $resource('/questions' + '/:id', {id: '@_id'}, {'update': {method: 'PUT' }});
+    function errorMessage(err) {
+      $scope.message = err;
+    };
+    function clearErrorMessage() {
+      $scope.message = '';
+    };
+    $scope.getConfiguration = function() {
+      configurationResource.query(function(data){
+        $scope.configuration = data[0];
+      }, errorMessage);
+    };
+    $scope.getConfiguration(); // Initialize our configuration object.
+    $scope.listQuestions = function() {
+      questionResource.query(function(data) {
+        $scope.questions = data;
+        $scope.divideQuestions();
+      }, errorMessage);
+    };
+    $scope.listQuestions();
+    $scope.divideQuestions = function() {
+      $scope.questionSets = [];
+      var questionSetIndex = 0;
+      for(var i=1; i<$scope.questions.length; i++){
+        if(!$scope.questionSets[questionSetIndex]){
+          $scope.questionSets[questionSetIndex] = [];
+        }
+        $scope.questionSets[questionSetIndex].push($scope.questions[i]);
+        if(i % $scope.configuration.event.questionSetSize == 0){
+          questionSetIndex++;
+        }
+      }
+    };
   })
 
   .controller('reportsCtrl', function($scope, $http) {

@@ -1,0 +1,40 @@
+<div ng-controller="questionSheetCtrl" class="question-sheet-container">
+  <div id="status" style="color:red; padding: 10px; clear: both;">{{message}}</div> 
+  <div id="participantInfo" class="participant-info">
+    <span class="participant-number">#: ______</span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="participant-name">Name: _______________________</span>&nbsp;&nbsp;
+    <span class="participant-share-name">Share Name?: <span class="participant-info-checkbox">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <span class="participant-email">Email: ________________________________</span>&nbsp;&nbsp;
+    <span class="participant-share-email">Share Email?: <span class="participant-info-checkbox">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></span>
+  </div>
+  <br/>
+  <div id="questionSets" ng-repeat="questionSet in questionSets" class="question-set ui-corner-all set_{{($index) % 2}}">
+    <div class="question-set-title ui-corner-top">Question Set #: <span class="question-set-number">{{$index + 1}}</span></div>
+    <div class="set-container">
+      <div ng-repeat="question in questionSet">
+        <span id="set_{{$index}}" class="question-sheet-number">{{question.number}}</span>
+        <span class="question-sheet-text">{{question.text}}</span>
+        <!--div class="question-sheet-note">{{question.note}}</div-->
+        <div class="question-sheet-answers">
+          <div style="float:left;">
+            <span class="question-answer-label">Say <b>"Yes!</b>"<br/>to partners </span>
+            <span ng-repeat="answerSpace in [0,1,2,3,4]" class="question-answerSpace">#: ______&nbsp;&nbsp;</span>&nbsp;&nbsp;
+          </div>
+          <div style="float:right;">
+            <span class="question-answer-label">Say <b>"Maybe?"</b><br/>to partners </span>
+            <span ng-repeat="answerSpace in [0,1,2,3,4]" class="question-answerSpace">#: ______&nbsp;&nbsp;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(document).ready(setTimeout(initializeSheet, 1000));
+  function initializeSheet(){
+    var newPageSpacers = $('.set_2');
+    newPageSpacers.each(function(i,v){
+      $(v).attr('style', 'margin-bottom:10px');
+    });
+  };
+</script>

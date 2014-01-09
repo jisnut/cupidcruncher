@@ -3,10 +3,8 @@ html(lang="en", ng-app="cruncher")
  head
   meta(charset="utf-8")
   title= title
-  link(rel='stylesheet', href='/css/cruncher.css')
-  link(rel='stylesheet', href='/css/animate.css')
+  link(rel='stylesheet', href='/css/questionSheet.css')
   script(type='text/javascript', src="http://code.jquery.com/jquery-2.0.3.min.js")
-  script(type='text/javascript', src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js")
   script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js")
   script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-route.min.js")
   script(type='text/javascript', src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular-resource.min.js")
@@ -17,11 +15,27 @@ html(lang="en", ng-app="cruncher")
   script(type='text/javascript', src="/js/controllers.js")
   script(type='text/javascript', src="/js/filters.js")
   script(type='text/javascript', src="/js/directives.js")
-  script(type='text/javascript', src="/js/countdown.min.js")
  body#cupidCruncher
   center
-   block centeredBody
-   - var appTitle = 'Cupid Cruncher';	// Why can't we set these in web.js with app.set???
-   - var appVersion = 'v0.2';
-   div#footer #{appTitle} &nbsp;
-    span#appVersion #{appVersion}
+   img(src="/img/sexstlbanner.png" style="margin-top:50px;")
+   h2#presents ~ presents ~
+   div#eventTitle The "No" Workshop
+   br
+   br
+   br
+   br
+   img(src="/img/QR_tr.png" style="margin-top:50px;")
+   br
+   br
+   br
+   br
+   h1
+    a(href="http://cupidcruncher.herokuapp.com/") http://cupidcruncher.herokuapp.com/
+   br
+   br
+   h3 Shameless Grounds WiFi Password:
+   h1 smutpeddlers
+   br
+   br
+  div#questionSheetContainer
+   include static/questionSheets.html

@@ -81,6 +81,7 @@ app.get('/rules', routes.rules);
 app.get('/login', routes.login);
 app.get('/registration', routes.registration);
 app.get('/registrationLoop', routes.registrationLoop);
+app.get('/generateQuestionSheets', routes.generateQuestionSheets);
 
 app.get('/users', user.list);
 app.get('/userlist', routes.userlist(db));

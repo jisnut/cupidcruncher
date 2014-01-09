@@ -12,7 +12,7 @@
     	  <th>Share</th>
     	  <th>Email</th>
     	  <th>Share</th>
-        <th>Partners</th>
+          <th>Partners</th>
     	  <th>Edit</th>
         <th>Responses</th>
         <th>Report</th>
@@ -23,7 +23,7 @@
     	  <td><span class="name-matches-ok" ng-show="participant.nameMatchesOk">&#x2713;</span></td>
     	  <td>{{participant.email}}</td>
     	  <td><span class="email-matches-ok" ng-show="participant.emailMatchesOk">&#x2713;</span></td>
-        <td>{{participant.partners.length}}</td>
+          <td>{{participant.partners.length}}</td>
     	  <td><button type="button" id="editParticipantButton" class="btn btn-primary" ng-click="editParticipant(participant)"><!--div class="ui-icon ui-icon-pencil"><div-->Edit</button></td>
         <td><button type="button" id="editResponsesButton" class="btn btn-primary" ng-click="editResponses(participant)">Responses</button></td>
         <td><button type="button" id="reportGenerationButton" class="btn btn-primary" ng-click="generateReport(participant)">Run</button></td>
@@ -37,6 +37,30 @@
     	  <td><button class="btn btn-primary"><div class="ui-icon ui-icon-disk"></div></button></td>
     	</tr -->
     </tbody></table>
+  </div>
+  <div id="participantReport" class="participant-report ui-corner-all">
+    <div id="reportContainer" class="report-container">
+      <h2>Your Personal "No" Workshop Match Report</h2>
+      <div ng-repeat="match in report">
+        <div ng-show="match.partner.name">{{match.partner.name}}<span ng-show="match.partner.email"> ({{match.partner.email}})</span> matched the following questions you responded to:</div>
+        <div ng-nide="match.partner.name"><div ng-show="match.partner.email">{{match.partner.email}} matched the following questions you responded to:</div></div>
+        <div ng-hide="match.partner.name && match.partner.email">Participant #{{match.partner.name}} chose not to share any contact information at the beginning of the workshop.<br/>They did match the following questions you responded to however:</div>
+        <div ng-show="match.matches.yesses[0]">'They said "Yes!" to you in response to the following questions:'</div>
+        <div ng-repeat="yes in match.matches.yesses">
+          {{yes}}. {{questions[yes]}}
+        </div>
+        <div ng-show="match.matches.maybes[0]">'They said "Maybe?" to you in response to the following questions:'</div>
+        <div ng-repeat="maybe in match.matches.maybes">
+          {{maybe}}. {{questions[maybe]}}
+        </div>
+        <br/>
+      </div>
+    </div>
+    <br/>
+    <div id="reportActions">
+      <button type="button" id="cancelReportButton" class="btn" ng-click="cancelReport()">Cancel</button>
+      <a type="button" id="emailReportButton" class="btn btn-primary" ng-click="emailReport()">Email</a>
+    </div>
   </div>
   <br/>
   <button type="button" id="updateParticipantsButton" ng-click="listParticipants()" class="btn btn-primary">Update Participant List</button>

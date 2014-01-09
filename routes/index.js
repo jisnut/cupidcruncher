@@ -66,8 +66,12 @@ exports.registration = function(req, res){
   res.render('registration', {title: 'Registration - '+mainTitle});
 };
 exports.registrationLoop = function(req, res){
-  var registryLoop = '<input type="hidden" id="registryLoop" name="registryLoop" value="false"></input>';
+  var registryLoop = '<input type="hidden" id="registryLoop" name="registryLoop" value="false"></input>';   // ?? is this necessary?
   res.render('registration', {title: 'Registration - '+mainTitle});
+};
+exports.generateQuestionSheets = function(req, res){
+//  var registryLoop = '<input type="hidden" id="registryLoop" name="registryLoop" value="false"></input>';   // ?? is this necessary?
+  res.render('questionSheets', {title: 'The "No" Workshop Question Sheet'});
 };
 exports.register = function(db) {
   return function(req, res) {

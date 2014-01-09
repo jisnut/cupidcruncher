@@ -28,7 +28,7 @@ List git remotes:
 	ssh-keygen -t rsa
 	heroku keys:add
 
-After deploying it's important you scale your web dynos. They start out at 0 for some dumb reason
+After deploying the first time, it's important you scale your web dynos. They start out at 0 for some dumb reason
 	heroku ps:scale web=1
 
 
@@ -65,12 +65,21 @@ Commit code changes in local repo
 	git status
 
 	
-
+	
+Linux
+sudo npm install express
 sudo npm install mongodb
 sudo npm install logfmt
 sudo npm install monk
+sudo npm install
 
 
+Windows 
+npm install -g express
+npm install -g mongodb
+npm install -g logfmt
+npm install -g monk
+npm install
 
 
 
@@ -89,6 +98,7 @@ rdesktop -u jcleve01 -d NRG -g 1920x1160 NRG226
 connect to MongoDB with:
 
 mongo ds053218.mongolab.com:53218/heroku_app20014113
+mongo ds053778.mongolab.com:53778/cupidcruncher
 
 export MONGOLAB_URI="mongodb://cupidcruncherlocaldev:<PASSWORD>@ds053218.mongolab.com:53218/heroku_app20014113"
 
@@ -100,22 +110,29 @@ db.auth('jisnut', '<password>')
 
 
 
+Install node inspector:
+	npm install -g node-inspector
+	
+Start your node server with your app running in debug mode
+	node --debug web.js
+
+Run the node inspector in the background...
+In Linux:
+	node-inspector &
+
+In Windows:
+	start node-inspector
+	
+Then, in a separate browser window navigate here to start debugging:
+	http://127.0.0.1:8080/debug?port=5858
+	
+The interface should look mighty familiar.
 
 
-node --debug server/web.js
 
-node-inspector &
-
-
-http://192.168.2.3:5000/data?json={"o":"PartnerList","p":""}
-
-http://192.168.2.3:5000/data?json={"o":"QuestionList","p":""}
-
-http://192.168.2.3:8080/debug?port=5858
 
 http://bit.ly/1hAZpNb
 
-participant.partner.answer
 
 
 
@@ -136,16 +153,6 @@ http://jquery-countdown.googlecode.com/svn/trunk/index.html
 
 
 
-
-
-
-
-
-
-
-  - console.log(title);
-  - console.log(content);
-  - var staticContent = 'static/index.html';
 
 
 
@@ -260,6 +267,12 @@ link(rel='stylesheet', href='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/
       </script>
       <div ng-show="selected">Selection from a modal: {{ selected }}</div>
 
+	  
+	  
+	  
+	  
+	  
+	  
       /*
 angular.module('cruncher.controllers', ['ui.bootstrap'])
   .controller('registrationCtrl', function($scope, $modal, $http, $location, $routeParams) {
@@ -288,15 +301,10 @@ angular.module('cruncher.controllers', ['ui.bootstrap'])
       */
     -->
 
-
-
-
-    <!-- div class="control-group" ng-class="{error: registrationForm.number.$invalid}">
-      <label for="name">Participant Number</label>
-      <br/>
-      <div ng-show="participant.number" class="animate-show">Be sure your numbered sticker is visible to your partners!</br></div>
-      <div ng-show="registrationForm.number.$error.required" class="help-inline animate-show">(Required - Your "No" Workshop leader will assign you this)</br></div>
-      <br/>
-      <input type="number" name="number" ng-model="participant.number" style="width:80px; height:50px; font-size:3.0em;" min="0" max="100" required>
-    </div>
-    <br/ -->
+	
+	
+	
+	
+	
+	
+	
