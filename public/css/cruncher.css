@@ -408,6 +408,7 @@ button .question-set{
   background-color: white;
   overflow-x: hidden;
   overflow-y: auto;
+  white-space: pre-wrap;
 }
 
 #appTitle {

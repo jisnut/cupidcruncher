@@ -504,21 +504,23 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       errorMessage("Generating report for: "+participant.name);
       $('#status').effect('pulsate', 1000);
       setTimeout(clearErrorMessage, 5000);
-      $scope.report = generateMatchReport(participant, $scope.participants, $scope.configuration);
+      $scope.report = {};
+      $scope.report.data = generateMatchReport(participant, $scope.participants, $scope.configuration);
+      $scope.report.participant = participant;
 
-      console.log('The "No" Workshop Match Report');
+      $scope.report.text = 'The "No" Workshop Match Report';
       var matchedClause = ' matched the following questions you responded to:';
       
-      for(var i=0; i<$scope.report.length; i++){
+      for(var i=0; i<$scope.report.data.length; i++){
         var name = '', email = '', contact = '';
-        if($scope.report[i].partner.nameMatchesOk){          //Be sure to check $scope.report[i].partner.nameMatchesOk and $scope.report[i].partner.emailMatchesOk on $scope.report rendering before displaying the name and email respectively
-          name = $scope.report[i].partner.name;
+        if($scope.report.data[i].partner.nameMatchesOk){          //Be sure to check $scope.report.data[i].partner.nameMatchesOk and $scope.report.data[i].partner.emailMatchesOk on $scope.report.data rendering before displaying the name and email respectively
+          name = $scope.report.data[i].partner.name;
         }
-        if($scope.report[i].partner.emailMatchesOk){
-          email = $scope.report[i].partner.email;
+        if($scope.report.data[i].partner.emailMatchesOk){
+          email = $scope.report.data[i].partner.email;
         }
         if(!name && !email){
-          contact = 'Participant #'+$scope.report[i].partner.number+' chose not to share any contact information at the beginning of the workshop.\nThey did match the following questions you responded to however:';
+          contact = 'Participant #'+$scope.report.data[i].partner.number+' chose not to share any contact information at the beginning of the workshop.\nThey did match the following questions you responded to however:';
         } else if(name){
           contact = name;
           if(email){
@@ -528,26 +530,26 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
         } else {
           contact = email + matchedClause;
         }
-        console.log(contact);
-        if($scope.report[i].matches.yeses.length){
-          console.log('They said "Yes!" to you in response to the following questions:');
+        $scope.report.text += '\n'+contact;
+        if($scope.report.data[i].matches.yeses.length){
+          $scope.report.text += '\n  They said "Yes!" to you in response to the following questions:';
         }
-        for(var j=0; j<$scope.report[i].matches.yeses.length; j++){
-          var question = $scope.report[i].matches.yeses[j] + ')  ';
-          question += $scope.questions[$scope.report[i].matches.yeses[j]].text;
+        for(var j=0; j<$scope.report.data[i].matches.yeses.length; j++){
+          var question = $scope.report.data[i].matches.yeses[j] + ')  ';
+          question += $scope.questions[$scope.report.data[i].matches.yeses[j]].text;
           console.log('\t'+question);
           // You said Yes! / Maybe? to them.
         }
-        if($scope.report[i].matches.maybes.length){
-          console.log('They said "Maybe?" to you in response to the following questions:');
+        if($scope.report.data[i].matches.maybes.length){
+          $scope.report.text += '\n  They said "Maybe?" to you in response to the following questions:';
         }
-        for(var j=0; j<$scope.report[i].matches.maybes.length; j++){
-          var question = $scope.report[i].matches.maybes[j] + ')  ';
-          question += $scope.questions[$scope.report[i].matches.maybes[j]].text;
+        for(var j=0; j<$scope.report.data[i].matches.maybes.length; j++){
+          var question = $scope.report.data[i].matches.maybes[j] + ')  ';
+          question += $scope.questions[$scope.report.data[i].matches.maybes[j]].text;
           console.log('\t'+question);
           // You said Yes! / Maybe? to them.
         }
-        console.log('\n');
+        $scope.report.text += '\n';
       }
 
       participantReport.show();
@@ -556,14 +558,18 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       participantReport.hide();
     };
     $scope.emailReport = function(participant) {
-      var reportHtml = reportContainer.html();
-      var mailto = 'mailto:'
-//      mailto += participant.email;
-mailto += 'jisnut@gmail.com';
-      mailto += '?subject=Your Personal "No" Workshop Match Report';
-      mailto += '&body='+encodeURIComponent(reportHtml);
-      $('#emailReportButton').attr('href', mailto);
-      return true;
+//      var reportHtml = reportContainer.html();
+      if($scope.report.participant && $scope.report.participant.email){
+        var mailto = 'mailto:'
+        mailto += $scope.report.participant.email;
+        mailto += '?subject=Your Personal "No" Workshop Match Report';
+// mailto += '&body='+encodeURIComponent(reportHtml);
+        mailto += '&body='+encodeURIComponent($scope.report.text);
+        $('#emailReportButton').attr('href', mailto);
+        return true;
+      } else {
+        errorMessage("Participant non-existant or has no email registered!");
+      }
     };
   })
 
