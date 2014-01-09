@@ -1,13 +1,25 @@
-[
+[ This array goes inside the a participant document as "parters"
  {			
   "number": 7,
   "hotness": 4,
   "note": "Red haired stranger",
   "shareName": true,
   "shareEmail": true,
-  "questions": [{"number":14, "answer":"Yes!"}, {"number":13, "answer":"Maybe?"}],
-  "yeses": [14, 17, 19, 73, 75, 79],
-  "maybes": [13, 18, 74]
+  "questions": [
+    {
+      "number":14, 
+      "answer":"Yes!",
+      "partnerAnswer": "Yes!"
+    }, 
+    {
+      "number":13,
+      "answer":"Maybe?"
+      "partnerAnswer": "No."
+    }
+  ]
+  "yeses": [7, 23, 19],			// question numbers for statistics
+  "maybes": [13, 18, 74],
+  "nos": [21, 35]
  },
  {
   "number": 23,

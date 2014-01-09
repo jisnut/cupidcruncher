@@ -153,7 +153,7 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
         errorMessage('Error: Did not load question data.');
         return
       }
-      $scope.questionsSetTotal = Math.ceil($scope.questions.length / $scope.configuration.event.questionSetSize);
+      $scope.questionsSetTotal = Math.ceil($scope.questions.length / $scope.configuration.event.questionSetSize)-1;
       $('#partner').hide();
       $('#question').hide();
       $('#questionSet').show();
