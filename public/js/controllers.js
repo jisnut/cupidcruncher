@@ -558,10 +558,10 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
     $scope.emailReport = function(participant) {
       var reportHtml = reportContainer.html();
       var mailto = 'mailto:'
-      //mailto += participant.email;
+//      mailto += participant.email;
 mailto += 'jisnut@gmail.com';
       mailto += '?subject=Your Personal "No" Workshop Match Report';
-      mailto += '&body='+"sample text\nwith line breaks\n\t...and a tab!";
+      mailto += '&body='+encodeURIComponent(reportHtml);
       $('#emailReportButton').attr('href', mailto);
       return true;
     };

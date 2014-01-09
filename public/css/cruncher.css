@@ -392,8 +392,7 @@ button .question-set{
 }
 
 .participant-report{
-  /*display: none;*/
-
+  display: none;
   position: relative;
   padding: 20px;
   top: -250px;

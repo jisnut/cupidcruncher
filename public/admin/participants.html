@@ -43,7 +43,7 @@
       <h2>Your Personal "No" Workshop Match Report</h2>
       <div ng-repeat="match in report">
         <div ng-show="match.partner.name">{{match.partner.name}}<span ng-show="match.partner.email"> ({{match.partner.email}})</span> matched the following questions you responded to:</div>
-        <div ng-nide="match.partner.name"><div ng-show="match.partner.email">{{match.partner.email}} matched the following questions you responded to:</div></div>
+        <div ng-hide="match.partner.name"><div ng-show="match.partner.email">{{match.partner.email}} matched the following questions you responded to:</div></div>
         <div ng-hide="match.partner.name && match.partner.email">Participant #{{match.partner.name}} chose not to share any contact information at the beginning of the workshop.<br/>They did match the following questions you responded to however:</div>
         <div ng-show="match.matches.yesses[0]">'They said "Yes!" to you in response to the following questions:'</div>
         <div ng-repeat="yes in match.matches.yesses">
