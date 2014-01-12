@@ -269,20 +269,22 @@ exports.participant = function(db) {
 //              });
           }
           play.responses.total++;
-          if(participant.partner.answer === 'Yes!'){
-            play.responses.yeses++;
-          }
-          if(participant.partner.answer === 'Maybe?'){
-            play.responses.maybes++;
-          }
-          if(participant.partner.answer === 'No.'){
-            play.responses.nos++;
-          }
-          if(participant.partner.questionNumber){
-            if(!play.questions[participant.partner.questionNumber]){
-              play.questions[participant.partner.questionNumber] = 1;
-            } else {
-              play.questions[participant.partner.questionNumber]++;
+          if(participant.partner){
+            if(participant.partner.answer === 'Yes!'){
+              play.responses.yeses++;
+            }
+            if(participant.partner.answer === 'Maybe?'){
+              play.responses.maybes++;
+            }
+            if(participant.partner.answer === 'No.'){
+              play.responses.nos++;
+            }
+            if(participant.partner.questionNumber){
+              if(!play.questions[participant.partner.questionNumber]){
+                play.questions[participant.partner.questionNumber] = 1;
+              } else {
+                play.questions[participant.partner.questionNumber]++;
+              }
             }
           }
 //          play.matrix[];

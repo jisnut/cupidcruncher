@@ -96,7 +96,7 @@ function generateMatchReport(thisParticipant, participants, config) {
   var matchedPartners = [];
   if(thisParticipant.partners) {
     for(var i=0; i<thisParticipant.partners.length; i++) {
-      var partner = thisParticipant.partners[i];
+      var partner = getParticipant(thisParticipant.partners[i], thisParticipant.partners[i].number, participants);
       var responses = getPartnersResponses(thisParticipant.number, partner.number, participants);
       if(responses) {
         var matchedYeses = [], matchedMaybes = [];
@@ -161,4 +161,56 @@ function getPartnersResponses(thisParticipantsNumber, partnersNumber, participan
     }
   }
   return null;
+};
+
+function getParticipant(target, participantNumber, participants) {
+  for(var i=0; i<participants.length; i++) {
+    if(participants[i].number == participantNumber){
+      target.number = participants[i].number,
+      target.name = participants[i].name,
+      target.nameMatchesOk = participants[i].nameMatchesOk,
+      target.email = participants[i].email,
+      target.emailMatchesOk = participants[i].emailMatchesOk
+      return target;
+    }
+  }
+}
+
+function recordPartnerAnswer(participant, questionNumber, answer, partnerNumber, participants){
+  var partner = null;
+  for(var i=0; i<participant.partners.length; i++) {
+    if(participant.partners[i].number == partnerNumber){
+      // This IS the partner object we want, but we also want to make sure that we have the most recent participant info.
+      // ...so, look them up in the master participant list.
+      partner = getParticipant(participant.partners[i], partnerNumber, participants);
+    }
+  }
+  if(!partner) {
+    partner = getParticipant({}, partnerNumber, participants);
+    participant.partners.push(partner);
+  }
+  if(partner) {
+    if(!partner.yeses){partner.yeses = [];}
+    if(!partner.maybes){partner.maybes = [];}
+    if(!partner.nos){partner.nos = [];}
+    var inYeses = $.inArray(questionNumber, partner.yeses);
+    var inMaybes = $.inArray(questionNumber, partner.maybes);
+//  var inNos = $.inArray($scope.question.number, partner.nos);
+    if(answer === 'yes') {
+      if(inYeses<0){                                           // if not already in the yeses array
+        partner.yeses.push(questionNumber);            // put it in.
+      }
+      if(inMaybes>=0){                                         // if already in the maybes array
+        partner.maybes.splice(inMaybes, 1);                    // take it out.
+      }
+    }
+    if(answer === 'maybe') {
+      if(inYeses>=0){                                          // if already in the yeses array
+        partner.yeses.splice(inYeses, 1);                      // take it out.
+      }
+      if(inMaybes<0){                                          // if not already in the maybes array
+        partner.maybes.push(questionNumber);           // put it in.
+      }
+    }
+  }
 };

@@ -504,65 +504,12 @@ angular.module('cruncher.controllers', ['ngCookies', 'ngResource'])
       $scope.responses.participant = participant;
       $scope.responses.questions = [];
       for(var i=0; i<$scope.questions.length; i++) {
-        var partnerResponse = {yeses:[0, 0, 0, 0, 0], maybes:[0, 0, 0, 0, 0]};
+        var partnerResponse = {yeses:['', '', '', '', ''], maybes:['', '', '', '', '']};
         $scope.responses.questions.push(partnerResponse);
       }
     };
     $scope.cancelResponses = function() {
       participantResponses.hide();
-    };
-    function recordPartnerAnswer(participant, questionNumber, answer, partnerNumber){
-      var partner = null;
-      for(var i=0; i<participant.partners.length; i++) {
-        if(participant.partners[i].number == partnerNumber){
-          partner = participant.partners[i];
-        }
-      }
-      if(!partner) {
-        for(var i=0; i<$scope.participants.length; i++) {
-          if($scope.participants[i].number == partnerNumber){
-            partner = {
-              number: $scope.participants[i].number,
-              name: $scope.participants[i].name,
-              nameMatchesOk: $scope.participants[i].nameMatchesOk,
-              email: $scope.participants[i].email,
-              emailMatchesOk: $scope.participants[i].emailMatchesOk
-            };
-          }
-        }
-        participant.partners.push(partner);
-      }
-      if(partner) {
-        if(!partner.yeses){partner.yeses = [];}
-        if(!partner.maybes){partner.maybes = [];}
-        if(!partner.nos){partner.nos = [];}
-        var inYeses = $.inArray(questionNumber, partner.yeses);
-        var inMaybes = $.inArray(questionNumber, partner.maybes);
-//      var inNos = $.inArray($scope.question.number, partner.nos);
-        if(answer === 'yes') {
-          if(inYeses<0){                                           // if not already in the yeses array
-            partner.yeses.push(questionNumber);            // put it in.
-          }
-          if(inMaybes>=0){                                         // if already in the maybes array
-            partner.maybes.splice(inMaybes, 1);                    // take it out.
-          }
-//          if(inNos>=0){                                            // if already in the nos array
-//            partner.nos.splice(inNos, 1);                          // take it out.
-//          }
-        }
-        if(answer === 'maybe') {
-          if(inYeses>=0){                                          // if already in the yeses array
-            partner.yeses.splice(inYeses, 1);                      // take it out.
-          }
-          if(inMaybes<0){                                          // if not already in the maybes array
-            partner.maybes.push(questionNumber);           // put it in.
-          }
-//          if(inNos>=0){                                            // if already in the nos array
-//            partner.nos.splice(inNos, 1);                          // take it out.
-//          }
-        }
-//      participant.partners.push(partner);
-      }
     };
     $scope.saveResponses = function() {
       participantResponses.hide();
@@ -575,18 +522,17 @@ console.log('Saving responses for: '+$scope.responses.participant.name);
         var partnerResponse = $scope.responses.questions[i];
         for(var j=0; j<partnerResponse.yeses.length; j++) {
           if(partnerResponse.yeses[j]){
-            recordPartnerAnswer($scope.responses.participant, i, 'yes', partnerResponse.yeses[j]);
+            recordPartnerAnswer($scope.responses.participant, i, 'yes', partnerResponse.yeses[j], $scope.participants);
           }
         }
         for(var j=0; j<partnerResponse.maybes.length; j++) {
           if(partnerResponse.maybes[j]){
-            recordPartnerAnswer($scope.responses.participant, i, 'maybe', partnerResponse.maybes[j]);
+            recordPartnerAnswer($scope.responses.participant, i, 'maybe', partnerResponse.maybes[j], $scope.participants);
           }
         }
       }
-
 console.log($scope.responses.participant);
-      //SAVE the participant to the database!
+      // Save the participant to the database!
       participantResource.update($scope.responses.participant, function(data) {
         errorMessage('Participant updated successfully!');  // <-- NOT ACTUALLY AN ERROR!
       }, errorMessage);
